@@ -89,9 +89,9 @@ export default function HorizontalScroll() {
       <div
         ref={containerRef}
         className="hidden md:block z-10"
-        style={{ height: `${ITEMS.length * 100}vh`, position: 'relative' }}
+        style={{ height: `${(ITEMS.length - 0.8) * 100}vh`, position: 'relative' }}
       >
-        <div className="sticky top-0 h-screen overflow-hidden bg-black/65 backdrop-blur-[4px]">
+        <div className="sticky top-0 h-screen overflow-hidden bg-black/70">
           <div className="absolute top-12 left-6 md:left-12 z-20">
             <p className="label-upper text-gold">What We Deliver</p>
           </div>
@@ -101,6 +101,7 @@ export default function HorizontalScroll() {
             style={{
               x,
               width: `${ITEMS.length * 100}%`,
+              willChange: 'transform',
             }}
           >
             {ITEMS.map((item, i) => (
