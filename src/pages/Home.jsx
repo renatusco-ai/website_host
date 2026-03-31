@@ -1,7 +1,37 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import HeroScene from '../components/HeroScene';
 import SectionReveal from '../components/SectionReveal';
+
+function SculptureImages() {
+  const { scrollYProgress } = useScroll();
+  const y1 = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
+  const y2 = useTransform(scrollYProgress, [0, 1], ['0%', '-80%']);
+  const y3 = useTransform(scrollYProgress, [0, 1], ['0%', '-30%']);
+
+  return (
+    <div className="fixed inset-0 z-[1] pointer-events-none overflow-hidden">
+      <motion.img
+        src="https://images.unsplash.com/photo-1601612470767-f70da5d4b8fb?auto=format&fit=crop&q=80&w=800"
+        alt="Classical sculpture torso"
+        style={{ y: y1 }}
+        className="absolute top-[20%] left-[-10%] w-[40vw] max-w-[500px] object-cover mix-blend-luminosity grayscale opacity-20"
+      />
+      <motion.img
+        src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&q=80&w=800"
+        alt="Classical sculpture face"
+        style={{ y: y2 }}
+        className="absolute top-[60%] right-[-5%] w-[35vw] max-w-[400px] object-cover mix-blend-luminosity grayscale opacity-25"
+      />
+      <motion.img
+        src="https://images.unsplash.com/photo-1514300481232-68b20ff441f7?auto=format&fit=crop&q=80&w=800"
+        alt="Classical sculpture wings"
+        style={{ y: y3 }}
+        className="absolute top-[110%] left-[5%] w-[45vw] max-w-[600px] object-cover mix-blend-luminosity grayscale opacity-15"
+      />
+    </div>
+  );
+}
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -47,10 +77,16 @@ const VALUE_PROPS = [
 export default function Home() {
   return (
     <motion.div {...pageTransition}>
-      {/* ─── HERO ─── */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* ─── FIXED 3D BACKGROUND ─── */}
+      <div className="fixed inset-0 z-0">
         <HeroScene />
+      </div>
+      
+      {/* ─── FIXED SCULPTURE IMAGES ─── */}
+      <SculptureImages />
 
+      {/* ─── HERO ─── */}
+      <section className="relative z-10 h-screen flex items-center justify-center overflow-hidden pointer-events-none">
         {/* Radial overlay for text readability */}
         <div
           className="absolute inset-0 z-[1]"
@@ -60,7 +96,7 @@ export default function Home() {
           }}
         />
 
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto pointer-events-auto">
           <motion.div variants={stagger} initial="initial" animate="animate">
             <motion.p variants={fadeUp} className="label-upper mb-6 text-gold">
               AI Operations Automation
@@ -91,7 +127,7 @@ export default function Home() {
 
         {/* Scroll indicator */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
@@ -106,7 +142,7 @@ export default function Home() {
       </section>
 
       {/* ─── PHILOSOPHY STRIP ─── */}
-      <section className="py-32 md:py-44 px-6">
+      <section className="relative z-10 py-32 md:py-44 px-6 bg-black/40 backdrop-blur-[2px]">
         <div className="max-w-5xl mx-auto text-center">
           <SectionReveal>
             <p className="heading-display text-3xl sm:text-4xl md:text-5xl text-marble leading-snug">
@@ -118,7 +154,7 @@ export default function Home() {
       </section>
 
       {/* ─── VALUE PROPOSITIONS ─── */}
-      <section className="py-24 md:py-32 px-6">
+      <section className="relative z-10 py-24 md:py-32 px-6 bg-black/65 backdrop-blur-[4px]">
         <div className="max-w-7xl mx-auto">
           <SectionReveal>
             <p className="label-upper text-gold mb-16 text-center md:text-left">
@@ -129,7 +165,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-marble/5">
             {VALUE_PROPS.map((item, i) => (
               <SectionReveal key={item.number} delay={i * 0.12}>
-                <div className="bg-black p-8 md:p-12 group hover:bg-obsidian transition-colors duration-500">
+                <div className="bg-black/80 backdrop-blur-sm p-8 md:p-12 group hover:bg-obsidian transition-colors duration-500 h-full">
                   <span className="heading-display text-5xl md:text-6xl text-marble/10 group-hover:text-gold/20 transition-colors duration-500 block mb-8">
                     {item.number}
                   </span>
@@ -147,7 +183,7 @@ export default function Home() {
       </section>
 
       {/* ─── TRUST / SOCIAL PROOF ─── */}
-      <section className="py-24 md:py-32 px-6 border-t border-b border-marble/5">
+      <section className="relative z-10 py-24 md:py-32 px-6 bg-black border-t border-b border-marble/5">
         <div className="max-w-4xl mx-auto text-center">
           <SectionReveal>
             <p className="label-upper text-stone/50 mb-10">Trusted By</p>
@@ -184,7 +220,7 @@ export default function Home() {
       </section>
 
       {/* ─── FOOTER CTA ─── */}
-      <section className="py-32 md:py-44 px-6">
+      <section className="relative z-10 py-32 md:py-44 px-6 bg-black">
         <div className="max-w-3xl mx-auto text-center">
           <SectionReveal>
             <p className="label-upper text-gold mb-6">Ready?</p>
