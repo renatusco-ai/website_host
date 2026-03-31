@@ -1,37 +1,8 @@
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import HeroScene from '../components/HeroScene';
+import LightShafts from '../components/LightShafts';
 import SectionReveal from '../components/SectionReveal';
-
-function SculptureImages() {
-  const { scrollYProgress } = useScroll();
-  const y1 = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
-  const y2 = useTransform(scrollYProgress, [0, 1], ['0%', '-80%']);
-  const y3 = useTransform(scrollYProgress, [0, 1], ['0%', '-30%']);
-
-  return (
-    <div className="fixed inset-0 z-[1] pointer-events-none overflow-hidden">
-      <motion.img
-        src="https://images.unsplash.com/photo-1601612470767-f70da5d4b8fb?auto=format&fit=crop&q=80&w=800"
-        alt="Classical sculpture torso"
-        style={{ y: y1 }}
-        className="absolute top-[20%] left-[-10%] w-[40vw] max-w-[500px] object-cover mix-blend-luminosity grayscale opacity-20"
-      />
-      <motion.img
-        src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&q=80&w=800"
-        alt="Classical sculpture face"
-        style={{ y: y2 }}
-        className="absolute top-[60%] right-[-5%] w-[35vw] max-w-[400px] object-cover mix-blend-luminosity grayscale opacity-25"
-      />
-      <motion.img
-        src="https://images.unsplash.com/photo-1514300481232-68b20ff441f7?auto=format&fit=crop&q=80&w=800"
-        alt="Classical sculpture wings"
-        style={{ y: y3 }}
-        className="absolute top-[110%] left-[5%] w-[45vw] max-w-[600px] object-cover mix-blend-luminosity grayscale opacity-15"
-      />
-    </div>
-  );
-}
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -82,8 +53,8 @@ export default function Home() {
         <HeroScene />
       </div>
       
-      {/* ─── FIXED SCULPTURE IMAGES ─── */}
-      <SculptureImages />
+      {/* ─── LIGHT SHAFTS (margins only) ─── */}
+      <LightShafts />
 
       {/* ─── HERO ─── */}
       <section className="relative z-10 h-screen flex items-center justify-center overflow-hidden pointer-events-none">
