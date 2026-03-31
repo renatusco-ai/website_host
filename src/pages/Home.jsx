@@ -5,6 +5,8 @@ import LightShafts from '../components/LightShafts';
 import SectionReveal from '../components/SectionReveal';
 import MagneticButton from '../components/MagneticButton';
 import AnimatedCounter from '../components/AnimatedCounter';
+import SplitText from '../components/SplitText';
+import HorizontalScroll from '../components/HorizontalScroll';
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -13,39 +15,7 @@ const pageTransition = {
   transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
 };
 
-const stagger = {
-  animate: { transition: { staggerChildren: 0.12 } },
-};
 
-const fadeUp = {
-  initial: { opacity: 0, y: 30 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
-const VALUE_PROPS = [
-  {
-    number: '01',
-    title: 'Intelligent Workflows',
-    description:
-      'AI agents that understand your operations and automate repetitive processes — from data entry to decision routing.',
-  },
-  {
-    number: '02',
-    title: 'Systems Architecture',
-    description:
-      'Custom-built automation infrastructure that connects your tools, centralises your data, and eliminates manual handoffs.',
-  },
-  {
-    number: '03',
-    title: 'Continuous Optimisation',
-    description:
-      'Self-improving systems that learn from every interaction, surfacing insights and tightening efficiency over time.',
-  },
-];
 
 export default function Home() {
   return (
@@ -70,35 +40,46 @@ export default function Home() {
         />
 
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto pointer-events-auto">
-          <motion.div variants={stagger} initial="initial" animate="animate">
-            <motion.p variants={fadeUp} className="label-upper mb-6 text-gold">
-              AI Operations Automation
-            </motion.p>
-            <motion.h1
-              variants={fadeUp}
-              className="heading-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-marble mb-6"
-            >
-              RENATUS
-            </motion.h1>
-            <motion.p
-              variants={fadeUp}
-              className="text-stone text-lg md:text-xl font-light max-w-xl mx-auto mb-10 leading-relaxed"
-              style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic' }}
-            >
-              Your Brand Reborn through AI Automation
-            </motion.p>
-            <motion.div variants={fadeUp} className="flex items-center justify-center gap-5">
-              <MagneticButton>
-                <Link to="/contact" className="btn-gold">
-                  Book a Demo
-                </Link>
-              </MagneticButton>
-              <MagneticButton>
-                <Link to="/services" className="btn-ghost">
-                  Our Services
-                </Link>
-              </MagneticButton>
-            </motion.div>
+          <motion.p
+            className="label-upper mb-6 text-gold"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            AI Operations Automation
+          </motion.p>
+
+          <SplitText
+            text="RENATUS"
+            className="heading-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-marble mb-6"
+          />
+
+          <motion.p
+            className="text-stone text-lg md:text-xl font-light max-w-xl mx-auto mb-10 leading-relaxed"
+            style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Your Brand Reborn through AI Automation
+          </motion.p>
+
+          <motion.div
+            className="flex items-center justify-center gap-5"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <MagneticButton>
+              <Link to="/contact" className="btn-gold">
+                Book a Demo
+              </Link>
+            </MagneticButton>
+            <MagneticButton>
+              <Link to="/services" className="btn-ghost">
+                Our Services
+              </Link>
+            </MagneticButton>
           </motion.div>
         </div>
 
@@ -172,34 +153,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── VALUE PROPOSITIONS ─── */}
-      <section className="relative z-10 py-24 md:py-32 px-6 bg-black/65 backdrop-blur-[4px]">
-        <div className="max-w-7xl mx-auto">
-          <SectionReveal>
-            <p className="label-upper text-gold mb-16 text-center md:text-left">
-              What We Deliver
-            </p>
-          </SectionReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-marble/5">
-            {VALUE_PROPS.map((item, i) => (
-              <SectionReveal key={item.number} delay={i * 0.12}>
-                <div className="bg-black/80 backdrop-blur-sm p-8 md:p-12 group hover:bg-obsidian transition-colors duration-500 h-full">
-                  <span className="heading-display text-5xl md:text-6xl text-marble/10 group-hover:text-gold/20 transition-colors duration-500 block mb-8">
-                    {item.number}
-                  </span>
-                  <h3 className="heading-display text-2xl md:text-3xl text-marble mb-4">
-                    {item.title}
-                  </h3>
-                  <p className="text-stone text-sm leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              </SectionReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ─── VALUE PROPOSITIONS (horizontal scroll) ─── */}
+      <HorizontalScroll />
 
       {/* ─── TRUST / SOCIAL PROOF ─── */}
       <section className="relative z-10 py-24 md:py-32 px-6 bg-black border-t border-b border-marble/5">
