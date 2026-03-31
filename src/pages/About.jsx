@@ -8,6 +8,19 @@ const pageTransition = {
   transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
 };
 
+const gradientOrbAnimation = {
+  animate: {
+    scale: [1, 1.2, 1],
+    opacity: [0.3, 0.5, 0.3],
+    rotate: [0, 90, 0],
+    transition: {
+      duration: 15,
+      repeat: Infinity,
+      ease: "linear"
+    }
+  }
+};
+
 const VALUES = [
   {
     symbol: 'I',
@@ -37,9 +50,19 @@ const VALUES = [
 
 export default function About() {
   return (
-    <motion.div {...pageTransition}>
+    <motion.div {...pageTransition} className="relative">
+      {/* Background animated orb */}
+      <motion.div 
+        className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full pointer-events-none z-0 blur-[120px]"
+        style={{
+          background: 'radial-gradient(circle, rgba(196,162,101,0.15) 0%, rgba(8,8,8,0) 70%)'
+        }}
+        variants={gradientOrbAnimation}
+        animate="animate"
+      />
+
       {/* ─── HERO ─── */}
-      <section className="pt-40 pb-24 md:pt-52 md:pb-32 px-6">
+      <section className="relative z-10 pt-40 pb-24 md:pt-52 md:pb-32 px-6">
         <div className="max-w-5xl mx-auto">
           <SectionReveal>
             <p className="label-upper text-gold mb-6">About Renatus</p>
@@ -54,7 +77,7 @@ export default function About() {
       </section>
 
       {/* ─── BRAND STORY ─── */}
-      <section className="py-24 md:py-32 px-6 border-t border-marble/5">
+      <section className="relative z-10 py-24 md:py-32 px-6 border-t border-marble/5">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
           <div className="md:col-span-4">
             <SectionReveal>

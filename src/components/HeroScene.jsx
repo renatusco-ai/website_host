@@ -1,9 +1,8 @@
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Float, MeshDistortMaterial, Environment, AdaptiveDpr, AdaptiveEvents } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { useSpring, animated } from '@react-spring/three';
-import * as THREE from 'three';
 
 function Sculpture() {
   const meshRef = useRef();
@@ -47,12 +46,12 @@ function Sculpture() {
         <mesh ref={meshRef} scale={1.6}>
           <torusKnotGeometry args={[1, 0.35, 128, 32, 2, 3]} />
           <MeshDistortMaterial
-            color="#eee9e1"
-            roughness={0.2}
-            metalness={0.05}
+            color="#d4cfc7"
+            roughness={0.25}
+            metalness={0.1}
             distort={0.12}
             speed={1.2}
-            envMapIntensity={1.2}
+            envMapIntensity={0.8}
           />
         </mesh>
       </Float>
@@ -60,91 +59,27 @@ function Sculpture() {
   );
 }
 
-function MarginFigure() {
-  const groupRef = useRef();
-  const { viewport } = useThree();
-
-  const torsoGeo = useMemo(() => {
-    const geo = new THREE.CapsuleGeometry(0.32, 2.2, 24, 48);
-    const pos = geo.attributes.position;
-    const vec = new THREE.Vector3();
-    for (let i = 0; i < pos.count; i++) {
-      vec.fromBufferAttribute(pos, i);
-      const yNorm = (vec.y + 1.1) / 2.2;
-      const chestSwell = Math.exp(-Math.pow((yNorm - 0.65) * 3.5, 2)) * 0.18;
-      const waistPinch = Math.exp(-Math.pow((yNorm - 0.35) * 4, 2)) * -0.08;
-      const shoulderWidth = Math.exp(-Math.pow((yNorm - 0.8) * 3, 2)) * 0.15;
-      const twist = Math.sin(yNorm * Math.PI * 1.2) * 0.15;
-      const organic =
-        Math.sin(vec.y * 5.5 + vec.x * 3) * 0.025 +
-        Math.sin(vec.y * 11 + vec.z * 7) * 0.012;
-      const radialScale = 1 + chestSwell + waistPinch + shoulderWidth + organic;
-      const cosT = Math.cos(twist);
-      const sinT = Math.sin(twist);
-      const nx = vec.x * cosT - vec.z * sinT;
-      const nz = vec.x * sinT + vec.z * cosT;
-      pos.setXYZ(i, nx * radialScale, vec.y, nz * radialScale);
-    }
-    geo.computeVertexNormals();
-    return geo;
-  }, []);
-
-  useFrame((_, delta) => {
-    if (groupRef.current) groupRef.current.rotation.y += delta * 0.04;
-  });
-
-  const xPos = viewport.width > 8 ? -viewport.width * 0.32 : -3.8;
-
-  return (
-    <Float speed={0.5} rotationIntensity={0.08} floatIntensity={0.15}>
-      <group
-        ref={groupRef}
-        position={[xPos, -0.3, -1.5]}
-        rotation={[0.08, 0.6, 0.03]}
-      >
-        <mesh geometry={torsoGeo} scale={1.4}>
-          <meshStandardMaterial
-            color="#e8e3da"
-            roughness={0.28}
-            metalness={0.02}
-            envMapIntensity={1.1}
-          />
-        </mesh>
-        <mesh position={[0, 1.65, 0]} scale={0.9}>
-          <sphereGeometry args={[0.28, 32, 24]} />
-          <meshStandardMaterial
-            color="#e8e3da"
-            roughness={0.28}
-            metalness={0.02}
-            envMapIntensity={1.1}
-          />
-        </mesh>
-      </group>
-    </Float>
-  );
-}
-
 function Lighting() {
   return (
     <>
-      <ambientLight intensity={0.04} color="#f0ebe3" />
+      <ambientLight intensity={0.08} color="#f0ebe3" />
       <directionalLight
         position={[-5, 3, 2]}
-        intensity={4}
-        color="#ffffff"
+        intensity={2.5}
+        color="#f0ebe3"
       />
       <directionalLight
         position={[4, -2, -3]}
-        intensity={0.6}
+        intensity={0.4}
         color="#c4a265"
       />
-      <pointLight position={[0, 5, 0]} intensity={0.15} color="#ffffff" />
+      <pointLight position={[0, 5, 0]} intensity={0.3} color="#f0ebe3" />
       <spotLight
         position={[-3, 5, 5]}
-        angle={0.25}
-        penumbra={0.6}
-        intensity={3}
-        color="#ffffff"
+        angle={0.3}
+        penumbra={0.8}
+        intensity={1.5}
+        color="#f0ebe3"
       />
     </>
   );
@@ -154,12 +89,12 @@ function PostProcessing() {
   return (
     <EffectComposer multisampling={0}>
       <Bloom
-        luminanceThreshold={0.4}
-        luminanceSmoothing={0.8}
-        intensity={0.7}
+        luminanceThreshold={0.6}
+        luminanceSmoothing={0.9}
+        intensity={0.4}
         mipmapBlur
       />
-      <Vignette darkness={0.8} offset={0.25} />
+      <Vignette darkness={0.7} offset={0.3} />
     </EffectComposer>
   );
 }
@@ -178,14 +113,13 @@ export default function HeroScene({ className = '' }) {
         }}
         style={{ background: 'transparent' }}
       >
-        <color attach="background" args={['#050505']} />
-        <fog attach="fog" args={['#050505', 10, 20]} />
+        <color attach="background" args={['#080808']} />
+        <fog attach="fog" args={['#080808', 8, 18]} />
         <AdaptiveDpr pixelated />
         <AdaptiveEvents />
         <Lighting />
         <Sculpture />
-        <MarginFigure />
-        <Environment preset="studio" environmentIntensity={0.35} />
+        <Environment preset="studio" environmentIntensity={0.15} />
         <PostProcessing />
       </Canvas>
     </div>

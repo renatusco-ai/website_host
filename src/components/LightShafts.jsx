@@ -9,8 +9,8 @@ const BEAMS = [
 ];
 
 const COLORS = {
-  marble: { from: 'rgba(255,255,255,0.12)', mid: 'rgba(255,255,255,0.04)', to: 'transparent' },
-  gold: { from: 'rgba(196,162,101,0.08)', mid: 'rgba(196,162,101,0.02)', to: 'transparent' },
+  marble: { from: 'rgba(240,235,227,0.14)', mid: 'rgba(240,235,227,0.05)', to: 'transparent' },
+  gold: { from: 'rgba(196,162,101,0.10)', mid: 'rgba(196,162,101,0.03)', to: 'transparent' },
 };
 
 function DustParticles() {

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
+import MagneticButton from '../components/MagneticButton';
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -90,8 +91,12 @@ export default function Services() {
         <div className="max-w-7xl mx-auto space-y-px">
           {SERVICES.map((service, i) => (
             <SectionReveal key={service.id} delay={i * 0.08}>
-              <div className="group bg-black hover:bg-obsidian transition-all duration-500 p-8 md:p-12 border-b border-marble/5 last:border-b-0">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+              <div className="group relative bg-black hover:bg-obsidian transition-all duration-500 p-8 md:p-12 border-b border-marble/5 last:border-b-0 overflow-hidden">
+                {/* Animated Gold Border Effect */}
+                <div className="absolute inset-0 border border-gold/0 group-hover:border-gold/30 transition-colors duration-700 pointer-events-none" />
+                <div className="absolute top-0 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-1000 ease-out pointer-events-none" />
+                
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-10">
                   <div className="md:col-span-1">
                     <span className="heading-display text-3xl text-marble/10 group-hover:text-gold/30 transition-colors duration-500">
                       {service.id}
@@ -176,9 +181,11 @@ export default function Services() {
             </p>
           </SectionReveal>
           <SectionReveal delay={0.3}>
-            <Link to="/contact" className="btn-gold">
-              Book a Demo
-            </Link>
+            <MagneticButton>
+              <Link to="/contact" className="btn-gold">
+                Book a Demo
+              </Link>
+            </MagneticButton>
           </SectionReveal>
         </div>
       </section>

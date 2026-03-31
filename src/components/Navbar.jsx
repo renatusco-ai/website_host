@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -12,9 +12,20 @@ const NAV_LINKS = [
 export default function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
+    <>
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-[2px] bg-gold origin-left z-[60]"
+        style={{ scaleX }}
+      />
+      <header className="fixed top-0 left-0 right-0 z-50 mt-[2px]">
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent pointer-events-none" />
 
       <nav className="relative max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
@@ -112,5 +123,6 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </header>
+    </>
   );
 }

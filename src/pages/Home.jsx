@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import HeroScene from '../components/HeroScene';
 import LightShafts from '../components/LightShafts';
 import SectionReveal from '../components/SectionReveal';
+import MagneticButton from '../components/MagneticButton';
+import AnimatedCounter from '../components/AnimatedCounter';
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -86,12 +88,16 @@ export default function Home() {
               Your Brand Reborn through AI Automation
             </motion.p>
             <motion.div variants={fadeUp} className="flex items-center justify-center gap-5">
-              <Link to="/contact" className="btn-gold">
-                Book a Demo
-              </Link>
-              <Link to="/services" className="btn-ghost">
-                Our Services
-              </Link>
+              <MagneticButton>
+                <Link to="/contact" className="btn-gold">
+                  Book a Demo
+                </Link>
+              </MagneticButton>
+              <MagneticButton>
+                <Link to="/services" className="btn-ghost">
+                  Our Services
+                </Link>
+              </MagneticButton>
             </motion.div>
           </motion.div>
         </div>
@@ -120,6 +126,48 @@ export default function Home() {
               Every great brand was built on systems.{' '}
               <span className="text-gold">We make those systems intelligent.</span>
             </p>
+          </SectionReveal>
+        </div>
+      </section>
+
+      {/* ─── METRICS / PROOF ─── */}
+      <section className="relative z-10 py-24 px-6 bg-black/80 backdrop-blur-md border-y border-marble/5">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-marble/10">
+          <SectionReveal delay={0.1}>
+            <div className="pt-8 md:pt-0">
+              <AnimatedCounter
+                value={97}
+                suffix="%"
+                duration={2.5}
+                className="heading-display text-6xl md:text-7xl text-gold block mb-4"
+              />
+              <p className="label-upper text-stone">Client Retention</p>
+            </div>
+          </SectionReveal>
+          
+          <SectionReveal delay={0.2}>
+            <div className="pt-16 md:pt-0">
+              <AnimatedCounter
+                value={3.2}
+                suffix="x"
+                decimals={1}
+                duration={2}
+                className="heading-display text-6xl md:text-7xl text-gold block mb-4"
+              />
+              <p className="label-upper text-stone">Avg. Efficiency Gain</p>
+            </div>
+          </SectionReveal>
+          
+          <SectionReveal delay={0.3}>
+            <div className="pt-16 md:pt-0">
+              <AnimatedCounter
+                value={40}
+                suffix="+"
+                duration={2}
+                className="heading-display text-6xl md:text-7xl text-gold block mb-4"
+              />
+              <p className="label-upper text-stone">Systems Deployed</p>
+            </div>
           </SectionReveal>
         </div>
       </section>
@@ -208,9 +256,11 @@ export default function Home() {
             </p>
           </SectionReveal>
           <SectionReveal delay={0.3}>
-            <Link to="/contact" className="btn-gold">
-              Book a Demo
-            </Link>
+            <MagneticButton>
+              <Link to="/contact" className="btn-gold">
+                Book a Demo
+              </Link>
+            </MagneticButton>
           </SectionReveal>
         </div>
       </section>
