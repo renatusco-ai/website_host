@@ -77,6 +77,33 @@ export const CASE_STUDIES = [
     metrics: { label: 'Data sources unified', value: '12+' },
   },
   {
+    id: 'market-research-analyst',
+    industry: 'AI Agents',
+    title: 'Market research analyst agent',
+    outcome:
+      'Deployed an AI agent that monitors competitors, synthesises industry trends, and delivers structured briefings — replacing hours of manual research with on-demand intelligence.',
+    tags: ['AI agents', 'Research automation', 'Competitive intel'],
+    metrics: { label: 'Research hours saved', value: '20+/wk' },
+  },
+  {
+    id: 'coach-os',
+    industry: 'Staff Operations',
+    title: 'Staff operating system',
+    outcome:
+      'Delivered a purpose-built staff platform for session planning, client tracking, and performance reviews — replacing manual workflows with intelligent automation.',
+    tags: ['PWA', 'Workflow automation', 'Team logins'],
+    metrics: { label: 'Staff hours tracked', value: '10K+' },
+  },
+  {
+    id: 'staff-rostering',
+    industry: 'Staff Operations',
+    title: 'Staff rostering and scheduling system',
+    outcome:
+      'Replaced the group-chat roster chaos with a purpose-built scheduling system. Owners and managers see live shift coverage at a glance, staff submit availability and cover requests in one place, and double-bookings become impossible. No more chasing confirmations or finding out someone didn\'t show up because the message got buried.',
+    tags: ['Rostering', 'Shift scheduling', 'Team management'],
+    metrics: { label: 'Roster admin time saved', value: '10+ hrs/wk' },
+  },
+  {
     id: 'member-app',
     industry: 'Member Experience',
     title: 'Member-facing mobile app',
@@ -86,15 +113,6 @@ export const CASE_STUDIES = [
     metrics: { label: 'Active members served', value: '500+' },
   },
   {
-    id: 'coach-os',
-    industry: 'Staff Operations',
-    title: 'Coach operating system',
-    outcome:
-      'Delivered a purpose-built staff platform for session planning, client tracking, and performance reviews — replacing manual workflows with intelligent automation.',
-    tags: ['PWA', 'Workflow automation', 'Team logins'],
-    metrics: { label: 'Coach hours tracked', value: '10K+' },
-  },
-  {
     id: 'renewal-automation',
     industry: 'Retention & Sales',
     title: 'Renewal intelligence system',
@@ -102,6 +120,15 @@ export const CASE_STUDIES = [
       'Automated renewal scoring, churn prediction, and coach assignment — turning a manual spreadsheet process into a real-time decision engine.',
     tags: ['AI agents', 'Predictive scoring', 'Automation'],
     metrics: { label: 'Renewal accuracy', value: '94%' },
+  },
+  {
+    id: 'referral-tracking-crm',
+    industry: 'Growth & Sales',
+    title: 'Referral tracking CRM',
+    outcome:
+      'Built a referral CRM that gives the whole team shared visibility — who referred whom, who has already made contact, and what was communicated — so nobody duplicates outreach or trips over each other chasing the same lead.',
+    tags: ['CRM', 'Referral tracking', 'Team coordination'],
+    metrics: { label: 'Referrals tracked', value: '1K+' },
   },
   {
     id: 'finance-dashboard',

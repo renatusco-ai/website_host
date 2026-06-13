@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { ReactLenis } from 'lenis/react';
 import Layout from './components/Layout';
@@ -9,7 +9,7 @@ import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
 import Workshops from './pages/Workshops';
-import Work from './pages/Work';
+import Portfolio from './pages/Portfolio';
 
 export default function App() {
   const location = useLocation();
@@ -24,7 +24,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/workshops" element={<Workshops />} />
             <Route path="/services" element={<Services />} />
-            <Route path="/work" element={<Work />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/work" element={<Navigate to="/portfolio" replace />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>

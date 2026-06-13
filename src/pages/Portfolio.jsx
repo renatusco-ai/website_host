@@ -13,14 +13,14 @@ const pageTransition = {
   transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
 };
 
-export default function Work() {
+export default function Portfolio() {
   return (
     <motion.div {...pageTransition}>
       {/* Hero */}
       <section className="pt-36 pb-20 md:pt-44 md:pb-28 px-6">
         <div className="max-w-5xl mx-auto">
           <SectionReveal>
-            <p className="section-eyebrow">Our Work</p>
+            <p className="section-eyebrow">Portfolio</p>
           </SectionReveal>
           <SectionReveal delay={0.1}>
             <h1 className="heading-display text-5xl sm:text-6xl md:text-7xl text-ink leading-[1.04] max-w-4xl">
@@ -29,7 +29,7 @@ export default function Work() {
           </SectionReveal>
           <SectionReveal delay={0.2}>
             <p className="text-sage text-lg mt-8 max-w-2xl leading-relaxed">
-              Real projects, real outcomes. Every case study represents a complete
+              Real projects, real outcomes. Every entry represents a complete
               solution — restructured data, automated workflows, and systems that run
               from day one. Client details anonymised.
             </p>

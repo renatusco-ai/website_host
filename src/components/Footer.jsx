@@ -21,7 +21,7 @@ export default function Footer() {
               <Link to="/" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Home</Link>
               <Link to="/workshops" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Workshops</Link>
               <Link to="/services" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Services</Link>
-              <Link to="/work" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Work</Link>
+              <Link to="/portfolio" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Portfolio</Link>
               <Link to="/about" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">About</Link>
               <Link to="/contact" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Contact</Link>
             </div>

@@ -127,11 +127,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Selected work */}
+      {/* Selected portfolio */}
       <section className="section-shell section-shell--paper border-y border-mist">
         <div className="max-w-7xl mx-auto">
           <SectionReveal>
-            <p className="section-eyebrow">Selected Work</p>
+            <p className="section-eyebrow">Selected Portfolio</p>
             <h2 className="heading-display text-4xl md:text-5xl text-ink mb-16 max-w-2xl">
               Real outcomes from restructured data
             </h2>
@@ -145,8 +145,8 @@ export default function Home() {
 
           <SectionReveal delay={0.3}>
             <div className="mt-12">
-              <Link to="/work" className="link-arrow">
-                View all work &rarr;
+              <Link to="/portfolio" className="link-arrow">
+                View full portfolio &rarr;
               </Link>
             </div>
           </SectionReveal>

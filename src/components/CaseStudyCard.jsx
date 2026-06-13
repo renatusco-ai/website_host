@@ -38,7 +38,7 @@ export default function CaseStudyCard({ study, index = 0, compact = false, linka
   return (
     <SectionReveal delay={index * 0.1}>
       {linkable ? (
-        <Link to="/work" className="case-study-card group block h-full">
+        <Link to="/portfolio" className="case-study-card group block h-full">
           <CardContent study={study} compact={compact} />
         </Link>
       ) : (
