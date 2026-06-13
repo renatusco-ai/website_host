@@ -8,6 +8,8 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
+import Workshops from './pages/Workshops';
+import Work from './pages/Work';
 
 export default function App() {
   const location = useLocation();
@@ -20,13 +22,15 @@ export default function App() {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/workshops" element={<Workshops />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/work" element={<Work />} />
+            <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </AnimatePresence>
         <AnimatePresence mode="wait">
-           <PageTransition key={location.pathname} />
+          <PageTransition key={location.pathname} />
         </AnimatePresence>
       </Layout>
     </ReactLenis>

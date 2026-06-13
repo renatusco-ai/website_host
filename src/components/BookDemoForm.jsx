@@ -15,7 +15,7 @@ export default function BookDemoForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Demo Request from ${formData.name}`);
+    const subject = encodeURIComponent(`Enquiry from ${formData.name}`);
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company}\n\nMessage:\n${formData.message}`
     );
@@ -24,7 +24,7 @@ export default function BookDemoForm() {
 
   const inputWrapperClasses = "relative group";
   const inputClasses =
-    'w-full bg-transparent border-b border-marble/10 px-0 py-4 text-marble text-sm font-[var(--font-body)] placeholder:text-stone/40 focus:outline-none transition-colors duration-300 relative z-10';
+    'w-full bg-transparent border-b border-mist px-0 py-4 text-ink text-sm font-[var(--font-body)] placeholder:text-sage/60 focus:outline-none transition-colors duration-300 relative z-10';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -89,7 +89,7 @@ export default function BookDemoForm() {
           value={formData.message}
           onChange={handleChange}
           rows={4}
-          placeholder="Tell us about your operations and what you'd like to automate..."
+          placeholder="Tell us about your business, your data challenges, or what you'd like to learn..."
           className={`${inputClasses} resize-none`}
         />
         <div className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />

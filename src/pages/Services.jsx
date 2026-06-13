@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
 import MagneticButton from '../components/MagneticButton';
+import PricingCard from '../components/PricingCard';
+import { TIERS, PROCESS_STEPS } from '../data/content';
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -10,134 +12,56 @@ const pageTransition = {
   transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
 };
 
-const SERVICES = [
-  {
-    id: '01',
-    title: 'Workflow Automation',
-    description:
-      'Replace manual, repetitive tasks with AI-driven workflows that execute faster, more accurately, and around the clock. From lead processing to invoice handling — we automate the grind so your team can focus on high-value work.',
-    capabilities: ['Process mapping & redesign', 'AI agent deployment', 'Real-time monitoring'],
-  },
-  {
-    id: '02',
-    title: 'Systems Integration',
-    description:
-      'Connect the tools your brand relies on into a unified, intelligent ecosystem. No more data silos, no more copy-pasting between platforms. One source of truth, accessible everywhere.',
-    capabilities: ['API orchestration', 'Data pipeline architecture', 'Cross-platform sync'],
-  },
-  {
-    id: '03',
-    title: 'Intelligent Reporting',
-    description:
-      'Transform raw operational data into actionable intelligence. Our AI surfaces the metrics that matter, identifies anomalies, and delivers insights before you have to ask for them.',
-    capabilities: ['Automated dashboards', 'Anomaly detection', 'Predictive analytics'],
-  },
-  {
-    id: '04',
-    title: 'Custom AI Solutions',
-    description:
-      'When off-the-shelf won\'t cut it, we build bespoke AI systems tailored to your exact operational reality. From natural language interfaces to decision-support engines — purpose-built for your brand.',
-    capabilities: ['Bespoke model development', 'NLP interfaces', 'Decision automation'],
-  },
-];
-
-const PROCESS_STEPS = [
-  {
-    phase: 'Phase I',
-    title: 'Discover',
-    description:
-      'We immerse ourselves in your operations. We map every workflow, identify every friction point, and understand the human context behind each process.',
-  },
-  {
-    phase: 'Phase II',
-    title: 'Architect',
-    description:
-      'We design an intelligent automation blueprint — the systems, integrations, and AI agents that will transform your operations from the ground up.',
-  },
-  {
-    phase: 'Phase III',
-    title: 'Automate',
-    description:
-      'We build, deploy, and refine. Every system is tested rigorously, deployed progressively, and optimised continuously as it learns from real-world data.',
-  },
-];
-
 export default function Services() {
   return (
     <motion.div {...pageTransition}>
-      {/* ─── HERO ─── */}
-      <section className="pt-40 pb-24 md:pt-52 md:pb-32 px-6">
+      {/* Hero */}
+      <section className="pt-36 pb-20 md:pt-44 md:pb-28 px-6">
         <div className="max-w-5xl mx-auto">
           <SectionReveal>
-            <p className="label-upper text-gold mb-6">Services</p>
+            <p className="section-eyebrow">Services</p>
           </SectionReveal>
           <SectionReveal delay={0.1}>
-            <h1 className="heading-display text-5xl sm:text-6xl md:text-7xl text-marble leading-tight max-w-4xl">
-              Operations, <span className="text-gold italic">reborn</span>
+            <h1 className="heading-display text-5xl sm:text-6xl md:text-7xl text-ink leading-[1.04] max-w-4xl">
+              Solutions, <span className="italic text-forest">not tools</span>.
             </h1>
           </SectionReveal>
           <SectionReveal delay={0.2}>
-            <p className="text-stone text-lg mt-8 max-w-2xl leading-relaxed">
-              We don&rsquo;t just automate your existing workflows — we rethink them.
-              Each engagement produces intelligent systems that learn, adapt, and
-              compound in value over time.
+            <p className="text-sage text-lg mt-8 max-w-2xl leading-relaxed">
+              We don&rsquo;t hand you software and walk away. Every engagement
+              delivers a working solution — restructured data, automated workflows,
+              and the knowledge your team needs to drive it.
             </p>
           </SectionReveal>
         </div>
       </section>
 
-      {/* ─── SERVICE CARDS ─── */}
-      <section className="py-24 md:py-32 px-6 border-t border-marble/5">
-        <div className="max-w-7xl mx-auto space-y-px">
-          {SERVICES.map((service, i) => (
-            <SectionReveal key={service.id} delay={i * 0.08}>
-              <div className="group relative bg-black hover:bg-obsidian transition-all duration-500 p-8 md:p-12 border-b border-marble/5 last:border-b-0 overflow-hidden">
-                {/* Animated Gold Border Effect */}
-                <div className="absolute inset-0 border border-gold/0 group-hover:border-gold/30 transition-colors duration-700 pointer-events-none" />
-                <div className="absolute top-0 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-1000 ease-out pointer-events-none" />
-                
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative z-10">
-                  <div className="md:col-span-1">
-                    <span className="heading-display text-3xl text-marble/10 group-hover:text-gold/30 transition-colors duration-500">
-                      {service.id}
-                    </span>
-                  </div>
-
-                  <div className="md:col-span-4">
-                    <h3 className="heading-display text-2xl md:text-3xl text-marble group-hover:text-gold transition-colors duration-500">
-                      {service.title}
-                    </h3>
-                  </div>
-
-                  <div className="md:col-span-5">
-                    <p className="text-stone text-sm leading-relaxed">
-                      {service.description}
-                    </p>
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <ul className="space-y-2">
-                      {service.capabilities.map((cap) => (
-                        <li key={cap} className="text-stone/60 text-xs flex items-center gap-2">
-                          <span className="w-1 h-1 rounded-full bg-gold/50 shrink-0" />
-                          {cap}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </SectionReveal>
-          ))}
+      {/* Narrative */}
+      <section className="section-shell section-shell--paper border-y border-mist">
+        <div className="max-w-4xl mx-auto text-center">
+          <SectionReveal>
+            <p className="heading-display text-3xl sm:text-4xl md:text-5xl text-ink leading-snug">
+              Your data is the foundation.{' '}
+              <span className="text-gold">We make it AI-ready.</span>
+            </p>
+          </SectionReveal>
+          <SectionReveal delay={0.15}>
+            <p className="text-sage text-lg mt-8 max-w-2xl mx-auto leading-relaxed">
+              Most AI projects fail because the data underneath is a mess. We start
+              by restructuring — cleaning CRMs, unifying databases, connecting
+              siloed systems — so every automation and AI agent has something solid
+              to build on.
+            </p>
+          </SectionReveal>
         </div>
       </section>
 
-      {/* ─── PROCESS ─── */}
-      <section className="py-32 md:py-44 px-6 bg-obsidian">
+      {/* Process */}
+      <section className="section-shell">
         <div className="max-w-7xl mx-auto">
           <SectionReveal>
-            <p className="label-upper text-gold mb-4">How We Work</p>
-            <h2 className="heading-display text-4xl md:text-5xl text-marble mb-20">
+            <p className="section-eyebrow">How We Work</p>
+            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-20">
               The Process
             </h2>
           </SectionReveal>
@@ -147,13 +71,13 @@ export default function Services() {
               <SectionReveal key={step.phase} delay={i * 0.15}>
                 <div className="relative">
                   {i < PROCESS_STEPS.length - 1 && (
-                    <div className="hidden md:block absolute top-6 left-full w-full h-px bg-gradient-to-r from-marble/10 to-transparent" />
+                    <div className="hidden md:block absolute top-6 left-full w-full h-px bg-gradient-to-r from-mist to-transparent" />
                   )}
-                  <p className="label-upper text-gold/60 mb-4">{step.phase}</p>
-                  <h3 className="heading-display text-3xl md:text-4xl text-marble mb-4">
+                  <p className="label-upper text-gold mb-4">{step.phase}</p>
+                  <h3 className="heading-display text-3xl md:text-4xl text-ink mb-4">
                     {step.title}
                   </h3>
-                  <p className="text-stone text-sm leading-relaxed">
+                  <p className="text-sage text-sm leading-relaxed">
                     {step.description}
                   </p>
                 </div>
@@ -163,29 +87,61 @@ export default function Services() {
         </div>
       </section>
 
-      {/* ─── CTA ─── */}
-      <section className="py-32 md:py-44 px-6">
+      {/* Pricing tiers */}
+      <section className="section-shell section-shell--paper border-y border-mist">
+        <div className="max-w-7xl mx-auto">
+          <SectionReveal>
+            <p className="section-eyebrow">Service Tiers</p>
+            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-4">
+              Find your starting point
+            </h2>
+            <p className="text-sage max-w-2xl mb-16 leading-relaxed">
+              From spreadsheet clean-up to enterprise transformation — every tier
+              delivers a complete solution, not a tool to figure out on your own.
+            </p>
+          </SectionReveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            {TIERS.map((tier, i) => (
+              <PricingCard key={tier.id} tier={tier} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="section-shell section-shell--forest">
         <div className="max-w-3xl mx-auto text-center">
           <SectionReveal>
-            <p className="label-upper text-gold mb-6">Next Step</p>
+            <p className="section-eyebrow" style={{ color: 'var(--color-gold-soft)' }}>
+              Not Sure Where to Start?
+            </p>
           </SectionReveal>
           <SectionReveal delay={0.1}>
-            <h2 className="heading-display text-4xl sm:text-5xl md:text-6xl text-marble mb-8">
-              Ready to Be Reborn?
+            <h2 className="heading-display text-4xl sm:text-5xl md:text-6xl text-cream mb-8">
+              Start with a workshop
             </h2>
           </SectionReveal>
           <SectionReveal delay={0.2}>
-            <p className="text-stone text-lg mb-12 max-w-lg mx-auto leading-relaxed">
-              Every transformation begins with a conversation. Tell us where you
-              are, and we&rsquo;ll show you what&rsquo;s possible.
+            <p className="text-cream/70 text-lg mb-12 max-w-lg mx-auto leading-relaxed">
+              Our AI workshops are the perfect entry point. Understand what&rsquo;s
+              possible, then choose the tier that fits.
             </p>
           </SectionReveal>
           <SectionReveal delay={0.3}>
-            <MagneticButton>
-              <Link to="/contact" className="btn-gold">
-                Book a Demo
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+              <MagneticButton>
+                <Link to="/workshops" className="btn-gold">
+                  Book an AI Workshop
+                </Link>
+              </MagneticButton>
+              <Link
+                to="/contact"
+                className="text-cream/80 text-sm hover:text-gold-soft transition-colors"
+              >
+                Or discuss your project &rarr;
               </Link>
-            </MagneticButton>
+            </div>
           </SectionReveal>
         </div>
       </section>
