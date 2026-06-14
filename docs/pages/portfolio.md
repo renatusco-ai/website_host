@@ -43,7 +43,7 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 
 | Export | From | Usage |
 |--------|------|-------|
-| `CASE_STUDIES` | `src/data/content.js` | Full grid (8 items) |
+| `CASE_STUDIES` | `src/data/content.js` | Full grid (11 items) |
 
 ### Case study schema (current)
 
@@ -55,8 +55,8 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
   outcome: string;      // description paragraph
   tags: string[];
   metrics: { label: string; value: string };
+  image?: string;       // card thumbnail URL (live)
   // PLANNED:
-  // image?: string;    // hero/screenshot URL
   // images?: string[]; // gallery for detail view
   // featured?: boolean;
 }
@@ -73,6 +73,9 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 | `member-app` | Member-facing mobile app | Member Experience |
 | `renewal-automation` | Renewal intelligence system | Retention & Sales |
 | `referral-tracking-crm` | Referral tracking CRM | Growth & Sales |
+| `exercise-programming-engine` | Exercise programming engine | Staff Operations |
+| `client-workbook` | Client workbook with live health data | Client Management |
+| `member-health-dashboard` | Member health and churn intelligence | Retention & Analytics |
 | `finance-dashboard` | Accounting intelligence dashboard | Finance & Reporting |
 
 ## CTAs and outbound links
@@ -86,13 +89,13 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 
 ### Current
 
-- None. Static case study data.
+- Case study card images via `study.image` → `public/portfolio/{id}.png`
+- `CaseStudyCard` renders optional image banner with `object-cover object-top` (browser chrome trimmed at render)
 
 ### Planned
 
 | Workflow | Trigger | Suggested integration | Tags / metadata |
 |----------|---------|----------------------|-----------------|
-| Case study images | Card render | Local `/public/portfolio/` or CDN | `asset_type: screenshot` |
 | Case study detail page | Card click | New route `/portfolio/:slug` | `page_type: case_study_detail` |
 | CMS-driven portfolio | Build or runtime fetch | Sanity / Contentful `caseStudy` type | `collection: portfolio` |
 | Image lightbox / gallery | User click | Client component | `interaction: gallery` |
@@ -113,19 +116,21 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 }
 ```
 
-### Image asset conventions (recommended)
+### Image asset conventions
 
 ```
 public/portfolio/
-  {id}-hero.jpg      # Card thumbnail / hero
-  {id}-01.jpg        # Gallery shots
-  {id}-02.jpg
+  {id}.png           # Card thumbnail (live — 5 entries)
+  {id}-01.png        # Gallery shots (planned)
+  {id}-02.png
 ```
+
+Current assets: `exercise-programming-engine`, `client-workbook`, `member-health-dashboard`, `renewal-automation`, `referral-tracking-crm`.
 
 ## Extension points
 
 - Enable `linkable` on cards when `/portfolio/:slug` exists
-- `CaseStudyCard` — add optional `<img>` when `study.image` is set
+- `CaseStudyCard` — image banner live when `study.image` is set
 - Featured section could pull from `CASE_STUDIES.find(c => c.featured)` instead of hardcoded copy
 - Home teasers auto-sync when case studies gain images
 

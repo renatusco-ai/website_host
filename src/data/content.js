@@ -120,6 +120,7 @@ export const CASE_STUDIES = [
       'Automated renewal scoring, churn prediction, and coach assignment — turning a manual spreadsheet process into a real-time decision engine.',
     tags: ['AI agents', 'Predictive scoring', 'Automation'],
     metrics: { label: 'Renewal accuracy', value: '94%' },
+    image: '/portfolio/renewal-automation.png',
   },
   {
     id: 'referral-tracking-crm',
@@ -129,6 +130,37 @@ export const CASE_STUDIES = [
       'Built a referral CRM that gives the whole team shared visibility — who referred whom, who has already made contact, and what was communicated — so nobody duplicates outreach or trips over each other chasing the same lead.',
     tags: ['CRM', 'Referral tracking', 'Team coordination'],
     metrics: { label: 'Referrals tracked', value: '1K+' },
+    image: '/portfolio/referral-tracking-crm.png',
+  },
+  {
+    id: 'exercise-programming-engine',
+    industry: 'Staff Operations',
+    title: 'Exercise programming engine',
+    outcome:
+      'Built a full programming system where staff generate exercise plans with AI-assisted confidence scoring — syncing to the member app and on-the-floor web app in real time.',
+    tags: ['Exercise programming', 'AI confidence scoring', 'Member sync', 'Multi-platform'],
+    metrics: { label: 'Programs auto-generated', value: '1K+' },
+    image: '/portfolio/exercise-programming-engine.png',
+  },
+  {
+    id: 'client-workbook',
+    industry: 'Client Management',
+    title: 'Client workbook with live health data',
+    outcome:
+      'Delivered a coach workbook for client check-ins, attendance, and team notes — with external API integrations that live-sync steps, nutrition tracking, body weight, and nutrition targets from health data platforms.',
+    tags: ['External API integrations', 'Health data sync', 'Nutrition tracking', 'Role-based access'],
+    metrics: { label: 'Health data sources integrated', value: '5+' },
+    image: '/portfolio/client-workbook.png',
+  },
+  {
+    id: 'member-health-dashboard',
+    industry: 'Retention & Analytics',
+    title: 'Member health and churn intelligence',
+    outcome:
+      'Built a member health dashboard with multi-factor churn risk scoring, AI-generated explanations, and team action queues — so staff stay on top of at-risk clients and coordinate renewals before it is too late.',
+    tags: ['Churn prediction', 'Risk scoring', 'AI explanations', 'Team dashboards'],
+    metrics: { label: 'Churn risk factors scored', value: '9' },
+    image: '/portfolio/member-health-dashboard.png',
   },
   {
     id: 'finance-dashboard',

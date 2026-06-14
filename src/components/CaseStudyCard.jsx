@@ -5,6 +5,16 @@ import DataReadout from './DataReadout';
 function CardContent({ study, compact }) {
   return (
     <>
+      {study.image && (
+        <div className="mb-5 -mx-6 -mt-6 overflow-hidden rounded-t-lg">
+          <img
+            src={study.image}
+            alt={study.title}
+            className="w-full h-44 object-cover object-top"
+          />
+        </div>
+      )}
+
       <div className="flex items-start justify-between gap-4 mb-4">
         <span className="label-upper">{study.industry}</span>
         {!compact && study.metrics && (
