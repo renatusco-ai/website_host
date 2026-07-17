@@ -1,12 +1,21 @@
 import { useState } from 'react';
 import MagneticButton from './MagneticButton';
 
-export default function BookDemoForm() {
+const INTENT_LABELS = {
+  scoping: 'Free Scoping Call',
+  strategy: 'Strategy Call ($249)',
+  general: 'General enquiry',
+};
+
+export default function BookDemoForm({ defaultIntent = 'general' }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    company: '',
+    phone: '',
+    website: '',
+    intent: defaultIntent,
     message: '',
+    spend: '',
   });
 
   const handleChange = (e) => {
@@ -15,9 +24,16 @@ export default function BookDemoForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Enquiry from ${formData.name}`);
+    const intentLabel = INTENT_LABELS[formData.intent] || INTENT_LABELS.general;
+    const subject = encodeURIComponent(`${intentLabel} — ${formData.name}`);
     const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company}\n\nMessage:\n${formData.message}`
+      `Booking: ${intentLabel}\n` +
+        `Name: ${formData.name}\n` +
+        `Phone: ${formData.phone}\n` +
+        `Email: ${formData.email}\n` +
+        `Business website: ${formData.website}\n` +
+        `Rough cost of this problem: ${formData.spend || 'Not shared'}\n\n` +
+        `What they need help with:\n${formData.message}`
     );
     window.location.href = `mailto:hello@renatus.ai?subject=${subject}&body=${body}`;
   };
@@ -26,8 +42,33 @@ export default function BookDemoForm() {
   const inputClasses =
     'w-full bg-transparent border-b border-mist px-0 py-4 text-ink text-sm font-[var(--font-body)] placeholder:text-sage/60 focus:outline-none transition-colors duration-300 relative z-10';
 
+  const submitLabel =
+    formData.intent === 'scoping'
+      ? 'Request a Free Scoping Call'
+      : formData.intent === 'strategy'
+      ? 'Book Strategy Call — $249'
+      : 'Send Request';
+
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      <div className={inputWrapperClasses}>
+        <label className="label-upper block mb-1" htmlFor="intent">
+          What are you booking?
+        </label>
+        <select
+          id="intent"
+          name="intent"
+          value={formData.intent}
+          onChange={handleChange}
+          className={`${inputClasses} appearance-none cursor-pointer`}
+        >
+          <option value="general">Not sure — general enquiry</option>
+          <option value="scoping">Free Scoping Call (15 min)</option>
+          <option value="strategy">Strategy Call — $249 (60 min)</option>
+        </select>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className={inputWrapperClasses}>
           <label className="label-upper block mb-1" htmlFor="name">
@@ -46,6 +87,25 @@ export default function BookDemoForm() {
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
         </div>
         <div className={inputWrapperClasses}>
+          <label className="label-upper block mb-1" htmlFor="phone">
+            Phone number
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            placeholder="For the call itself"
+            className={inputClasses}
+          />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className={inputWrapperClasses}>
           <label className="label-upper block mb-1" htmlFor="email">
             Email
           </label>
@@ -61,27 +121,27 @@ export default function BookDemoForm() {
           />
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
         </div>
-      </div>
-
-      <div className={inputWrapperClasses}>
-        <label className="label-upper block mb-1" htmlFor="company">
-          Company
-        </label>
-        <input
-          type="text"
-          id="company"
-          name="company"
-          value={formData.company}
-          onChange={handleChange}
-          placeholder="Your organisation"
-          className={inputClasses}
-        />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
+        <div className={inputWrapperClasses}>
+          <label className="label-upper block mb-1" htmlFor="website">
+            Business website
+          </label>
+          <input
+            type="text"
+            id="website"
+            name="website"
+            value={formData.website}
+            onChange={handleChange}
+            required
+            placeholder="yourbusiness.com"
+            className={inputClasses}
+          />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
+        </div>
       </div>
 
       <div className={inputWrapperClasses}>
         <label className="label-upper block mb-1" htmlFor="message">
-          Message
+          What are you looking for help with?
         </label>
         <textarea
           id="message"
@@ -89,15 +149,36 @@ export default function BookDemoForm() {
           value={formData.message}
           onChange={handleChange}
           rows={4}
-          placeholder="Tell us about your business, your data challenges, or what you'd like to learn..."
+          required
+          placeholder="Tell us what's broken, slow, or manual right now..."
           className={`${inputClasses} resize-none`}
         />
         <div className="absolute bottom-[5px] left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
       </div>
 
+      <div className={inputWrapperClasses}>
+        <label className="label-upper block mb-1" htmlFor="spend">
+          Roughly, what&rsquo;s this problem costing you? <span className="text-sage/60 normal-case">(optional)</span>
+        </label>
+        <select
+          id="spend"
+          name="spend"
+          value={formData.spend}
+          onChange={handleChange}
+          className={`${inputClasses} appearance-none cursor-pointer`}
+        >
+          <option value="">Prefer not to say</option>
+          <option value="$">$ — Minor annoyance</option>
+          <option value="$$">$$ — Noticeable drag</option>
+          <option value="$$$">$$$ — Real money lost</option>
+          <option value="$$$$">$$$$ — Significant impact</option>
+        </select>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
+      </div>
+
       <MagneticButton>
         <button type="submit" className="btn-gold w-full md:w-auto justify-center">
-          Send Request
+          {submitLabel}
         </button>
       </MagneticButton>
     </form>

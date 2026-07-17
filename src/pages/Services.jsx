@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
 import MagneticButton from '../components/MagneticButton';
 import PricingCard from '../components/PricingCard';
-import { TIERS, PROCESS_STEPS } from '../data/content';
+import EntryOfferCard from '../components/EntryOfferCard';
+import { TIERS, PROCESS_STEPS, ENTRY_OFFERS } from '../data/content';
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -36,23 +37,25 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Narrative */}
+      {/* Low-friction entry offers */}
       <section className="section-shell section-shell--paper border-y border-mist">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto">
           <SectionReveal>
-            <p className="heading-display text-3xl sm:text-4xl md:text-5xl text-ink leading-snug">
-              Your data is the foundation.{' '}
-              <span className="text-gold">We make it AI-ready.</span>
+            <p className="section-eyebrow">Where To Start</p>
+            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-4 max-w-2xl">
+              We know how this works. Here&rsquo;s how to start, low-pressure.
+            </h2>
+            <p className="text-sage max-w-2xl mb-16 leading-relaxed">
+              No hard sell, no hidden numbers until you ask. Pick the entry point
+              that matches how ready you are.
             </p>
           </SectionReveal>
-          <SectionReveal delay={0.15}>
-            <p className="text-sage text-lg mt-8 max-w-2xl mx-auto leading-relaxed">
-              Most AI projects fail because the data underneath is a mess. We start
-              by restructuring — cleaning CRMs, unifying databases, connecting
-              siloed systems — so every automation and AI agent has something solid
-              to build on.
-            </p>
-          </SectionReveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {ENTRY_OFFERS.map((offer, i) => (
+              <EntryOfferCard key={offer.id} offer={offer} index={i} />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -93,7 +96,7 @@ export default function Services() {
           <SectionReveal>
             <p className="section-eyebrow">Service Tiers</p>
             <h2 className="heading-display text-4xl md:text-5xl text-ink mb-4">
-              Find your starting point
+              How We Transform Your Business
             </h2>
             <p className="text-sage max-w-2xl mb-16 leading-relaxed">
               From spreadsheet clean-up to enterprise transformation — every tier
@@ -106,6 +109,26 @@ export default function Services() {
               <PricingCard key={tier.id} tier={tier} index={i} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Narrative */}
+      <section className="section-shell">
+        <div className="max-w-4xl mx-auto text-center">
+          <SectionReveal>
+            <p className="heading-display text-3xl sm:text-4xl md:text-5xl text-ink leading-snug">
+              Your data is the foundation.{' '}
+              <span className="text-gold">We make it AI-ready.</span>
+            </p>
+          </SectionReveal>
+          <SectionReveal delay={0.15}>
+            <p className="text-sage text-lg mt-8 max-w-2xl mx-auto leading-relaxed">
+              Most AI projects fail because the data underneath is a mess. We start
+              by restructuring — cleaning CRMs, unifying databases, connecting
+              siloed systems — so every automation and AI agent has something solid
+              to build on.
+            </p>
+          </SectionReveal>
         </div>
       </section>
 

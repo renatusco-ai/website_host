@@ -38,7 +38,7 @@ export default function PricingCard({ tier, index = 0 }) {
           <p className={`label-upper mb-2 ${labelClass}`}>
             {tier.metal} &middot; {tier.name}
           </p>
-          <p className="heading-display text-3xl md:text-4xl text-ink">{tier.price}</p>
+          <p className="text-ink/70 text-base italic mt-1">{tier.price}</p>
           <p className="text-sage text-sm mt-2">{tier.audience}</p>
         </div>
 
@@ -55,7 +55,7 @@ export default function PricingCard({ tier, index = 0 }) {
           to="/contact"
           className={tier.popular ? 'btn-gold w-full justify-center text-center' : 'btn-ghost w-full justify-center text-center'}
         >
-          Get Started
+          Enquire
         </Link>
       </div>
     </SectionReveal>

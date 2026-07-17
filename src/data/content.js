@@ -3,7 +3,7 @@ export const TIERS = [
     id: 'bronze',
     metal: 'Bronze',
     name: 'Foundation',
-    price: 'From $3,000',
+    price: 'Tailored to your business',
     audience: 'Starter businesses & sole traders',
     popular: false,
     accent: 'bronze',
@@ -18,7 +18,7 @@ export const TIERS = [
     id: 'silver',
     metal: 'Silver',
     name: 'Accelerate',
-    price: '$5.5K – $8.5K',
+    price: 'Tailored to your business',
     audience: 'SMBs with 1–4 person teams',
     popular: false,
     accent: 'silver',
@@ -34,7 +34,7 @@ export const TIERS = [
     id: 'gold',
     metal: 'Gold',
     name: 'Elevate',
-    price: '$15K – $25K',
+    price: 'Tailored to your business',
     audience: 'Growing teams ready to scale',
     popular: true,
     accent: 'gold',
@@ -51,7 +51,7 @@ export const TIERS = [
     id: 'meridian',
     metal: 'Meridian',
     name: 'Transform',
-    price: '$25K – $35K',
+    price: 'Tailored to your business',
     audience: 'Enterprise-level transformation',
     popular: false,
     accent: 'meridian',
@@ -170,6 +170,59 @@ export const CASE_STUDIES = [
       'Connected accounting, payroll, and operational data into live reporting dashboards — giving leadership real-time visibility without manual exports.',
     tags: ['Dashboards', 'Integrations', 'Live reporting'],
     metrics: { label: 'Manual reports eliminated', value: '100%' },
+  },
+];
+
+export const ENTRY_OFFERS = [
+  {
+    id: 'scoping-call',
+    label: 'Free',
+    duration: '15 min · Phone call',
+    title: 'Scoping Call',
+    description:
+      "A quick, no-pressure call to understand what you're dealing with. We ask a few questions, you tell us what's broken — we'll tell you honestly whether we can help.",
+    features: [
+      '15 minutes, phone only',
+      'An honest read on whether it’s worth pursuing',
+      'No pitch, no pressure',
+    ],
+    cta: 'Book a Free Scoping Call',
+    ctaLink: '/contact?intent=scoping',
+    accent: 'bronze',
+  },
+  {
+    id: 'strategy-call',
+    label: '$249',
+    duration: '60 min · Video or in person',
+    title: 'Strategy Call',
+    note: 'Credited towards your project if you engage with us',
+    description:
+      'A paid working session, not a sales pitch. We dig into your specific problem and hand you a plan and tools you can act on immediately — whether or not you ever hire us.',
+    features: [
+      '60-minute deep-dive session',
+      'A written action plan you keep either way',
+      'Real tools & templates, not just advice',
+    ],
+    cta: 'Book a Strategy Call — $249',
+    ctaLink: '/contact?intent=strategy',
+    accent: 'gold',
+    popular: true,
+  },
+  {
+    id: 'workshop',
+    label: 'Team session',
+    duration: 'Half-day · Your whole team',
+    title: 'AI Workshop',
+    description:
+      'Bring your whole team. A hands-on session that demystifies AI and leaves everyone with practical, usable skills — no restructuring commitment required.',
+    features: [
+      'Whole-team AI literacy',
+      'Hands-on exercises, not theory',
+      'A roadmap for what to tackle first',
+    ],
+    cta: 'Book a Workshop',
+    ctaLink: '/workshops',
+    accent: 'silver',
   },
 ];
 

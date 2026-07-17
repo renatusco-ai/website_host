@@ -27,22 +27,12 @@ export default function Home() {
       <section className="pt-32 pb-20 md:pt-40 md:pb-28 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
-            <motion.p
-              className="section-eyebrow"
-              {...fadeUp}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              AI Workshops + Data Restructuring
-            </motion.p>
-
             <motion.h1
               className="heading-display text-5xl sm:text-6xl md:text-7xl text-ink leading-[1.02]"
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              Understand AI.
-              <br />
-              Then <span className="italic text-forest">put it</span> to work.
+              Getting your business <span className="italic text-forest">ready for AI</span>.
             </motion.h1>
 
             <motion.p
@@ -50,8 +40,8 @@ export default function Home() {
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             >
-              Hands-on AI education and data restructuring that turn complexity into
-              clarity — and insight into real impact.
+              We restructure your data, automate the busywork, and teach your team
+              to use AI with confidence.
             </motion.p>
 
             <motion.div

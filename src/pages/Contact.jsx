@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
 import BookDemoForm from '../components/BookDemoForm';
 import SchedulingEmbed from '../components/SchedulingEmbed';
+
+const VALID_INTENTS = ['scoping', 'strategy', 'general'];
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -12,6 +14,10 @@ const pageTransition = {
 };
 
 export default function Contact() {
+  const [searchParams] = useSearchParams();
+  const intentParam = searchParams.get('intent');
+  const defaultIntent = VALID_INTENTS.includes(intentParam) ? intentParam : 'general';
+
   return (
     <motion.div {...pageTransition}>
       {/* Hero */}
@@ -57,7 +63,7 @@ export default function Contact() {
           <div className="lg:col-span-7">
             <SectionReveal>
               <p className="section-eyebrow">Get in Touch</p>
-              <BookDemoForm />
+              <BookDemoForm defaultIntent={defaultIntent} />
             </SectionReveal>
           </div>
 
