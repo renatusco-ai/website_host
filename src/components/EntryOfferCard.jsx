@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import SectionReveal from './SectionReveal';
+import { useBooking } from '../context/BookingContext';
 
 const ACCENT_LABEL = {
   bronze: 'tier-accent-bronze',
@@ -14,8 +15,12 @@ const ACCENT_DOT = {
 };
 
 export default function EntryOfferCard({ offer, index = 0 }) {
+  const { openBooking } = useBooking();
   const labelClass = ACCENT_LABEL[offer.accent] || ACCENT_LABEL.gold;
   const dotClass = ACCENT_DOT[offer.accent] || ACCENT_DOT.gold;
+  const ctaClassName = offer.popular
+    ? 'btn-gold w-full justify-center text-center'
+    : 'btn-ghost w-full justify-center text-center';
 
   return (
     <SectionReveal delay={index * 0.08} className={offer.popular ? 'md:-my-4 relative z-10' : ''}>
@@ -54,12 +59,19 @@ export default function EntryOfferCard({ offer, index = 0 }) {
           ))}
         </ul>
 
-        <Link
-          to={offer.ctaLink}
-          className={offer.popular ? 'btn-gold w-full justify-center text-center' : 'btn-ghost w-full justify-center text-center'}
-        >
-          {offer.cta}
-        </Link>
+        {offer.bookingType ? (
+          <button
+            type="button"
+            className={ctaClassName}
+            onClick={() => openBooking(offer.bookingType)}
+          >
+            {offer.cta}
+          </button>
+        ) : (
+          <Link to={offer.ctaLink} className={ctaClassName}>
+            {offer.cta}
+          </Link>
+        )}
       </div>
     </SectionReveal>
   );

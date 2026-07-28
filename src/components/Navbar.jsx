@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import BookDiscoveryButton from './BookDiscoveryButton';
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
@@ -55,9 +56,7 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link to="/workshops" className="btn-gold text-sm py-2.5 px-5">
-              Book a Workshop
-            </Link>
+            <BookDiscoveryButton className="btn-gold text-sm py-2.5 px-5" />
           </div>
 
           <button
@@ -115,13 +114,10 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.45 }}
               >
-                <Link
-                  to="/workshops"
+                <BookDiscoveryButton
                   className="btn-gold mt-4"
                   onClick={() => setMobileOpen(false)}
-                >
-                  Book a Workshop
-                </Link>
+                />
               </motion.div>
             </motion.div>
           )}

@@ -66,6 +66,9 @@ export const TIERS = [
   },
 ];
 
+/** Set true when high-quality, anonymised portfolio screenshots are ready */
+export const PORTFOLIO_MEDIA_ENABLED = false;
+
 export const CASE_STUDIES = [
   {
     id: 'data-neural-network',
@@ -120,7 +123,12 @@ export const CASE_STUDIES = [
       'Automated renewal scoring, churn prediction, and coach assignment — turning a manual spreadsheet process into a real-time decision engine.',
     tags: ['AI agents', 'Predictive scoring', 'Automation'],
     metrics: { label: 'Renewal accuracy', value: '94%' },
-    image: '/portfolio/renewal-automation.png',
+    media: [
+      {
+        src: '/portfolio/renewal-automation.png',
+        caption: 'Projected churn — renewal action queue with risk scoring',
+      },
+    ],
   },
   {
     id: 'referral-tracking-crm',
@@ -130,7 +138,12 @@ export const CASE_STUDIES = [
       'Built a referral CRM that gives the whole team shared visibility — who referred whom, who has already made contact, and what was communicated — so nobody duplicates outreach or trips over each other chasing the same lead.',
     tags: ['CRM', 'Referral tracking', 'Team coordination'],
     metrics: { label: 'Referrals tracked', value: '1K+' },
-    image: '/portfolio/referral-tracking-crm.png',
+    media: [
+      {
+        src: '/portfolio/referral-tracking-crm.png',
+        caption: 'Referral tracker — pipeline, contact history, and conversion trends',
+      },
+    ],
   },
   {
     id: 'exercise-programming-engine',
@@ -140,7 +153,16 @@ export const CASE_STUDIES = [
       'Built a full programming system where staff generate exercise plans with AI-assisted confidence scoring — syncing to the member app and on-the-floor web app in real time.',
     tags: ['Exercise programming', 'AI confidence scoring', 'Member sync', 'Multi-platform'],
     metrics: { label: 'Programs auto-generated', value: '1K+' },
-    image: '/portfolio/exercise-programming-engine.png',
+    media: [
+      {
+        src: '/portfolio/exercise-programming-engine.png',
+        caption: 'Day view — exercise prescription with personal-best history',
+      },
+      {
+        src: '/portfolio/exercise-programming-engine-weekly.png',
+        caption: 'Weekly view — full training week across multiple days',
+      },
+    ],
   },
   {
     id: 'client-workbook',
@@ -150,7 +172,16 @@ export const CASE_STUDIES = [
       'Delivered a coach workbook for client check-ins, attendance, and team notes — with external API integrations that live-sync steps, nutrition tracking, body weight, and nutrition targets from health data platforms.',
     tags: ['External API integrations', 'Health data sync', 'Nutrition tracking', 'Role-based access'],
     metrics: { label: 'Health data sources integrated', value: '5+' },
-    image: '/portfolio/client-workbook.png',
+    media: [
+      {
+        src: '/portfolio/client-workbook.png',
+        caption: 'Coach workbook — check-ins, attendance, and shared team notes',
+      },
+      {
+        src: '/portfolio/client-workbook-nutrition.png',
+        caption: 'Live health data — body weight, steps, and nutrition targets synced from external APIs',
+      },
+    ],
   },
   {
     id: 'member-health-dashboard',
@@ -160,7 +191,12 @@ export const CASE_STUDIES = [
       'Built a member health dashboard with multi-factor churn risk scoring, AI-generated explanations, and team action queues — so staff stay on top of at-risk clients and coordinate renewals before it is too late.',
     tags: ['Churn prediction', 'Risk scoring', 'AI explanations', 'Team dashboards'],
     metrics: { label: 'Churn risk factors scored', value: '9' },
-    image: '/portfolio/member-health-dashboard.png',
+    media: [
+      {
+        src: '/portfolio/member-health-dashboard.png',
+        caption: 'Member health — colour-coded risk overview across the full base',
+      },
+    ],
   },
   {
     id: 'finance-dashboard',
@@ -173,38 +209,59 @@ export const CASE_STUDIES = [
   },
 ];
 
+export const BOOKING_SESSIONS = {
+  discovery: {
+    id: 'discovery',
+    eyebrow: 'Intro Session',
+    title: 'Free AI & Ops Diagnostic',
+    description:
+      'Reserved for businesses generating over $1M in annual revenue. Come prepared to talk through your biggest problems — we will tell you honestly whether we can help.',
+    embedPath: 'mnl09r0/free-ai-ops-diagnostic-intro',
+    url: 'https://tidycal.com/mnl09r0/free-ai-ops-diagnostic-intro',
+  },
+  audit: {
+    id: 'audit',
+    eyebrow: 'Paid Session',
+    title: 'Operations & AI Optimization Audit',
+    description:
+      'A 60-minute paid working session. We dig into your operations, identify where AI and automation can help, and hand you a clear plan you can act on — whether or not you work with us further.',
+    embedPath: 'mnl09r0/operations-ai-optimization-audit',
+    url: 'https://tidycal.com/mnl09r0/operations-ai-optimization-audit',
+  },
+};
+
 export const ENTRY_OFFERS = [
   {
-    id: 'scoping-call',
+    id: 'diagnostic',
     label: 'Free',
-    duration: '15 min · Phone call',
-    title: 'Scoping Call',
+    duration: '15 min · Phone or video',
+    title: 'Free AI & Ops Diagnostic',
     description:
-      "A quick, no-pressure call to understand what you're dealing with. We ask a few questions, you tell us what's broken — we'll tell you honestly whether we can help.",
+      "A quick, no-pressure session to understand what you're dealing with. You tell us what's broken — we'll tell you honestly whether we can help.",
     features: [
-      '15 minutes, phone only',
-      'An honest read on whether it’s worth pursuing',
+      'Intro diagnostic session',
+      'An honest read on whether it is worth pursuing',
       'No pitch, no pressure',
     ],
-    cta: 'Book a Free Scoping Call',
-    ctaLink: '/contact?intent=scoping',
+    cta: 'Book Free Diagnostic',
+    bookingType: 'discovery',
     accent: 'bronze',
   },
   {
-    id: 'strategy-call',
-    label: '$249',
+    id: 'audit',
+    label: 'Paid',
     duration: '60 min · Video or in person',
-    title: 'Strategy Call',
+    title: 'Operations & AI Optimization Audit',
     note: 'Credited towards your project if you engage with us',
     description:
-      'A paid working session, not a sales pitch. We dig into your specific problem and hand you a plan and tools you can act on immediately — whether or not you ever hire us.',
+      'A paid working session, not a sales pitch. We dig into your operations and hand you a plan and tools you can act on immediately — whether or not you ever hire us.',
     features: [
       '60-minute deep-dive session',
       'A written action plan you keep either way',
-      'Real tools & templates, not just advice',
+      'Real tools and templates, not just advice',
     ],
-    cta: 'Book a Strategy Call — $249',
-    ctaLink: '/contact?intent=strategy',
+    cta: 'Book Paid Audit Session',
+    bookingType: 'audit',
     accent: 'gold',
     popular: true,
   },

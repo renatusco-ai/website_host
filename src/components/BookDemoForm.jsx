@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import MagneticButton from './MagneticButton';
+import { useBooking } from '../context/BookingContext';
 
 const INTENT_LABELS = {
-  scoping: 'Free Scoping Call',
-  strategy: 'Strategy Call ($249)',
+  scoping: 'Free AI & Ops Diagnostic',
+  strategy: 'Operations & AI Optimization Audit',
   general: 'General enquiry',
 };
 
 export default function BookDemoForm({ defaultIntent = 'general' }) {
+  const { openBooking } = useBooking();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,10 +26,21 @@ export default function BookDemoForm({ defaultIntent = 'general' }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (formData.intent === 'scoping') {
+      openBooking('discovery');
+      return;
+    }
+
+    if (formData.intent === 'strategy') {
+      openBooking('audit');
+      return;
+    }
+
     const intentLabel = INTENT_LABELS[formData.intent] || INTENT_LABELS.general;
     const subject = encodeURIComponent(`${intentLabel} — ${formData.name}`);
     const body = encodeURIComponent(
-      `Booking: ${intentLabel}\n` +
+      `Enquiry: ${intentLabel}\n` +
         `Name: ${formData.name}\n` +
         `Phone: ${formData.phone}\n` +
         `Email: ${formData.email}\n` +
@@ -44,16 +57,16 @@ export default function BookDemoForm({ defaultIntent = 'general' }) {
 
   const submitLabel =
     formData.intent === 'scoping'
-      ? 'Request a Free Scoping Call'
+      ? 'Book Free AI & Ops Diagnostic'
       : formData.intent === 'strategy'
-      ? 'Book Strategy Call — $249'
+      ? 'Book Operations & AI Optimization Audit'
       : 'Send Request';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       <div className={inputWrapperClasses}>
         <label className="label-upper block mb-1" htmlFor="intent">
-          What are you booking?
+          What are you looking for?
         </label>
         <select
           id="intent"
@@ -63,8 +76,8 @@ export default function BookDemoForm({ defaultIntent = 'general' }) {
           className={`${inputClasses} appearance-none cursor-pointer`}
         >
           <option value="general">Not sure — general enquiry</option>
-          <option value="scoping">Free Scoping Call (15 min)</option>
-          <option value="strategy">Strategy Call — $249 (60 min)</option>
+          <option value="scoping">Free AI & Ops Diagnostic (intro session)</option>
+          <option value="strategy">Operations & AI Optimization Audit (60 min, paid)</option>
         </select>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
       </div>

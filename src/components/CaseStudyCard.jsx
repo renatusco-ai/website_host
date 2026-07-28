@@ -1,20 +1,15 @@
 import { Link } from 'react-router-dom';
 import SectionReveal from './SectionReveal';
 import DataReadout from './DataReadout';
+import { PORTFOLIO_MEDIA_ENABLED } from '../data/content';
 
-function CardContent({ study, compact }) {
+function CardContent({ study, compact, onViewMedia }) {
+  const hasMedia = study.media?.length > 0;
+  const showMedia = PORTFOLIO_MEDIA_ENABLED && hasMedia && onViewMedia;
+  const showDemoNote = !PORTFOLIO_MEDIA_ENABLED && hasMedia && !compact;
+
   return (
     <>
-      {study.image && (
-        <div className="mb-5 -mx-6 -mt-6 overflow-hidden rounded-t-lg">
-          <img
-            src={study.image}
-            alt={study.title}
-            className="w-full h-44 object-cover object-top"
-          />
-        </div>
-      )}
-
       <div className="flex items-start justify-between gap-4 mb-4">
         <span className="label-upper">{study.industry}</span>
         {!compact && study.metrics && (
@@ -40,11 +35,37 @@ function CardContent({ study, compact }) {
           </span>
         ))}
       </div>
+
+      {showMedia && (
+        <button
+          type="button"
+          onClick={() => onViewMedia(study)}
+          className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-forest border-b border-gold pb-0.5 hover:text-gold transition-colors"
+        >
+          View interface
+          <span aria-hidden="true">&#8599;</span>
+        </button>
+      )}
+
+      {showDemoNote && (
+        <p className="mt-6 text-sm text-sage leading-relaxed">
+          <Link to="/contact" className="text-forest hover:text-gold transition-colors">
+            Book a call for a live demo
+          </Link>
+          {' '}to see this in action.
+        </p>
+      )}
     </>
   );
 }
 
-export default function CaseStudyCard({ study, index = 0, compact = false, linkable = true }) {
+export default function CaseStudyCard({
+  study,
+  index = 0,
+  compact = false,
+  linkable = true,
+  onViewMedia,
+}) {
   return (
     <SectionReveal delay={index * 0.1}>
       {linkable ? (
@@ -53,7 +74,7 @@ export default function CaseStudyCard({ study, index = 0, compact = false, linka
         </Link>
       ) : (
         <div className="case-study-card h-full">
-          <CardContent study={study} compact={compact} />
+          <CardContent study={study} compact={compact} onViewMedia={onViewMedia} />
         </div>
       )}
     </SectionReveal>

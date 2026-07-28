@@ -35,7 +35,8 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 
 | Component | Source | Notes |
 |-----------|--------|-------|
-| `CaseStudyCard` | `src/components/CaseStudyCard.jsx` | `linkable={false}` on this page |
+| `CaseStudyCard` | `src/components/CaseStudyCard.jsx` | `linkable={false}` here; shows "View interface" button when `study.media` + `onViewMedia` |
+| `CaseStudyModal` | `src/components/CaseStudyModal.jsx` | Lightbox in a designed browser frame; gallery, captions, ESC/arrow keys, scroll lock |
 | `DataReadout` | `src/components/DataReadout.jsx` | Stats + featured metrics |
 | `SectionReveal` | `src/components/SectionReveal.jsx` | Animations |
 
@@ -55,9 +56,12 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
   outcome: string;      // description paragraph
   tags: string[];
   metrics: { label: string; value: string };
-  image?: string;       // card thumbnail URL (live)
+  media?: {             // proof shots shown in the modal lightbox
+    src: string;        // /portfolio/{id}.png
+    caption?: string;
+    placeholder?: boolean; // true => blurred + "anonymised capture pending" badge
+  }[];
   // PLANNED:
-  // images?: string[]; // gallery for detail view
   // featured?: boolean;
 }
 ```
@@ -89,8 +93,9 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 
 ### Current
 
-- Case study card images via `study.image` → `public/portfolio/{id}.png`
-- `CaseStudyCard` renders optional image banner with `object-cover object-top` (browser chrome trimmed at render)
+- Cards are text-led; those with `study.media` expose a "View interface" button
+- Clicking opens `CaseStudyModal` — a lightbox that renders shots inside a designed browser frame (never the real Chrome/bookmarks), with prev/next gallery, captions, and keyboard nav
+- `placeholder: true` media render blurred with an "anonymised capture pending" badge — privacy-safe until clean re-captures replace them
 
 ### Planned
 
@@ -98,7 +103,7 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 |----------|---------|----------------------|-----------------|
 | Case study detail page | Card click | New route `/portfolio/:slug` | `page_type: case_study_detail` |
 | CMS-driven portfolio | Build or runtime fetch | Sanity / Contentful `caseStudy` type | `collection: portfolio` |
-| Image lightbox / gallery | User click | Client component | `interaction: gallery` |
+| Replace placeholder shots | Re-capture | Clean, chrome-free, anonymised images → drop `placeholder` flag | `asset_state: final` |
 | Filter by tag/industry | User filter | Client-side or search API | `filter: tags` |
 | Testimonial embed | Per case study | CMS relation | `type: testimonial` |
 | Before/after data viz | Featured section | Static images or interactive chart | `viz: data_restructure` |
@@ -120,12 +125,17 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 
 ```
 public/portfolio/
-  {id}.png           # Card thumbnail (live — 5 entries)
-  {id}-01.png        # Gallery shots (planned)
-  {id}-02.png
+  {id}.png                 # Primary shot (shown in modal)
+  {id}-{variant}.png       # Extra gallery shots, e.g. -weekly, -nutrition
 ```
 
-Current assets: `exercise-programming-engine`, `client-workbook`, `member-health-dashboard`, `renewal-automation`, `referral-tracking-crm`.
+Current assets (all flagged `placeholder` pending clean re-captures):
+`exercise-programming-engine` (+ `-weekly`), `client-workbook` (+ `-nutrition`),
+`member-health-dashboard`, `renewal-automation`, `referral-tracking-crm`.
+
+Re-capture guidance: hide browser chrome (F11 / devtools device mode), use demo or
+anonymised data, capture at 2x resolution. Then drop the `placeholder` flag in
+`CASE_STUDIES`.
 
 ## Extension points
 

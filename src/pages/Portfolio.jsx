@@ -37,6 +37,24 @@ export default function Portfolio() {
         </div>
       </section>
 
+      {/* Confidentiality notice */}
+      <section className="px-6 pb-8">
+        <div className="max-w-5xl mx-auto">
+          <SectionReveal delay={0.25}>
+            <div className="p-6 md:p-8 bg-paper border border-mist rounded-xl">
+              <p className="text-ink text-sm md:text-base leading-relaxed">
+                For client confidentiality, we don&rsquo;t publish screenshots of live
+                systems online. Book a live demo and we can walk you through any of
+                these projects in action.
+              </p>
+              <Link to="/contact" className="link-arrow mt-5 inline-flex">
+                Book a live demo &rarr;
+              </Link>
+            </div>
+          </SectionReveal>
+        </div>
+      </section>
+
       {/* Aggregate stats */}
       <section className="py-12 px-6 bg-paper border-y border-mist">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-6 md:gap-12">
