@@ -5,10 +5,9 @@ import BookDiscoveryButton from './BookDiscoveryButton';
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
-  { to: '/workshops', label: 'Workshops' },
   { to: '/services', label: 'Services' },
   { to: '/portfolio', label: 'Portfolio' },
-  { to: '/about', label: 'About' },
+  { to: '/workshops', label: 'Workshops' },
   { to: '/contact', label: 'Contact' },
 ];
 

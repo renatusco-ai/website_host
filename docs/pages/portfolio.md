@@ -25,11 +25,11 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 
 ## Page sections (top → bottom)
 
-1. **Hero** — Portfolio intro
-2. **Aggregate stats** — `DataReadout` chips (static values)
-3. **Case studies grid** — All `CASE_STUDIES` via `CaseStudyCard`
-4. **Featured transformation** — Long-form anonymized fitness ops story + metrics
-5. **CTA** — Workshop or project discussion
+1. **Hero**: Portfolio intro
+2. **Aggregate stats**: `DataReadout` chips (static values)
+3. **Case studies grid**: All `CASE_STUDIES` via `CaseStudyCard`
+4. **Featured transformation**: Long-form anonymized fitness ops story + metrics
+5. **CTA**: Workshop or project discussion
 
 ## Components used
 
@@ -94,8 +94,8 @@ Portfolio / case studies page. Showcases anonymized proof of work from real proj
 ### Current
 
 - Cards are text-led; those with `study.media` expose a "View interface" button
-- Clicking opens `CaseStudyModal` — a lightbox that renders shots inside a designed browser frame (never the real Chrome/bookmarks), with prev/next gallery, captions, and keyboard nav
-- `placeholder: true` media render blurred with an "anonymised capture pending" badge — privacy-safe until clean re-captures replace them
+- Clicking opens `CaseStudyModal`: a lightbox that renders shots inside a designed browser frame (never the real Chrome/bookmarks), with prev/next gallery, captions, and keyboard nav
+- `placeholder: true` media render blurred with an "anonymised capture pending" badge: privacy-safe until clean re-captures replace them
 
 ### Planned
 
@@ -140,12 +140,12 @@ anonymised data, capture at 2x resolution. Then drop the `placeholder` flag in
 ## Extension points
 
 - Enable `linkable` on cards when `/portfolio/:slug` exists
-- `CaseStudyCard` — image banner live when `study.image` is set
+- `CaseStudyCard`: image banner live when `study.image` is set
 - Featured section could pull from `CASE_STUDIES.find(c => c.featured)` instead of hardcoded copy
 - Home teasers auto-sync when case studies gain images
 
 ## Related docs
 
-- [home.md](./home.md) — shows first 3 case studies
-- [services.md](./services.md) — tiers referenced in future `services_tier` tags
-- [../README.md](../README.md) — integration status
+- [home.md](./home.md): shows first 3 case studies
+- [services.md](./services.md): tiers referenced in future `services_tier` tags
+- [../README.md](../README.md): integration status

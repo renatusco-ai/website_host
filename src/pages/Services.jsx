@@ -30,7 +30,7 @@ export default function Services() {
           <SectionReveal delay={0.2}>
             <p className="text-sage text-lg mt-8 max-w-2xl leading-relaxed">
               We don&rsquo;t hand you software and walk away. Every engagement
-              delivers a working solution — restructured data, automated workflows,
+              delivers a working solution: restructured data, automated workflows,
               and the knowledge your team needs to drive it.
             </p>
           </SectionReveal>
@@ -99,7 +99,7 @@ export default function Services() {
               How We Transform Your Business
             </h2>
             <p className="text-sage max-w-2xl mb-16 leading-relaxed">
-              From spreadsheet clean-up to enterprise transformation — every tier
+              From spreadsheet clean-up to enterprise transformation, every tier
               delivers a complete solution, not a tool to figure out on your own.
             </p>
           </SectionReveal>
@@ -124,8 +124,8 @@ export default function Services() {
           <SectionReveal delay={0.15}>
             <p className="text-sage text-lg mt-8 max-w-2xl mx-auto leading-relaxed">
               Most AI projects fail because the data underneath is a mess. We start
-              by restructuring — cleaning CRMs, unifying databases, connecting
-              siloed systems — so every automation and AI agent has something solid
+              by restructuring. cleaning CRMs, unifying databases, connecting
+              siloed systems. so every automation and AI agent has something solid
               to build on.
             </p>
           </SectionReveal>

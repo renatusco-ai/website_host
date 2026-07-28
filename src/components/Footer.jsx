@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { CONTACT_EMAIL } from '../data/content';
 
 export default function Footer() {
   return (
@@ -11,7 +12,7 @@ export default function Footer() {
             </span>
             <p className="mt-4 text-cream/60 text-sm leading-relaxed max-w-xs">
               AI education and business data restructuring. We help you understand
-              AI, then put it to work — with solutions, not just tools.
+              AI, then put it to work, with solutions, not just tools.
             </p>
           </div>
 
@@ -19,10 +20,9 @@ export default function Footer() {
             <span className="label-upper block mb-6 text-cream/50">Navigate</span>
             <div className="flex flex-col gap-3">
               <Link to="/" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Home</Link>
-              <Link to="/workshops" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Workshops</Link>
               <Link to="/services" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Services</Link>
               <Link to="/portfolio" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Portfolio</Link>
-              <Link to="/about" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">About</Link>
+              <Link to="/workshops" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Workshops</Link>
               <Link to="/contact" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Contact</Link>
             </div>
           </div>
@@ -31,13 +31,13 @@ export default function Footer() {
             <span className="label-upper block mb-6 text-cream/50">Get in Touch</span>
             <div className="flex flex-col gap-3">
               <a
-                href="mailto:hello@renatus.ai"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="text-cream/70 text-sm hover:text-gold-soft transition-colors"
               >
-                hello@renatus.ai
+                {CONTACT_EMAIL}
               </a>
               <Link to="/workshops" className="text-gold-soft text-sm hover:text-cream transition-colors">
-                Book a Workshop &rarr;
+                Company workshops &rarr;
               </Link>
             </div>
           </div>

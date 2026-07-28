@@ -6,7 +6,7 @@ import { BOOKING_SESSIONS } from '../data/content';
 const PREP_ITEMS = [
   'Your biggest operational pain points right now',
   'Where manual work or broken systems are slowing the team down',
-  'Roughly what it is costing you — in time, money, or missed opportunity',
+  'Roughly what it is costing you in time, money, or missed opportunity',
 ];
 
 export default function BookingModal({ isOpen, bookingType = 'discovery', onClose }) {
@@ -82,7 +82,7 @@ export default function BookingModal({ isOpen, bookingType = 'discovery', onClos
             )}
 
             <SchedulingEmbed
-              key={session.embedPath}
+              key={bookingType}
               title="Pick a time"
               embedPath={session.embedPath}
               url={session.url}

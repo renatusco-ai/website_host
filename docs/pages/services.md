@@ -23,11 +23,11 @@ Service offering and pricing page. Explains the "solutions, not tools" delivery 
 
 ## Page sections (top → bottom)
 
-1. **Hero** — Service positioning
-2. **Narrative** — Data-first / AI-readiness story
-3. **How We Work** — `PROCESS_STEPS` (Discover, Architect, Deliver)
-4. **Service Tiers** — `TIERS` rendered via `PricingCard` × 4
-5. **CTA** — Workshop entry point + contact
+1. **Hero**: Service positioning
+2. **Narrative**: Data-first / AI-readiness story
+3. **How We Work**: `PROCESS_STEPS` (Discover, Architect, Deliver)
+4. **Service Tiers**: `TIERS` rendered via `PricingCard` × 4
+5. **CTA**: Workshop entry point + contact
 
 ## Components used
 
@@ -48,10 +48,10 @@ Service offering and pricing page. Explains the "solutions, not tools" delivery 
 
 | ID | Metal · Name | Price | Popular |
 |----|--------------|-------|---------|
-| `bronze` | Bronze · Foundation | From $3,000 | — |
-| `silver` | Silver · Accelerate | $5.5K – $8.5K | — |
-| `gold` | Gold · Elevate | $15K – $25K | Yes |
-| `meridian` | Meridian · Transform | $25K – $35K | — |
+| `bronze` | Bronze · Foundation | From $3,000 |: |
+| `silver` | Silver · Accelerate | $5.5K - $8.5K |: |
+| `gold` | Gold · Elevate | $15K - $25K | Yes |
+| `meridian` | Meridian · Transform | $25K - $35K |: |
 
 ## CTAs and outbound links
 
@@ -74,7 +74,7 @@ Service offering and pricing page. Explains the "solutions, not tools" delivery 
 | Tier selection pre-fill | "Get Started" click | Query param `/contact?tier=gold` | `selected_tier`, `estimated_budget` |
 | Dynamic pricing | CMS update | Sanity / Contentful `TIERS` collection | Versioned pricing |
 | ROI calculator | Optional section | Client-side or API | `tool: roi_calculator` |
-| Scoping questionnaire | Post–tier click | Typeform / Tally embed | `workflow: service_scoping` |
+| Scoping questionnaire | Post-tier click | Typeform / Tally embed | `workflow: service_scoping` |
 | CRM deal creation | Contact form with tier | HubSpot deal stage by tier | `deal_tier: elevate` |
 | PDF proposal generator | Internal workflow | n8n / Make.com on form submit | `artifact: proposal_pdf` |
 | Stripe payment link (deposit) | Meridian / Elevate | Stripe Payment Links per tier | `product_sku: tier_gold` |
@@ -85,7 +85,7 @@ Service offering and pricing page. Explains the "solutions, not tools" delivery 
 {
   "tier_id": "gold",
   "tier_name": "Elevate",
-  "price_range": "$15K – $25K",
+  "price_range": "$15K - $25K",
   "source_page": "/services",
   "intent": "service_enquiry"
 }
@@ -100,6 +100,6 @@ Service offering and pricing page. Explains the "solutions, not tools" delivery 
 
 ## Related docs
 
-- [workshops.md](./workshops.md) — recommended entry funnel
-- [contact.md](./contact.md) — tier enquiry destination
-- [portfolio.md](./portfolio.md) — proof points for tier claims
+- [workshops.md](./workshops.md): recommended entry funnel
+- [contact.md](./contact.md): tier enquiry destination
+- [portfolio.md](./portfolio.md): proof points for tier claims

@@ -90,7 +90,7 @@ export default function CaseStudyModal({ study, onClose }) {
 
                 {current.placeholder && (
                   <span className="absolute top-3 left-3 text-[0.6rem] uppercase tracking-wider text-cream bg-ink/70 px-2.5 py-1 rounded">
-                    Preview — anonymised capture pending
+                    Preview: anonymised capture pending
                   </span>
                 )}
 

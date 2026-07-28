@@ -30,7 +30,7 @@ export default function Portfolio() {
           <SectionReveal delay={0.2}>
             <p className="text-sage text-lg mt-8 max-w-2xl leading-relaxed">
               Real projects, real outcomes. Every entry represents a complete
-              solution — restructured data, automated workflows, and systems that run
+              solution: restructured data, automated workflows, and systems that run
               from day one. Client details anonymised.
             </p>
           </SectionReveal>
@@ -97,7 +97,7 @@ export default function Portfolio() {
                   firefight.
                 </p>
                 <p>
-                  We restructured everything — designing a unified data schema,
+                  We restructured everything, designing a unified data schema,
                   migrating historical records, building staff tools with individual
                   logins, deploying a member-facing app, and automating renewal
                   scoring. The result wasn&rsquo;t a tool they had to learn. It was an

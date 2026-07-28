@@ -20,15 +20,15 @@ General enquiry and booking hub. Workshop-first messaging with contact form, sch
 | Eyebrow | Contact |
 | Headline | Let's start a *conversation*. |
 | Workshop prompt | New here? Start with our beginner-friendly AI workshop |
-| Email | hello@renatus.ai |
+| Email | info@renatusco.com |
 | Response time | Within 24 hours |
 
 ## Page sections (top → bottom)
 
-1. **Hero** — Contact intro
-2. **Workshop prompt band** — Redirect new visitors to `/workshops`
-3. **Get in Touch** — `BookDemoForm` + `SchedulingEmbed` + contact details sidebar
-4. **Quote** — Socrates quote (forest band)
+1. **Hero**: Contact intro
+2. **Workshop prompt band**: Redirect new visitors to `/workshops`
+3. **Get in Touch**: `BookDemoForm` + `SchedulingEmbed` + contact details sidebar
+4. **Quote**: Socrates quote (forest band)
 
 ## Components used
 
@@ -56,7 +56,7 @@ None from `content.js`. Form fields are hardcoded in `BookDemoForm`.
 | Label | Target |
 |-------|--------|
 | Book a Workshop | `/workshops` |
-| hello@renatus.ai | `mailto:hello@renatus.ai` |
+| info@renatusco.com | `mailto:info@renatusco.com` |
 
 ## APIs & workflows
 
@@ -64,8 +64,8 @@ None from `content.js`. Form fields are hardcoded in `BookDemoForm`.
 
 | Integration | Behaviour |
 |-------------|-----------|
-| `BookDemoForm` submit | `window.location.href = mailto:hello@renatus.ai?...` |
-| `SchedulingEmbed` | Placeholder — no calendar URL |
+| `BookDemoForm` submit | `window.location.href = mailto:info@renatusco.com?...` |
+| `SchedulingEmbed` | Placeholder: no calendar URL |
 
 ### Planned
 
@@ -127,6 +127,6 @@ sequenceDiagram
 
 ## Related docs
 
-- [workshops.md](./workshops.md) — shares `BookDemoForm` + `SchedulingEmbed`
-- [services.md](./services.md) — tier query param source
-- [../README.md](../README.md) — env var conventions
+- [workshops.md](./workshops.md): shares `BookDemoForm` + `SchedulingEmbed`
+- [services.md](./services.md): tier query param source
+- [../README.md](../README.md): env var conventions

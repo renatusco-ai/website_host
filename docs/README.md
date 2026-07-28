@@ -1,4 +1,4 @@
-# Renatus Website — Agent Documentation Index
+# Renatus Website: Agent Documentation Index
 
 > AI-friendly reference for the Renatus marketing site (`renatusco-ai/website_host`).
 > Use this index to find per-page docs, routing, shared data, and planned integrations.
@@ -18,11 +18,11 @@
 | Route | Page component | Doc |
 |-------|----------------|-----|
 | `/` | `src/pages/Home.jsx` | [pages/home.md](./pages/home.md) |
-| `/workshops` | `src/pages/Workshops.jsx` | [pages/workshops.md](./pages/workshops.md) |
 | `/services` | `src/pages/Services.jsx` | [pages/services.md](./pages/services.md) |
 | `/portfolio` | `src/pages/Portfolio.jsx` | [pages/portfolio.md](./pages/portfolio.md) |
-| `/about` | `src/pages/About.jsx` | [pages/about.md](./pages/about.md) |
+| `/workshops` | `src/pages/Workshops.jsx` | [pages/workshops.md](./pages/workshops.md) |
 | `/contact` | `src/pages/Contact.jsx` | [pages/contact.md](./pages/contact.md) |
+| `/about` | Redirect → `/workshops` | (removed) |
 
 Routes are registered in `src/App.jsx`. All pages render inside `src/components/Layout.jsx` (Navbar + Footer).
 
@@ -30,18 +30,16 @@ Routes are registered in `src/App.jsx`. All pages render inside `src/components/
 
 ```mermaid
 flowchart TD
-  Home["/ Home"] --> Workshops["/workshops"]
-  Home --> Services["/services"]
+  Home["/ Home"] --> Services["/services"]
   Home --> Portfolio["/portfolio"]
+  Home --> Workshops["/workshops"]
   Workshops --> Contact["/contact"]
   Services --> Contact
   Portfolio --> Contact
-  About["/about"] --> Workshops
-  About --> Contact
   Contact --> Workshops
 ```
 
-**Primary CTA sitewide:** Book a Workshop → `/workshops` or `#book` anchor on Workshops page.
+**Primary CTA sitewide:** Book Free Diagnostic (modal). Workshops are a company education path via `/workshops`.
 
 ## Shared content (`src/data/content.js`)
 
@@ -66,11 +64,11 @@ flowchart TD
 | `Navbar` | `src/components/Navbar.jsx` | Global nav + scroll progress |
 | `Footer` | `src/components/Footer.jsx` | Global footer |
 
-## Integrations — current vs planned
+## Integrations: current vs planned
 
 | Integration | Status | Pages affected |
 |-------------|--------|----------------|
-| `mailto:hello@renatus.ai` | **Live** (form fallback) | Contact, Workshops |
+| `mailto:info@renatusco.com` | **Live** (form fallback) | Contact, Workshops |
 | Calendly / Cal.com embed | **Placeholder** | Contact, Workshops |
 | Form API (Formspree, Supabase, etc.) | **Not wired** | Contact, Workshops |
 | CMS for copy / case studies | **Not wired** | All content pages |
@@ -83,7 +81,7 @@ flowchart TD
 When APIs are added, prefer `VITE_*` prefixed vars for client-safe config:
 
 ```env
-# Examples — not yet in use
+# Examples: not yet in use
 VITE_FORM_ENDPOINT=
 VITE_CALENDLY_URL=
 VITE_CALCOM_URL=

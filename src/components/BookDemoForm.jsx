@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import MagneticButton from './MagneticButton';
 import { useBooking } from '../context/BookingContext';
+import { CONTACT_EMAIL } from '../data/content';
 
 const INTENT_LABELS = {
   scoping: 'Free AI & Ops Diagnostic',
@@ -38,7 +39,7 @@ export default function BookDemoForm({ defaultIntent = 'general' }) {
     }
 
     const intentLabel = INTENT_LABELS[formData.intent] || INTENT_LABELS.general;
-    const subject = encodeURIComponent(`${intentLabel} — ${formData.name}`);
+    const subject = encodeURIComponent(`${intentLabel}: ${formData.name}`);
     const body = encodeURIComponent(
       `Enquiry: ${intentLabel}\n` +
         `Name: ${formData.name}\n` +
@@ -48,7 +49,7 @@ export default function BookDemoForm({ defaultIntent = 'general' }) {
         `Rough cost of this problem: ${formData.spend || 'Not shared'}\n\n` +
         `What they need help with:\n${formData.message}`
     );
-    window.location.href = `mailto:hello@renatus.ai?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
   };
 
   const inputWrapperClasses = "relative group";
@@ -75,7 +76,7 @@ export default function BookDemoForm({ defaultIntent = 'general' }) {
           onChange={handleChange}
           className={`${inputClasses} appearance-none cursor-pointer`}
         >
-          <option value="general">Not sure — general enquiry</option>
+          <option value="general">Not sure: general enquiry</option>
           <option value="scoping">Free AI & Ops Diagnostic (intro session)</option>
           <option value="strategy">Operations & AI Optimization Audit (60 min, paid)</option>
         </select>
@@ -181,10 +182,10 @@ export default function BookDemoForm({ defaultIntent = 'general' }) {
           className={`${inputClasses} appearance-none cursor-pointer`}
         >
           <option value="">Prefer not to say</option>
-          <option value="$">$ — Minor annoyance</option>
-          <option value="$$">$$ — Noticeable drag</option>
-          <option value="$$$">$$$ — Real money lost</option>
-          <option value="$$$$">$$$$ — Significant impact</option>
+          <option value="$">$: Minor annoyance</option>
+          <option value="$$">$$: Noticeable drag</option>
+          <option value="$$$">$$$: Real money lost</option>
+          <option value="$$$$">$$$$: Significant impact</option>
         </select>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-gold transition-all duration-500 group-focus-within:w-full z-20" />
       </div>

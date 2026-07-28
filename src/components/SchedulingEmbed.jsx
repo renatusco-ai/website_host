@@ -1,57 +1,49 @@
 import { useEffect, useRef } from 'react';
+import { CONTACT_EMAIL } from '../data/content';
 
 const TIDYCAL_SCRIPT_SRC = 'https://asset-tidycal.b-cdn.net/js/embed.js';
 
-let tidyCalScriptPromise = null;
-
-function loadTidyCalScript() {
-  if (tidyCalScriptPromise) return tidyCalScriptPromise;
-
-  tidyCalScriptPromise = new Promise((resolve, reject) => {
-    const existing = document.querySelector(`script[src="${TIDYCAL_SCRIPT_SRC}"]`);
-    if (existing) {
-      resolve();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = TIDYCAL_SCRIPT_SRC;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = reject;
-    document.body.appendChild(script);
+function removeTidyCalScripts() {
+  document.querySelectorAll(`script[src="${TIDYCAL_SCRIPT_SRC}"]`).forEach((node) => {
+    node.remove();
   });
-
-  return tidyCalScriptPromise;
 }
 
-function refreshTidyCalEmbeds() {
-  const existing = document.querySelector(`script[src="${TIDYCAL_SCRIPT_SRC}"]`);
-  if (!existing) return;
+function mountTidyCalEmbed(container, embedPath) {
+  container.innerHTML = '';
+
+  const embed = document.createElement('div');
+  embed.className = 'tidycal-embed';
+  embed.setAttribute('data-path', embedPath);
+  container.appendChild(embed);
+
+  removeTidyCalScripts();
 
   const script = document.createElement('script');
   script.src = TIDYCAL_SCRIPT_SRC;
   script.async = true;
-  existing.replaceWith(script);
+  document.body.appendChild(script);
 }
 
 export default function SchedulingEmbed({ title = 'Schedule a call', embedPath, url }) {
-  const embedRef = useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    if (!embedPath || !embedRef.current) return undefined;
+    if (!embedPath || !containerRef.current) return undefined;
 
     let cancelled = false;
 
-    loadTidyCalScript()
-      .then(() => {
-        if (cancelled) return;
-        refreshTidyCalEmbeds();
-      })
-      .catch(() => {});
+    const timer = window.setTimeout(() => {
+      if (cancelled || !containerRef.current) return;
+      mountTidyCalEmbed(containerRef.current, embedPath);
+    }, 150);
 
     return () => {
       cancelled = true;
+      window.clearTimeout(timer);
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
     };
   }, [embedPath]);
 
@@ -61,12 +53,7 @@ export default function SchedulingEmbed({ title = 'Schedule a call', embedPath, 
       {embedPath ? (
         <>
           <div className="scheduling-embed__frame-wrap">
-            <div
-              key={embedPath}
-              ref={embedRef}
-              className="tidycal-embed"
-              data-path={embedPath}
-            />
+            <div ref={containerRef} className="scheduling-embed__mount" />
           </div>
           {url && (
             <a
@@ -84,8 +71,8 @@ export default function SchedulingEmbed({ title = 'Schedule a call', embedPath, 
           <p className="text-ink text-sm mb-2">Booking link coming soon</p>
           <p className="text-sage text-xs leading-relaxed">
             Your booking calendar will appear here. Until then, email{' '}
-            <a href="mailto:hello@renatus.ai" className="text-gold hover:text-forest transition-colors">
-              hello@renatus.ai
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-gold hover:text-forest transition-colors">
+              {CONTACT_EMAIL}
             </a>{' '}
             to request a time.
           </p>

@@ -69,12 +69,12 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center">
           <SectionReveal>
             <p className="heading-display text-3xl sm:text-4xl text-ink leading-snug">
-              We deliver solutions, not tools.
+              Built for founders ready to scale.
             </p>
             <p className="text-sage text-lg mt-5 max-w-2xl mx-auto leading-relaxed">
-              A service on the outside, a tech company on the inside. We restructure
-              your data, automate the busywork, and teach your team to use AI with
-              confidence.
+              We help solo founders and SMEs build people-first AI systems, so you
+              can hire with confidence, run the business without everything sitting
+              in your head, and get the operational edge that lets growth stick.
             </p>
           </SectionReveal>
         </div>
@@ -86,7 +86,7 @@ export default function Home() {
           <SectionReveal>
             <p className="section-eyebrow">What We Do</p>
             <h2 className="heading-display text-4xl md:text-5xl text-ink mb-16 max-w-2xl">
-              Three steps, one clear outcome
+              Systems that scale with your team
             </h2>
           </SectionReveal>
 

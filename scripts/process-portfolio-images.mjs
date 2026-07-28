@@ -62,7 +62,7 @@ const BLUR_REGIONS = {
   ],
 };
 
-/** Optional crop before blur — pixel values */
+/** Optional crop before blur: pixel values */
 const CROPS = {
   'renewal-automation.png': { left: 0, top: 100, width: 1024, height: 420 },
 };

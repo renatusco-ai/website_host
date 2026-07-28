@@ -1,3 +1,5 @@
+export const CONTACT_EMAIL = 'info@renatusco.com';
+
 export const TIERS = [
   {
     id: 'bronze',
@@ -19,7 +21,7 @@ export const TIERS = [
     metal: 'Silver',
     name: 'Accelerate',
     price: 'Tailored to your business',
-    audience: 'SMBs with 1–4 person teams',
+    audience: 'SMBs with 1-4 person teams',
     popular: false,
     accent: 'silver',
     features: [
@@ -75,7 +77,7 @@ export const CASE_STUDIES = [
     industry: 'Fitness Operations',
     title: 'Unified data architecture',
     outcome:
-      'Restructured fragmented member, coach, and billing data into a single AI-ready source of truth — replacing siloed spreadsheets with a connected schema.',
+      'Restructured fragmented member, coach, and billing data into a single AI-ready source of truth, replacing siloed spreadsheets with a connected schema.',
     tags: ['Database restructure', 'Schema design', 'AI readiness'],
     metrics: { label: 'Data sources unified', value: '12+' },
   },
@@ -84,7 +86,7 @@ export const CASE_STUDIES = [
     industry: 'AI Agents',
     title: 'Market research analyst agent',
     outcome:
-      'Deployed an AI agent that monitors competitors, synthesises industry trends, and delivers structured briefings — replacing hours of manual research with on-demand intelligence.',
+      'Deployed an AI agent that monitors competitors, synthesises industry trends, and delivers structured briefings, replacing hours of manual research with on-demand intelligence.',
     tags: ['AI agents', 'Research automation', 'Competitive intel'],
     metrics: { label: 'Research hours saved', value: '20+/wk' },
   },
@@ -93,7 +95,7 @@ export const CASE_STUDIES = [
     industry: 'Staff Operations',
     title: 'Staff operating system',
     outcome:
-      'Delivered a purpose-built staff platform for session planning, client tracking, and performance reviews — replacing manual workflows with intelligent automation.',
+      'Delivered a purpose-built staff platform for session planning, client tracking, and performance reviews, replacing manual workflows with intelligent automation.',
     tags: ['PWA', 'Workflow automation', 'Team logins'],
     metrics: { label: 'Staff hours tracked', value: '10K+' },
   },
@@ -111,7 +113,7 @@ export const CASE_STUDIES = [
     industry: 'Member Experience',
     title: 'Member-facing mobile app',
     outcome:
-      'Built a cross-platform member app with real-time session data, coach visibility, and personalised engagement — all powered by the restructured backend.',
+      'Built a cross-platform member app with real-time session data, coach visibility, and personalised engagement, all powered by the restructured backend.',
     tags: ['React Native', 'Real-time data', 'Member portal'],
     metrics: { label: 'Active members served', value: '500+' },
   },
@@ -120,13 +122,13 @@ export const CASE_STUDIES = [
     industry: 'Retention & Sales',
     title: 'Renewal intelligence system',
     outcome:
-      'Automated renewal scoring, churn prediction, and coach assignment — turning a manual spreadsheet process into a real-time decision engine.',
+      'Automated renewal scoring, churn prediction, and coach assignment, turning a manual spreadsheet process into a real-time decision engine.',
     tags: ['AI agents', 'Predictive scoring', 'Automation'],
     metrics: { label: 'Renewal accuracy', value: '94%' },
     media: [
       {
         src: '/portfolio/renewal-automation.png',
-        caption: 'Projected churn — renewal action queue with risk scoring',
+        caption: 'Projected churn: renewal action queue with risk scoring',
       },
     ],
   },
@@ -135,13 +137,13 @@ export const CASE_STUDIES = [
     industry: 'Growth & Sales',
     title: 'Referral tracking CRM',
     outcome:
-      'Built a referral CRM that gives the whole team shared visibility — who referred whom, who has already made contact, and what was communicated — so nobody duplicates outreach or trips over each other chasing the same lead.',
+      'Built a referral CRM that gives the whole team shared visibility on who referred whom, who has already made contact, and what was communicated, so nobody duplicates outreach or trips over each other chasing the same lead.',
     tags: ['CRM', 'Referral tracking', 'Team coordination'],
     metrics: { label: 'Referrals tracked', value: '1K+' },
     media: [
       {
         src: '/portfolio/referral-tracking-crm.png',
-        caption: 'Referral tracker — pipeline, contact history, and conversion trends',
+        caption: 'Referral tracker: pipeline, contact history, and conversion trends',
       },
     ],
   },
@@ -150,17 +152,17 @@ export const CASE_STUDIES = [
     industry: 'Staff Operations',
     title: 'Exercise programming engine',
     outcome:
-      'Built a full programming system where staff generate exercise plans with AI-assisted confidence scoring — syncing to the member app and on-the-floor web app in real time.',
+      'Built a full programming system where staff generate exercise plans with AI-assisted confidence scoring, syncing to the member app and on-the-floor web app in real time.',
     tags: ['Exercise programming', 'AI confidence scoring', 'Member sync', 'Multi-platform'],
     metrics: { label: 'Programs auto-generated', value: '1K+' },
     media: [
       {
         src: '/portfolio/exercise-programming-engine.png',
-        caption: 'Day view — exercise prescription with personal-best history',
+        caption: 'Day view: exercise prescription with personal-best history',
       },
       {
         src: '/portfolio/exercise-programming-engine-weekly.png',
-        caption: 'Weekly view — full training week across multiple days',
+        caption: 'Weekly view: full training week across multiple days',
       },
     ],
   },
@@ -169,17 +171,17 @@ export const CASE_STUDIES = [
     industry: 'Client Management',
     title: 'Client workbook with live health data',
     outcome:
-      'Delivered a coach workbook for client check-ins, attendance, and team notes — with external API integrations that live-sync steps, nutrition tracking, body weight, and nutrition targets from health data platforms.',
+      'Delivered a coach workbook for client check-ins, attendance, and team notes, with external API integrations that live-sync steps, nutrition tracking, body weight, and nutrition targets from health data platforms.',
     tags: ['External API integrations', 'Health data sync', 'Nutrition tracking', 'Role-based access'],
     metrics: { label: 'Health data sources integrated', value: '5+' },
     media: [
       {
         src: '/portfolio/client-workbook.png',
-        caption: 'Coach workbook — check-ins, attendance, and shared team notes',
+        caption: 'Coach workbook: check-ins, attendance, and shared team notes',
       },
       {
         src: '/portfolio/client-workbook-nutrition.png',
-        caption: 'Live health data — body weight, steps, and nutrition targets synced from external APIs',
+        caption: 'Live health data: body weight, steps, and nutrition targets synced from external APIs',
       },
     ],
   },
@@ -188,13 +190,13 @@ export const CASE_STUDIES = [
     industry: 'Retention & Analytics',
     title: 'Member health and churn intelligence',
     outcome:
-      'Built a member health dashboard with multi-factor churn risk scoring, AI-generated explanations, and team action queues — so staff stay on top of at-risk clients and coordinate renewals before it is too late.',
+      'Built a member health dashboard with multi-factor churn risk scoring, AI-generated explanations, and team action queues, so staff stay on top of at-risk clients and coordinate renewals before it is too late.',
     tags: ['Churn prediction', 'Risk scoring', 'AI explanations', 'Team dashboards'],
     metrics: { label: 'Churn risk factors scored', value: '9' },
     media: [
       {
         src: '/portfolio/member-health-dashboard.png',
-        caption: 'Member health — colour-coded risk overview across the full base',
+        caption: 'Member health: colour-coded risk overview across the full base',
       },
     ],
   },
@@ -203,7 +205,7 @@ export const CASE_STUDIES = [
     industry: 'Finance & Reporting',
     title: 'Accounting intelligence dashboard',
     outcome:
-      'Connected accounting, payroll, and operational data into live reporting dashboards — giving leadership real-time visibility without manual exports.',
+      'Connected accounting, payroll, and operational data into live reporting dashboards, giving leadership real-time visibility without manual exports.',
     tags: ['Dashboards', 'Integrations', 'Live reporting'],
     metrics: { label: 'Manual reports eliminated', value: '100%' },
   },
@@ -215,7 +217,7 @@ export const BOOKING_SESSIONS = {
     eyebrow: 'Intro Session',
     title: 'Free AI & Ops Diagnostic',
     description:
-      'Reserved for businesses generating over $1M in annual revenue. Come prepared to talk through your biggest problems — we will tell you honestly whether we can help.',
+      'Reserved for businesses generating over $1M in annual revenue. Come prepared to talk through your biggest problems. We will tell you honestly whether we can help.',
     embedPath: 'mnl09r0/free-ai-ops-diagnostic-intro',
     url: 'https://tidycal.com/mnl09r0/free-ai-ops-diagnostic-intro',
   },
@@ -224,7 +226,7 @@ export const BOOKING_SESSIONS = {
     eyebrow: 'Paid Session',
     title: 'Operations & AI Optimization Audit',
     description:
-      'A 60-minute paid working session. We dig into your operations, identify where AI and automation can help, and hand you a clear plan you can act on — whether or not you work with us further.',
+      'A 60-minute paid working session. We dig into your operations, identify where AI and automation can help, and hand you a clear plan you can act on, whether or not you work with us further.',
     embedPath: 'mnl09r0/operations-ai-optimization-audit',
     url: 'https://tidycal.com/mnl09r0/operations-ai-optimization-audit',
   },
@@ -237,7 +239,7 @@ export const ENTRY_OFFERS = [
     duration: '15 min · Phone or video',
     title: 'Free AI & Ops Diagnostic',
     description:
-      "A quick, no-pressure session to understand what you're dealing with. You tell us what's broken — we'll tell you honestly whether we can help.",
+      "A quick, no-pressure session to understand what you're dealing with. You tell us what's broken. We'll tell you honestly whether we can help.",
     features: [
       'Intro diagnostic session',
       'An honest read on whether it is worth pursuing',
@@ -254,7 +256,7 @@ export const ENTRY_OFFERS = [
     title: 'Operations & AI Optimization Audit',
     note: 'Credited towards your project if you engage with us',
     description:
-      'A paid working session, not a sales pitch. We dig into your operations and hand you a plan and tools you can act on immediately — whether or not you ever hire us.',
+      'A paid working session, not a sales pitch. We dig into your operations and hand you a plan and tools you can act on immediately, whether or not you ever hire us.',
     features: [
       '60-minute deep-dive session',
       'A written action plan you keep either way',
@@ -268,16 +270,16 @@ export const ENTRY_OFFERS = [
   {
     id: 'workshop',
     label: 'Team session',
-    duration: 'Half-day · Your whole team',
-    title: 'AI Workshop',
+    duration: 'Half-day · Leadership & management',
+    title: 'Company AI Workshop',
     description:
-      'Bring your whole team. A hands-on session that demystifies AI and leaves everyone with practical, usable skills — no restructuring commitment required.',
+      'An open education workshop for your management team: practical AI skills first, then company-specific discussion on how to implement with your people and systems.',
     features: [
-      'Whole-team AI literacy',
-      'Hands-on exercises, not theory',
-      'A roadmap for what to tackle first',
+      'Leadership-aligned AI literacy',
+      'Open discussion on implementation',
+      'Company-specific agenda layered in',
     ],
-    cta: 'Book a Workshop',
+    cta: 'Enquire about a Workshop',
     ctaLink: '/workshops',
     accent: 'silver',
   },
@@ -285,20 +287,24 @@ export const ENTRY_OFFERS = [
 
 export const WORKSHOP_TOPICS = [
   {
-    title: 'AI fundamentals',
-    description: 'What AI actually is, what it can and cannot do, and how to evaluate tools without the hype.',
+    title: 'AI fundamentals for leaders',
+    description:
+      'What AI actually is, what it can and cannot do, and how to evaluate tools without the hype, so management can lead with clarity.',
   },
   {
-    title: 'Practical workflows',
-    description: 'Hands-on exercises using AI for writing, research, data analysis, and day-to-day business tasks.',
+    title: 'Practical team workflows',
+    description:
+      'Hands-on exercises your team can use day to day: writing, research, analysis, and ops tasks that save real hours.',
   },
   {
-    title: 'Data readiness',
-    description: 'Why clean, structured data is the foundation every AI tool depends on — and how to get there.',
+    title: 'Your company, applied',
+    description:
+      'We layer company-specific discussion on top of the basics: your systems, people, bottlenecks, and where AI should (and should not) land first.',
   },
   {
-    title: 'Building your roadmap',
-    description: 'Leave with a clear plan for where AI fits in your business and what to tackle first.',
+    title: 'Implementation roadmap',
+    description:
+      'Leave with a shared plan: ownership, priorities, and the next steps for rolling AI into the business with your team aligned.',
   },
 ];
 
@@ -313,36 +319,36 @@ export const PROCESS_STEPS = [
     phase: 'Phase II',
     title: 'Architect',
     description:
-      'We design the solution — data schema, workflows, integrations, and AI agents — tailored to your exact operational reality.',
+      'We design the solution (data schema, workflows, integrations, and AI agents) tailored to your exact operational reality.',
   },
   {
     phase: 'Phase III',
     title: 'Deliver',
     description:
-      'We build, deploy, and hand over a working solution. Not a tool to figure out — a system that runs from day one.',
+      'We build, deploy, and hand over a working solution. Not a tool to figure out: a system that runs from day one.',
   },
 ];
 
 export const VALUE_PILLARS = [
   {
     number: '01',
-    title: 'Restructure',
+    title: 'Systems',
     description:
-      'We clean, connect, and reorganise your business data so it becomes a foundation AI can actually build on — not a mess of spreadsheets and silos.',
-    detail: 'CRM clean-up, database design, schema architecture, data migration.',
+      'We design how work should flow as you take on staff (roles, handovers, and the data that keeps everyone aligned) so the business no longer depends on one person holding it all together.',
+    detail: 'Ops design, CRM clean-up, schema architecture, staff workflows.',
   },
   {
     number: '02',
-    title: 'Automate',
+    title: 'Technology',
     description:
-      'We deploy intelligent workflows and AI agents that eliminate manual work — from lead processing to reporting — so your team focuses on what matters.',
-    detail: 'Workflow automation, AI agent deployment, integrations, real-time monitoring.',
+      'We build the tools that support those systems (dashboards, apps, and AI that remove busywork) so your team can execute without drowning in admin.',
+    detail: 'Workflow automation, AI agents, staff apps, live reporting.',
   },
   {
     number: '03',
-    title: 'Educate',
+    title: 'Scale',
     description:
-      'We teach your team to understand and use AI confidently — because a solution only works when the people behind it know how to drive it.',
-    detail: 'AI workshops, strategy sessions, ongoing support, documentation.',
+      'We leave you with an operational edge: clear processes, trained people, and technology that grows with the business, not a software handoff you have to figure out alone.',
+    detail: 'Onboarding, team training, documentation, ongoing support.',
   },
 ];

@@ -5,7 +5,6 @@ import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
 import PageTransition from './components/PageTransition';
 import Home from './pages/Home';
-import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
 import Workshops from './pages/Workshops';
@@ -22,11 +21,11 @@ export default function App() {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
-            <Route path="/workshops" element={<Workshops />} />
             <Route path="/services" element={<Services />} />
             <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/workshops" element={<Workshops />} />
             <Route path="/work" element={<Navigate to="/portfolio" replace />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/about" element={<Navigate to="/workshops" replace />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </AnimatePresence>

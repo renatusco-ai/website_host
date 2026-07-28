@@ -4,13 +4,19 @@ import { useBooking } from '../context/BookingContext';
 export default function BookDiscoveryButton({
   className = 'btn-gold',
   children = 'Book Free Diagnostic',
+  bookingType = 'discovery',
   ...props
 }) {
   const { openBooking } = useBooking();
 
   return (
     <MagneticButton>
-      <button type="button" className={className} onClick={openBooking} {...props}>
+      <button
+        type="button"
+        className={className}
+        onClick={() => openBooking(bookingType)}
+        {...props}
+      >
         {children}
       </button>
     </MagneticButton>
