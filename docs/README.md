@@ -1,7 +1,7 @@
 # Renatus Website: Agent Documentation Index
 
 > AI-friendly reference for the Renatus marketing site (`renatusco-ai/website_host`).
-> Wiki: [Architecture](./architecture.md) · [Progress](./progress.md) · [Home](./pages/home.md) · [Services](./pages/services.md) · [Portfolio](./pages/portfolio.md) · [Lockeroom](./pages/lockeroom.md) · [Workshops](./pages/workshops.md) · [Contact](./pages/contact.md)
+> Wiki: [Architecture](./architecture.md) · [Progress](./progress.md) · [Home](./pages/home.md) · [Learn More](./pages/learn-more.md) · [Services](./pages/services.md) · [Portfolio](./pages/portfolio.md) · [Lockeroom](./pages/lockeroom.md) · [Workshops](./pages/workshops.md) · [Contact](./pages/contact.md)
 
 ## Stack
 
@@ -18,6 +18,7 @@
 | Route | Page component | Doc |
 |-------|----------------|-----|
 | `/` | `src/pages/Home.jsx` | [pages/home.md](./pages/home.md) |
+| `/learn-more` | `src/pages/WhyCustom.jsx` | [pages/learn-more.md](./pages/learn-more.md) |
 | `/services` | `src/pages/Services.jsx` | [pages/services.md](./pages/services.md) |
 | `/portfolio` | `src/pages/Portfolio.jsx` | [pages/portfolio.md](./pages/portfolio.md) |
 | `/portfolio/lockeroom` | `src/pages/LockeroomCaseStudy.jsx` | [pages/lockeroom.md](./pages/lockeroom.md) |
@@ -32,6 +33,7 @@ Routes are registered in `src/App.jsx`. All pages render inside `src/components/
 ```mermaid
 flowchart TD
   Home["/ Home"] --> Services["/services"]
+  Home --> LearnMore["/learn-more"]
   Home --> Portfolio["/portfolio"]
   Home --> Workshops["/workshops"]
   Workshops --> Contact["/contact"]

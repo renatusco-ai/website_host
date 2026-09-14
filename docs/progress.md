@@ -34,6 +34,7 @@ Shaun is waiting for Cloudflare to propagate Resend DNS. Checking nameservers / 
 | Form: boxed fields; mobile / email / company required | Done |
 | Resend path (`api/enquiry.js` + Vite middleware) | Wired, not delivering |
 | TidyCal / mailto CTA | Removed from primary path |
+| `/learn-more` software economics parallax story | Done |
 
 ## Blocked / next (in order)
 

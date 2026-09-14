@@ -68,11 +68,9 @@ Do not drop the status flag or `COST_MODEL_DISCLAIMER` when editing those number
 
 | Label | Target |
 |-------|--------|
-| Start with a Workshop | `/workshops` |
-| Explore services → | `/services` |
-| View full portfolio → | `/portfolio` |
-| Book an AI Workshop | `/workshops` |
-| Or get in touch → | `/contact` |
+| Enquire Now | On-page enquiry modal |
+| Learn how businesses are making crazy savings → | `/learn-more` |
+| View our portfolio → | `/portfolio` |
 
 ## APIs & workflows
 
@@ -98,6 +96,7 @@ Do not drop the status flag or `COST_MODEL_DISCLAIMER` when editing those number
 ## Related docs
 
 - [workshops.md](./workshops.md): company education path
+- [learn-more.md](./learn-more.md): custom software economics story
 - [portfolio.md](./portfolio.md): full case study portfolio
 - [../architecture.md](../architecture.md): system map
 - [../progress.md](../progress.md): where we left off
@@ -105,4 +104,4 @@ Do not drop the status flag or `COST_MODEL_DISCLAIMER` when editing those number
 
 ## Wiki
 
-[Architecture](../architecture.md) · [Progress](../progress.md) · [Index](../README.md) · [Home](./home.md) · [Services](./services.md) · [Portfolio](./portfolio.md) · [Lockeroom](./lockeroom.md) · [Workshops](./workshops.md) · [Contact](./contact.md)
+[Architecture](../architecture.md) · [Progress](../progress.md) · [Index](../README.md) · [Home](./home.md) · [Learn More](./learn-more.md) · [Services](./services.md) · [Portfolio](./portfolio.md) · [Lockeroom](./lockeroom.md) · [Workshops](./workshops.md) · [Contact](./contact.md)

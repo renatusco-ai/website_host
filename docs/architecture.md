@@ -2,7 +2,7 @@
 
 > System map for `renatusco-ai/website_host`. Start here, then jump to a page doc or [progress](./progress.md).
 
-[Index](./README.md) · [Progress](./progress.md) · [Home](./pages/home.md) · [Services](./pages/services.md) · [Portfolio](./pages/portfolio.md) · [Lockeroom](./pages/lockeroom.md) · [Workshops](./pages/workshops.md) · [Contact](./pages/contact.md)
+[Index](./README.md) · [Progress](./progress.md) · [Home](./pages/home.md) · [Learn More](./pages/learn-more.md) · [Services](./pages/services.md) · [Portfolio](./pages/portfolio.md) · [Lockeroom](./pages/lockeroom.md) · [Workshops](./pages/workshops.md) · [Contact](./pages/contact.md)
 
 ## What this is
 
@@ -35,6 +35,7 @@ flowchart LR
 | Path | Page | Doc |
 |------|------|-----|
 | `/` | `src/pages/Home.jsx` | [home.md](./pages/home.md) |
+| `/learn-more` | `src/pages/WhyCustom.jsx` | [learn-more.md](./pages/learn-more.md) |
 | `/services` | `src/pages/Services.jsx` | [services.md](./pages/services.md) |
 | `/portfolio` | `src/pages/Portfolio.jsx` | [portfolio.md](./pages/portfolio.md) |
 | `/portfolio/lockeroom` | `src/pages/LockeroomCaseStudy.jsx` | [lockeroom.md](./pages/lockeroom.md) |
@@ -48,8 +49,10 @@ flowchart LR
 ```mermaid
 flowchart TD
   Home["Home"] --> Portfolio
-  Home --> Contact
+  Home --> LearnMore["/learn-more"]
   Home --> Lockeroom["/portfolio/lockeroom"]
+  LearnMore --> Lockeroom
+  LearnMore --> Enquiry["Enquire Now"]
   Portfolio --> Lockeroom
   Portfolio --> Contact
   Services --> Contact
@@ -101,4 +104,4 @@ Sources: `assets/logos-src/`. Output: `public/clients/`. Rebuild: `npm run proce
 
 ## Wiki
 
-[Progress](./progress.md) · [Index](./README.md) · [Home](./pages/home.md) · [Services](./pages/services.md) · [Portfolio](./pages/portfolio.md) · [Lockeroom](./pages/lockeroom.md) · [Workshops](./pages/workshops.md) · [Contact](./pages/contact.md)
+[Progress](./progress.md) · [Index](./README.md) · [Home](./pages/home.md) · [Learn More](./pages/learn-more.md) · [Services](./pages/services.md) · [Portfolio](./pages/portfolio.md) · [Lockeroom](./pages/lockeroom.md) · [Workshops](./pages/workshops.md) · [Contact](./pages/contact.md)

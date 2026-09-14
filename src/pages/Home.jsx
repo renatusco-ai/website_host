@@ -49,8 +49,8 @@ export default function Home() {
               transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <EnquireNowButton />
-              <Link to="/contact" className="link-arrow">
-                You&rsquo;ll learn more &rarr;
+              <Link to="/learn-more" className="link-arrow max-w-xs">
+                Learn how businesses are making crazy savings &rarr;
               </Link>
             </motion.div>
           </div>
