@@ -118,6 +118,23 @@ body {
   color: var(--color-cream);
 }
 
+/* Full-viewport closer so the sticky footer cannot sit under this copy. */
+.section-shell--forest:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100dvh;
+  box-sizing: border-box;
+}
+
+/* Short cream gap so the footer cannot sit under the last forest CTA. */
+.footer-reveal-pad {
+  position: relative;
+  z-index: 10;
+  height: 6rem;
+  background-color: var(--color-cream);
+}
+
 /* Primary button: forest to gold gradient */
 .btn-gold {
   position: relative;

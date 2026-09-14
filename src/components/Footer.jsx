@@ -3,7 +3,7 @@ import { CONTACT_EMAIL } from '../data/content';
 
 export default function Footer() {
   return (
-    <footer className="sticky bottom-0 z-0 bg-forest text-cream">
+    <footer className="relative z-0 bg-forest text-cream">
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
           <div>

@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useSpring,
+  useMotionValueEvent,
+} from 'framer-motion';
 import EnquireNowButton from './EnquireNowButton';
 
 const NAV_LINKS = [
@@ -22,11 +28,16 @@ function Wordmark() {
 export default function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { scrollYProgress } = useScroll();
+  const { scrollY, scrollYProgress } = useScroll();
+  const [solid, setSolid] = useState(false);
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
+  });
+
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    setSolid(y > 16);
   });
 
   return (
@@ -35,8 +46,18 @@ export default function Navbar() {
         className="fixed top-0 left-0 right-0 h-[2px] bg-gold origin-left z-[60]"
         style={{ scaleX }}
       />
-      <header className="fixed top-0 left-0 right-0 z-50 mt-[2px]">
-        <div className="absolute inset-0 bg-gradient-to-b from-cream via-cream/80 to-transparent pointer-events-none" />
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 mt-[2px] ${
+          solid ? 'bg-cream' : ''
+        }`}
+      >
+        <div
+          className={`absolute inset-0 pointer-events-none ${
+            solid
+              ? 'bg-cream'
+              : 'bg-gradient-to-b from-cream via-cream/80 to-transparent'
+          }`}
+        />
 
         <nav className="relative max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
           <Link to="/" className="relative z-10">
