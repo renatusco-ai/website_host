@@ -1,5 +1,20 @@
 export const CONTACT_EMAIL = 'info@renatusco.com';
 
+/** Legacy mailto subjects. Enquire Now now opens the on-page form modal. */
+export const INQUIRE = {
+  default: {
+    subject: 'Inquiry from renatusco.com',
+  },
+  subscription: {
+    subject: 'Subscription Diagnostic',
+    body: 'I would like to book a paid Subscription Diagnostic: map my software spend and leave with an actionable plan to reduce it.',
+  },
+  diagnostic: {
+    subject: 'Free AI & Ops Diagnostic (15 min)',
+    body: 'I would like a quick, no-pressure 15-minute AI & Ops Diagnostic.',
+  },
+};
+
 /**
  * Clients shown on the home page logo wall. Logos are pre-flattened to one ink tone
  * by `npm run process-logos`.
@@ -325,25 +340,25 @@ export const ENTRY_OFFERS = [
       'An honest read on whether it is worth pursuing',
       'No pitch, no pressure',
     ],
-    cta: 'Book Free Diagnostic',
-    bookingType: 'discovery',
+    cta: 'Enquire Now',
+    inquire: 'diagnostic',
     accent: 'bronze',
   },
   {
     id: 'audit',
     label: 'Paid',
-    duration: '60 min · Video or in person',
-    title: 'Operations & AI Optimization Audit',
+    duration: 'Working session · Video or in person',
+    title: 'Subscription Diagnostic',
     note: 'Credited towards your project if you engage with us',
     description:
-      'A paid working session, not a sales pitch. We dig into your operations and hand you a plan and tools you can act on immediately, whether or not you ever hire us.',
+      'A paid working session. We map what you are paying to rent software and hand you an actionable plan to reduce that spend, whether or not you ever hire us.',
     features: [
-      '60-minute deep-dive session',
-      'A written action plan you keep either way',
-      'Real tools and templates, not just advice',
+      'An actionable plan you can take wherever you like',
+      'A clearer picture of your current software landscape',
+      'An honest read on whether rebuilding would create a quantified saving',
     ],
-    cta: 'Book Paid Audit Session',
-    bookingType: 'audit',
+    cta: 'Enquire Now',
+    inquire: 'subscription',
     accent: 'gold',
     popular: true,
   },

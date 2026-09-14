@@ -44,3 +44,7 @@ Company-facing AI education workshop page. Positioned for leadership and managem
 - [services.md](./services.md) - upsell after workshop
 - [contact.md](./contact.md) - shared form / diagnostic path
 - [../README.md](../README.md) - route map
+
+## Wiki
+
+[Architecture](../architecture.md) · [Progress](../progress.md) · [Index](../README.md) · [Home](./home.md) · [Services](./services.md) · [Portfolio](./portfolio.md) · [Lockeroom](./lockeroom.md) · [Workshops](./workshops.md) · [Contact](./contact.md)

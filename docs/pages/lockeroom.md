@@ -62,3 +62,7 @@ equal `net`. Edit the figures in `LOCKEROOM_CASE` only, never in the component.
 - [portfolio.md](./portfolio.md) - parent grid
 - [home.md](./home.md) - logo wall and cost comparison both link here
 - [../README.md](../README.md) - route map
+
+## Wiki
+
+[Architecture](../architecture.md) · [Progress](../progress.md) · [Index](../README.md) · [Home](./home.md) · [Services](./services.md) · [Portfolio](./portfolio.md) · [Lockeroom](./lockeroom.md) · [Workshops](./workshops.md) · [Contact](./contact.md)

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
-import BookDiscoveryButton from '../components/BookDiscoveryButton';
+import EnquireNowButton from '../components/EnquireNowButton';
 import { CASE_STUDIES, LOCKEROOM_CASE } from '../data/content';
 
 const pageTransition = {
@@ -219,7 +219,7 @@ export default function LockeroomCaseStudy() {
               Most businesses have never added it up. We will, and we will tell you
               honestly whether rebuilding is worth it for you.
             </p>
-            <BookDiscoveryButton className="btn-gold" />
+            <EnquireNowButton className="btn-gold" />
           </SectionReveal>
         </div>
       </section>

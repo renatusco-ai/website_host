@@ -149,3 +149,7 @@ anonymised data, capture at 2x resolution. Then drop the `placeholder` flag in
 - [home.md](./home.md): shows first 3 case studies
 - [services.md](./services.md): tiers referenced in future `services_tier` tags
 - [../README.md](../README.md): integration status
+
+## Wiki
+
+[Architecture](../architecture.md) · [Progress](../progress.md) · [Index](../README.md) · [Home](./home.md) · [Services](./services.md) · [Portfolio](./portfolio.md) · [Lockeroom](./lockeroom.md) · [Workshops](./workshops.md) · [Contact](./contact.md)

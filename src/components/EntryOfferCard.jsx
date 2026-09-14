@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import SectionReveal from './SectionReveal';
-import { useBooking } from '../context/BookingContext';
+import EnquireNowButton from './EnquireNowButton';
 
 const ACCENT_LABEL = {
   bronze: 'tier-accent-bronze',
@@ -15,7 +15,6 @@ const ACCENT_DOT = {
 };
 
 export default function EntryOfferCard({ offer, index = 0 }) {
-  const { openBooking } = useBooking();
   const labelClass = ACCENT_LABEL[offer.accent] || ACCENT_LABEL.gold;
   const dotClass = ACCENT_DOT[offer.accent] || ACCENT_DOT.gold;
   const ctaClassName = offer.popular
@@ -59,14 +58,10 @@ export default function EntryOfferCard({ offer, index = 0 }) {
           ))}
         </ul>
 
-        {offer.bookingType ? (
-          <button
-            type="button"
-            className={ctaClassName}
-            onClick={() => openBooking(offer.bookingType)}
-          >
+        {offer.inquire ? (
+          <EnquireNowButton inquire={offer.inquire} className={ctaClassName}>
             {offer.cta}
-          </button>
+          </EnquireNowButton>
         ) : (
           <Link to={offer.ctaLink} className={ctaClassName}>
             {offer.cta}

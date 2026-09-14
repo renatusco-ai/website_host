@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import HeroGraphic from '../components/HeroGraphic';
 import SectionReveal from '../components/SectionReveal';
-import BookDiscoveryButton from '../components/BookDiscoveryButton';
+import EnquireNowButton from '../components/EnquireNowButton';
 import ClientLogoWall from '../components/ClientLogoWall';
 import CostComparison from '../components/CostComparison';
 
@@ -30,7 +30,8 @@ export default function Home() {
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              Getting your business <span className="italic text-forest">ready for AI</span>.
+              The software changed.{' '}
+              <span className="italic text-forest">Your business hasn&rsquo;t.</span>
             </motion.h1>
 
             <motion.p
@@ -38,8 +39,8 @@ export default function Home() {
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             >
-              We fix broken business systems using AI, built on real operational
-              experience, so you never have to touch the tech.
+              You settled for off-the-shelf because custom wasn&rsquo;t an option.
+              Now it is.
             </motion.p>
 
             <motion.div
@@ -47,9 +48,9 @@ export default function Home() {
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <BookDiscoveryButton />
+              <EnquireNowButton />
               <Link to="/contact" className="link-arrow">
-                Learn more &rarr;
+                You&rsquo;ll learn more &rarr;
               </Link>
             </motion.div>
           </div>
@@ -91,12 +92,9 @@ export default function Home() {
           </SectionReveal>
           <SectionReveal delay={0.3}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <BookDiscoveryButton
-                className="btn-gold"
-                bookingType="subscriptionAudit"
-              >
-                Book a Subscription Audit
-              </BookDiscoveryButton>
+              <EnquireNowButton inquire="subscription" className="btn-gold">
+                Enquire Now
+              </EnquireNowButton>
               <Link
                 to="/portfolio"
                 className="text-cream/80 text-sm hover:text-gold-soft transition-colors"

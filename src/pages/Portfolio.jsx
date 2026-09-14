@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
-import MagneticButton from '../components/MagneticButton';
-import CaseStudyCard from '../components/CaseStudyCard';
-import DataReadout from '../components/DataReadout';
-import { CASE_STUDIES } from '../data/content';
+import EnquireNowButton from '../components/EnquireNowButton';
+import { COST_EXAMPLES, LOCKEROOM_CASE } from '../data/content';
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -13,144 +11,193 @@ const pageTransition = {
   transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
 };
 
+const money = (value) =>
+  value.toLocaleString('en-AU', {
+    style: 'currency',
+    currency: 'AUD',
+    maximumFractionDigits: 0,
+  });
+
+function ProofCard({ example, featured = false }) {
+  const stackTotal = example.rows.reduce((sum, row) => sum + row.annual, 0);
+  const amountSuffix = example.amountSuffix ?? '/yr';
+
+  return (
+    <div
+      className={`h-full p-8 md:p-10 rounded-2xl border ${
+        featured ? 'bg-cream border-forest/20' : 'bg-paper border-mist'
+      }`}
+    >
+      <div className="flex flex-wrap items-baseline justify-between gap-3 mb-6">
+        <p className="text-[0.7rem] tracking-[0.18em] uppercase text-gold">
+          {featured ? 'Documented savings' : 'Potential'}
+        </p>
+        {example.status === 'documented' && (
+          <span className="cost-flag cost-flag--verified">
+            Documented &middot; {example.client}
+          </span>
+        )}
+        {example.status === 'modelled' && (
+          <span className="cost-flag cost-flag--verified">
+            Modelled &middot; {example.client}
+          </span>
+        )}
+        {example.status === 'indicative' && (
+          <span className="cost-flag">Indicative list pricing</span>
+        )}
+      </div>
+
+      <h2 className="heading-display text-3xl text-ink mb-2">{example.label}</h2>
+      <p className="text-sage text-sm mb-8">{example.context}</p>
+
+      {example.ours && (
+        <p className="heading-display text-4xl md:text-5xl text-forest leading-none mb-8">
+          {money(example.ours.value)}
+          <span className="text-lg text-sage"> {example.ours.period}</span>
+        </p>
+      )}
+
+      <ul className="divide-y divide-mist mb-6">
+        {example.rows.map((row) => (
+          <li key={row.label} className="py-3 flex items-start justify-between gap-6">
+            <span>
+              <span className="block text-ink text-sm">{row.label}</span>
+              <span className="block text-sage text-xs mt-1">{row.basis}</span>
+            </span>
+            <span className="text-ink text-sm whitespace-nowrap tabular-nums">
+              {money(row.annual)}
+              {amountSuffix === '/yr' ? '/yr' : ''}
+            </span>
+          </li>
+        ))}
+        <li className="py-3 flex items-baseline justify-between gap-6">
+          <span className="text-ink text-sm font-medium">
+            {example.stackLabel ?? 'Every year, before anything else'}
+          </span>
+          <span className="heading-display text-xl text-ink tabular-nums">
+            {money(stackTotal)}
+          </span>
+        </li>
+      </ul>
+
+      <p className="text-sage text-xs leading-relaxed">{example.footnote}</p>
+
+      {example.href && (
+        <Link to={example.href} className="link-arrow inline-block mt-7">
+          Read the full case study &rarr;
+        </Link>
+      )}
+    </div>
+  );
+}
+
 export default function Portfolio() {
+  const lockeroom = COST_EXAMPLES.find((example) => example.id === 'fitness');
+  const marketing = COST_EXAMPLES.find((example) => example.id === 'marketing');
+  const potentials = COST_EXAMPLES.filter(
+    (example) => example.id !== 'fitness' && example.id !== 'marketing',
+  );
+
   return (
     <motion.div {...pageTransition}>
-      {/* Hero */}
-      <section className="pt-36 pb-20 md:pt-44 md:pb-28 px-6">
+      <section className="pt-36 pb-16 md:pt-44 md:pb-20 px-6">
         <div className="max-w-5xl mx-auto">
           <SectionReveal>
             <p className="section-eyebrow">Portfolio</p>
           </SectionReveal>
           <SectionReveal delay={0.1}>
             <h1 className="heading-display text-5xl sm:text-6xl md:text-7xl text-ink leading-[1.04] max-w-4xl">
-              Built to <span className="italic text-forest">deliver</span>.
+              Savings we can <span className="italic text-forest">show</span>,
+              and savings we can model.
             </h1>
           </SectionReveal>
           <SectionReveal delay={0.2}>
             <p className="text-sage text-lg mt-8 max-w-2xl leading-relaxed">
-              Real projects, real outcomes. Every entry represents a complete
-              solution: restructured data, automated workflows, and systems that run
-              from day one. Client details anonymised.
+              Lockeroom is delivered work with documented numbers. Marketing is a
+              modelled stack review. The rest are indicative, so you can see the
+              shape of the same problem in other industries.
             </p>
           </SectionReveal>
         </div>
       </section>
 
-      {/* Confidentiality notice */}
       <section className="px-6 pb-8">
         <div className="max-w-5xl mx-auto">
-          <SectionReveal delay={0.25}>
-            <div className="p-6 md:p-8 bg-paper border border-mist rounded-xl">
-              <p className="text-ink text-sm md:text-base leading-relaxed">
-                For client confidentiality, we don&rsquo;t publish screenshots of live
-                systems online. Book a live demo and we can walk you through any of
-                these projects in action.
+          <SectionReveal>
+            <div className="p-8 md:p-12 bg-forest rounded-2xl">
+              <p
+                className="text-[0.7rem] tracking-[0.18em] uppercase mb-5"
+                style={{ color: 'var(--color-gold-soft)' }}
+              >
+                Flagship &middot; {LOCKEROOM_CASE.sector}
               </p>
-              <Link to="/contact" className="link-arrow mt-5 inline-flex">
-                Book a live demo &rarr;
+              <img
+                src={LOCKEROOM_CASE.logo}
+                alt="Lockeroom logo"
+                className="h-10 sm:h-12 w-auto mb-8"
+              />
+              <p className="heading-display text-5xl sm:text-6xl text-cream leading-none">
+                {LOCKEROOM_CASE.headline.value}
+              </p>
+              <p className="text-cream/70 text-sm mt-4 max-w-md leading-relaxed">
+                {LOCKEROOM_CASE.headline.label}. {LOCKEROOM_CASE.tagline}
+              </p>
+              <Link
+                to="/portfolio/lockeroom"
+                className="inline-block mt-8 text-gold-soft text-sm hover:text-cream transition-colors"
+              >
+                Read the Lockeroom case study &rarr;
               </Link>
             </div>
           </SectionReveal>
         </div>
       </section>
 
-      {/* Aggregate stats */}
-      <section className="py-12 px-6 bg-paper border-y border-mist">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-6 md:gap-12">
-          <DataReadout label="Projects delivered" value="40+" />
-          <DataReadout label="Data sources unified" value="50+" />
-          <DataReadout label="Workflows automated" value="200+" />
-          <DataReadout label="Industries served" value="5" />
-        </div>
-      </section>
-
-      {/* Case studies grid */}
       <section className="section-shell">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {CASE_STUDIES.map((study, i) => (
-              <CaseStudyCard key={study.id} study={study} index={i} linkable={false} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured deep-dive */}
-      <section className="section-shell section-shell--paper border-t border-mist">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <SectionReveal>
-            <p className="section-eyebrow">Featured Transformation</p>
-            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-8 max-w-3xl">
-              From fragmented spreadsheets to a unified operations platform
+            <p className="section-eyebrow">The numbers</p>
+            <h2 className="heading-display text-3xl md:text-4xl text-ink mb-12 max-w-2xl">
+              Documented first. Potential next.
             </h2>
           </SectionReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mt-12">
-            <SectionReveal delay={0.1} className="md:col-span-7">
-              <div className="space-y-6 text-sage leading-relaxed">
-                <p>
-                  A multi-location fitness operations company was running on a
-                  patchwork of spreadsheets, disconnected CRM exports, and manual
-                  processes. Member data lived in five different places. Coach
-                  assignments were tracked by hand. Renewals were a quarterly
-                  firefight.
-                </p>
-                <p>
-                  We restructured everything, designing a unified data schema,
-                  migrating historical records, building staff tools with individual
-                  logins, deploying a member-facing app, and automating renewal
-                  scoring. The result wasn&rsquo;t a tool they had to learn. It was an
-                  operating system that replaced the chaos.
-                </p>
-              </div>
-            </SectionReveal>
-
-            <SectionReveal delay={0.2} className="md:col-span-5">
-              <div className="grid grid-cols-2 gap-4">
-                <DataReadout label="Data sources consolidated" value="12 → 1" />
-                <DataReadout label="Manual processes eliminated" value="85%" />
-                <DataReadout label="Renewal prediction accuracy" value="94%" />
-                <DataReadout label="Staff adoption (week 1)" value="100%" />
-              </div>
-            </SectionReveal>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            {lockeroom && (
+              <SectionReveal>
+                <ProofCard example={lockeroom} featured />
+              </SectionReveal>
+            )}
+            {marketing && (
+              <SectionReveal delay={0.1}>
+                <ProofCard example={marketing} />
+              </SectionReveal>
+            )}
           </div>
+
+          {potentials.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {potentials.map((example, index) => (
+                <SectionReveal key={example.id} delay={index * 0.08}>
+                  <ProofCard example={example} />
+                </SectionReveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* CTA */}
       <section className="section-shell section-shell--forest">
         <div className="max-w-3xl mx-auto text-center">
           <SectionReveal>
-            <p className="section-eyebrow" style={{ color: 'var(--color-gold-soft)' }}>
-              Your Turn
-            </p>
-          </SectionReveal>
-          <SectionReveal delay={0.1}>
-            <h2 className="heading-display text-4xl sm:text-5xl md:text-6xl text-cream mb-8">
-              Ready for your transformation?
+            <h2 className="heading-display text-4xl sm:text-5xl text-cream mb-8">
+              What is your stack costing you?
             </h2>
-          </SectionReveal>
-          <SectionReveal delay={0.2}>
             <p className="text-cream/70 text-lg mb-12 max-w-lg mx-auto leading-relaxed">
-              Every project starts with understanding your data. Book a workshop or
-              reach out to discuss your specific challenges.
+              If we cannot show a substantial, measurable saving, we will not take
+              the work. Enquire and we will tell you which conversation to have.
             </p>
-          </SectionReveal>
-          <SectionReveal delay={0.3}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <MagneticButton>
-                <Link to="/workshops" className="btn-gold">
-                  Book an AI Workshop
-                </Link>
-              </MagneticButton>
-              <Link
-                to="/contact"
-                className="text-cream/80 text-sm hover:text-gold-soft transition-colors"
-              >
-                Or discuss a project &rarr;
-              </Link>
-            </div>
+            <EnquireNowButton className="btn-gold" />
           </SectionReveal>
         </div>
       </section>

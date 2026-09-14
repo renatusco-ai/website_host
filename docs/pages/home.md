@@ -18,8 +18,8 @@ Landing page. Primary entry point for Renatus positioning: approachable AI educa
 | Element | Copy |
 |---------|------|
 | Eyebrow | AI Workshops + Data Restructuring |
-| Headline | Understand AI. Then *put it* to work. |
-| Subline | Hands-on AI education and data restructuring that turn complexity into clarity: and insight into real impact. |
+| Headline | The software changed. Your business hasn't. |
+| Subline | You settled for off-the-shelf because custom wasn't an option. Now it is. |
 | Manifesto | We deliver solutions, not tools. |
 | Supporting line | A service on the outside, a tech company on the inside. |
 
@@ -97,6 +97,12 @@ Do not drop the status flag or `COST_MODEL_DISCLAIMER` when editing those number
 
 ## Related docs
 
-- [workshops.md](./workshops.md): primary conversion target
+- [workshops.md](./workshops.md): company education path
 - [portfolio.md](./portfolio.md): full case study portfolio
+- [../architecture.md](../architecture.md): system map
+- [../progress.md](../progress.md): where we left off
 - [../README.md](../README.md): site-wide routing
+
+## Wiki
+
+[Architecture](../architecture.md) · [Progress](../progress.md) · [Index](../README.md) · [Home](./home.md) · [Services](./services.md) · [Portfolio](./portfolio.md) · [Lockeroom](./lockeroom.md) · [Workshops](./workshops.md) · [Contact](./contact.md)

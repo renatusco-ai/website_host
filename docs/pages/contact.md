@@ -2,7 +2,7 @@
 
 ## Summary
 
-General enquiry and booking hub. Workshop-first messaging with contact form, scheduling placeholder, and contact details. Shared form component also used on Workshops page.
+Learn-more hub. Enquire Now opens an on-page form. Submit posts to `/api/enquiry`, which sends via Resend to `info@renatusco.com`. Needs `RESEND_API_KEY` on the server. TidyCal is disconnected.
 
 ## Route
 
@@ -127,6 +127,11 @@ sequenceDiagram
 
 ## Related docs
 
-- [workshops.md](./workshops.md): shares `BookDemoForm` + `SchedulingEmbed`
+- [workshops.md](./workshops.md): shares `BookDemoForm`
 - [services.md](./services.md): tier query param source
+- [../progress.md](../progress.md): Resend / DNS block
 - [../README.md](../README.md): env var conventions
+
+## Wiki
+
+[Architecture](../architecture.md) · [Progress](../progress.md) · [Index](../README.md) · [Home](./home.md) · [Services](./services.md) · [Portfolio](./portfolio.md) · [Lockeroom](./lockeroom.md) · [Workshops](./workshops.md) · [Contact](./contact.md)

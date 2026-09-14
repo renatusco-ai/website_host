@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
 import MagneticButton from '../components/MagneticButton';
 import BookDemoForm from '../components/BookDemoForm';
-import { useBooking } from '../context/BookingContext';
+import EnquireNowButton from '../components/EnquireNowButton';
 import { WORKSHOP_TOPICS } from '../data/content';
 
 const pageTransition = {
@@ -43,8 +43,6 @@ const FORMAT_POINTS = [
 ];
 
 export default function Workshops() {
-  const { openBooking } = useBooking();
-
   return (
     <motion.div {...pageTransition}>
       {/* Hero */}
@@ -73,18 +71,14 @@ export default function Workshops() {
                   Enquire about a workshop
                 </a>
               </MagneticButton>
-              <button
-                type="button"
-                className="link-arrow"
-                onClick={() => openBooking('audit')}
-              >
-                Need strategy you can act on now? Book the 60 min audit &rarr;
-              </button>
+              <EnquireNowButton inquire="subscription" className="link-arrow">
+                Need the numbers now? Subscription Diagnostic &rarr;
+              </EnquireNowButton>
             </div>
             <p className="text-sage text-sm mt-5 max-w-xl leading-relaxed">
               Workshops are built for education and team alignment. If you want a
-              true strategy-to-action plan for your business now, the paid 60 minute
-              Operations &amp; AI Audit is the better fit.
+              true strategy-to-action plan for your software spend now, the paid
+              Subscription Diagnostic is the better fit.
             </p>
           </SectionReveal>
         </div>

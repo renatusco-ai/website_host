@@ -103,3 +103,7 @@ Service offering and pricing page. Explains the "solutions, not tools" delivery 
 - [workshops.md](./workshops.md): recommended entry funnel
 - [contact.md](./contact.md): tier enquiry destination
 - [portfolio.md](./portfolio.md): proof points for tier claims
+
+## Wiki
+
+[Architecture](../architecture.md) · [Progress](../progress.md) · [Index](../README.md) · [Home](./home.md) · [Services](./services.md) · [Portfolio](./portfolio.md) · [Lockeroom](./lockeroom.md) · [Workshops](./workshops.md) · [Contact](./contact.md)

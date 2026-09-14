@@ -1,7 +1,7 @@
 # Renatus Website: Agent Documentation Index
 
 > AI-friendly reference for the Renatus marketing site (`renatusco-ai/website_host`).
-> Use this index to find per-page docs, routing, shared data, and planned integrations.
+> Wiki: [Architecture](./architecture.md) · [Progress](./progress.md) · [Home](./pages/home.md) · [Services](./pages/services.md) · [Portfolio](./pages/portfolio.md) · [Lockeroom](./pages/lockeroom.md) · [Workshops](./pages/workshops.md) · [Contact](./pages/contact.md)
 
 ## Stack
 
@@ -40,7 +40,7 @@ flowchart TD
   Contact --> Workshops
 ```
 
-**Primary CTA sitewide:** Book Free Diagnostic (modal). Workshops are a company education path via `/workshops`.
+**Primary CTA sitewide:** Enquire Now (modal → Resend). Workshops are a company education path via `/workshops`.
 
 ## Shared content (`src/data/content.js`)
 
@@ -68,8 +68,12 @@ official logo.
 
 | Component | Path | Role |
 |-----------|------|------|
-| `BookDemoForm` | `src/components/BookDemoForm.jsx` | Contact + Workshops enquiry form |
-| `SchedulingEmbed` | `src/components/SchedulingEmbed.jsx` | Calendly/Cal.com placeholder |
+| `EnquireNowButton` | `src/components/EnquireNowButton.jsx` | Opens enquiry modal |
+| `EnquiryModal` | `src/components/EnquiryModal.jsx` | Sitewide form overlay |
+| `BookDemoForm` | `src/components/BookDemoForm.jsx` | POSTs `/api/enquiry` |
+| `ClientLogoWall` | `src/components/ClientLogoWall.jsx` | Home featured + carousel |
+| `CostComparison` | `src/components/CostComparison.jsx` | Home industry savings tabs |
+| `SchedulingEmbed` | `src/components/SchedulingEmbed.jsx` | Unused for now (no TidyCal) |
 | `PricingCard` | `src/components/PricingCard.jsx` | Service tier cards |
 | `CaseStudyCard` | `src/components/CaseStudyCard.jsx` | Portfolio cards |
 | `DataReadout` | `src/components/DataReadout.jsx` | Metric stat chips |
@@ -81,25 +85,26 @@ official logo.
 
 | Integration | Status | Pages affected |
 |-------------|--------|----------------|
-| `mailto:info@renatusco.com` | **Live** (form fallback) | Contact, Workshops |
-| Calendly / Cal.com embed | **Placeholder** | Contact, Workshops |
-| Form API (Formspree, Supabase, etc.) | **Not wired** | Contact, Workshops |
+| Resend `POST /api/enquiry` | **Wired, blocked** — domain not verified | Modal, Contact, Workshops |
+| `mailto:` as submit | **Removed** | — |
+| Calendly / TidyCal embed | **Disconnected** | Contact, Workshops |
+| Form API (Formspree, etc.) | **Not used** — Resend instead | — |
 | CMS for copy / case studies | **Not wired** | All content pages |
 | Case study images | **Planned** | Portfolio, Home teasers |
 | Analytics (Plausible, GA4, etc.) | **Not wired** | All |
 | CRM / lead routing (HubSpot, etc.) | **Not wired** | Contact, Workshops |
 
-## Environment variables (future)
+## Environment variables
 
-When APIs are added, prefer `VITE_*` prefixed vars for client-safe config:
+Server-only (no `VITE_` prefix). See `.env.example`. Never commit `.env`.
 
 ```env
-# Examples: not yet in use
-VITE_FORM_ENDPOINT=
-VITE_CALENDLY_URL=
-VITE_CALCOM_URL=
-VITE_ANALYTICS_ID=
+RESEND_API_KEY=
+RESEND_FROM=Renatus <shaun@renatusco.com>
+ENQUIRY_TO=shaun@renatusco.com
 ```
+
+`RESEND_FROM` needs a mailbox on a **verified** Resend domain. Current block: Cloudflare DNS for `renatusco.com`. See [progress.md](./progress.md).
 
 ## Conventions for extending docs
 
@@ -108,4 +113,5 @@ When adding a page, workflow, or API:
 1. Add route in `src/App.jsx`
 2. Create `src/pages/<Name>.jsx`
 3. Add `docs/pages/<slug>.md` using the same section template as existing page docs
-4. Update this README route map and integration table
+4. Update this README, [architecture.md](./architecture.md), and the wiki strip on sibling page docs
+5. Note status in [progress.md](./progress.md) if you stop mid-task
