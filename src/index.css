@@ -1175,6 +1175,70 @@ body {
   stroke: var(--color-gold);
 }
 
+.story-svg-machine-frame {
+  fill: rgba(111, 125, 116, 0.035);
+  stroke: rgba(111, 125, 116, 0.58);
+  stroke-width: 1.4;
+}
+
+.story-svg-machine-line,
+.story-svg-machine-copy,
+.story-svg-machine-wheel {
+  fill: none;
+  stroke: var(--color-sage);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.4;
+}
+
+.story-svg-machine-copy {
+  opacity: 0.5;
+}
+
+.story-svg-machine-wheel {
+  opacity: 0.72;
+}
+
+.story-svg-machine-hub {
+  fill: var(--color-sage);
+}
+
+.story-svg-era-title {
+  fill: var(--color-forest);
+  font-family: var(--font-display);
+  font-size: 20px;
+}
+
+.story-svg-era-title--gold {
+  fill: var(--color-gold);
+}
+
+.story-svg-evolution-arrow,
+.story-svg-evolution-line,
+.story-svg-modern-slot {
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.story-svg-modern-core {
+  fill: var(--color-forest);
+  stroke: rgba(176, 132, 60, 0.72);
+  stroke-width: 1.4;
+}
+
+.story-svg-modern-screen {
+  fill: rgba(246, 242, 234, 0.08);
+  stroke: rgba(246, 242, 234, 0.35);
+}
+
+.story-svg-modern-slot {
+  opacity: 0.42;
+  stroke: var(--color-cream);
+}
+
 .story-ending {
   position: relative;
   z-index: 2;

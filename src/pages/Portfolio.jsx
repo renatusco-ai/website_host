@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
 import EnquireNowButton from '../components/EnquireNowButton';
+import {
+  STORY_PAGE_TRANSITION,
+  StoryCloser,
+  StoryHero,
+  StorySectionHeading,
+  StoryStatement,
+} from '../components/SiteStory';
 import { COST_EXAMPLES, LOCKEROOM_CASE } from '../data/content';
-
-const pageTransition = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-};
 
 const money = (value) =>
   value.toLocaleString('en-AU', {
@@ -24,8 +24,8 @@ function ProofCard({ example, featured = false }) {
 
   return (
     <div
-      className={`h-full p-8 md:p-10 rounded-2xl border ${
-        featured ? 'bg-cream border-forest/20' : 'bg-paper border-mist'
+      className={`proof-story-card h-full p-8 md:p-10 rounded-2xl border ${
+        featured ? 'proof-story-card--featured bg-cream border-forest/20' : 'bg-paper border-mist'
       }`}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-3 mb-6">
@@ -99,69 +99,67 @@ export default function Portfolio() {
   );
 
   return (
-    <motion.div {...pageTransition}>
-      <section className="pt-36 pb-16 md:pt-44 md:pb-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">Portfolio</p>
-          </SectionReveal>
-          <SectionReveal delay={0.1}>
-            <h1 className="heading-display text-5xl sm:text-6xl md:text-7xl text-ink leading-[1.04] max-w-4xl">
-              Savings we can <span className="italic text-forest">show</span>,
-              and savings we can model.
-            </h1>
-          </SectionReveal>
-          <SectionReveal delay={0.2}>
-            <p className="text-sage text-lg mt-8 max-w-2xl leading-relaxed">
-              Lockeroom is delivered work with documented numbers. Marketing is a
-              modelled stack review. The rest are indicative, so you can see the
-              shape of the same problem in other industries.
-            </p>
-          </SectionReveal>
-        </div>
-      </section>
+    <motion.div {...STORY_PAGE_TRANSITION} className="portfolio-story">
+      <StoryHero
+        eyebrow="Portfolio"
+        title={
+          <>
+            Evidence before <em>adjectives.</em>
+          </>
+        }
+        lead="We show what was removed, what replaced it and where every saving came from. Delivered work is documented. Future work is clearly labelled."
+        graphic="savings"
+        actions={
+          <>
+            <a href="#flagship" className="btn-gold">See the documented result</a>
+            <Link to="/learn-more" className="link-arrow">Understand the model &rarr;</Link>
+          </>
+        }
+      />
 
-      <section className="px-6 pb-8">
-        <div className="max-w-5xl mx-auto">
+      <StoryStatement
+        eyebrow="Three standards of proof"
+        body="Lockeroom is delivered work with documented numbers. Marketing is a modelled stack review. Other industries are indicative list-rate arithmetic — useful for seeing the shape of the opportunity, never presented as a result."
+      >
+        Documented when it happened. Modelled when it is scoped.{' '}
+        <em>Indicative when it is only potential.</em>
+      </StoryStatement>
+
+      <section id="flagship" className="site-story-section portfolio-story__flagship-section">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="01"
+            eyebrow={`Flagship · ${LOCKEROOM_CASE.sector}`}
+            title="One system replaced a fragmented operating stack."
+            body="A delivered example of what happens when software, data and workflow are treated as one commercial problem."
+          />
           <SectionReveal>
-            <div className="p-8 md:p-12 bg-forest rounded-2xl">
-              <p
-                className="text-[0.7rem] tracking-[0.18em] uppercase mb-5"
-                style={{ color: 'var(--color-gold-soft)' }}
-              >
-                Flagship &middot; {LOCKEROOM_CASE.sector}
-              </p>
-              <img
-                src={LOCKEROOM_CASE.logo}
-                alt="Lockeroom logo"
-                className="h-10 sm:h-12 w-auto mb-8"
-              />
-              <p className="heading-display text-5xl sm:text-6xl text-cream leading-none">
-                {LOCKEROOM_CASE.headline.value}
-              </p>
-              <p className="text-cream/70 text-sm mt-4 max-w-md leading-relaxed">
-                {LOCKEROOM_CASE.headline.label}. {LOCKEROOM_CASE.tagline}
-              </p>
-              <Link
-                to="/portfolio/lockeroom"
-                className="inline-block mt-8 text-gold-soft text-sm hover:text-cream transition-colors"
-              >
-                Read the Lockeroom case study &rarr;
-              </Link>
+            <div className="portfolio-story__flagship">
+              <div>
+                <img src={LOCKEROOM_CASE.logo} alt="Lockeroom logo" />
+                <p>{LOCKEROOM_CASE.tagline}</p>
+              </div>
+              <div>
+                <span>Documented net annual saving</span>
+                <strong>{LOCKEROOM_CASE.headline.value}</strong>
+                <p>{LOCKEROOM_CASE.headline.label}</p>
+                <Link to="/portfolio/lockeroom">
+                  Follow the full case study <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </div>
             </div>
           </SectionReveal>
         </div>
       </section>
 
-      <section className="section-shell">
-        <div className="max-w-6xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">The numbers</p>
-            <h2 className="heading-display text-3xl md:text-4xl text-ink mb-12 max-w-2xl">
-              Documented first. Potential next.
-            </h2>
-          </SectionReveal>
-
+      <section className="site-story-section site-story-section--paper">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="02"
+            eyebrow="The wider pattern"
+            title="The problem changes shape. The economics repeat."
+            body="Choose a sector below to see the visible stack cost. Each card shows its evidence status so delivered outcomes never blur into projections."
+          />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {lockeroom && (
               <SectionReveal>
@@ -187,20 +185,16 @@ export default function Portfolio() {
         </div>
       </section>
 
-      <section className="section-shell section-shell--forest">
-        <div className="max-w-3xl mx-auto text-center">
-          <SectionReveal>
-            <h2 className="heading-display text-4xl sm:text-5xl text-cream mb-8">
-              What is your stack costing you?
-            </h2>
-            <p className="text-cream/70 text-lg mb-12 max-w-lg mx-auto leading-relaxed">
-              If we cannot show a substantial, measurable saving, we will not take
-              the work. Enquire and we will tell you which conversation to have.
-            </p>
-            <EnquireNowButton className="btn-gold" />
-          </SectionReveal>
-        </div>
-      </section>
+      <StoryCloser
+        eyebrow="Your evidence"
+        title="What is your stack costing you?"
+        body="Most businesses have never put every subscription, workaround and duplicated hour in one place. We will — and tell you honestly whether rebuilding is worth it."
+      >
+        <EnquireNowButton inquire="subscription" className="btn-gold">
+          Map the real cost
+        </EnquireNowButton>
+        <Link to="/contact">Compare the ways to start &rarr;</Link>
+      </StoryCloser>
     </motion.div>
   );
 }

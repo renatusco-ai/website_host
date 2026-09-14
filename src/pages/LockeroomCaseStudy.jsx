@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
 import EnquireNowButton from '../components/EnquireNowButton';
+import {
+  STORY_PAGE_TRANSITION,
+  StoryCloser,
+  StoryHero,
+  StorySectionHeading,
+  StoryStatement,
+} from '../components/SiteStory';
 import { CASE_STUDIES, LOCKEROOM_CASE } from '../data/content';
-
-const pageTransition = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-};
 
 const money = (value) =>
   value.toLocaleString('en-AU', {
@@ -27,76 +27,70 @@ export default function LockeroomCaseStudy() {
     .filter(Boolean);
 
   return (
-    <motion.div {...pageTransition}>
-      {/* Hero */}
-      <section className="pt-32 pb-16 md:pt-40 md:pb-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <Link to="/portfolio" className="text-sage text-sm hover:text-forest transition-colors">
-            &larr; All work
-          </Link>
+    <motion.div {...STORY_PAGE_TRANSITION} className="case-story">
+      <StoryHero
+        eyebrow={`Case study · ${LOCKEROOM_CASE.sector}`}
+        title={
+          <>
+            One owned system. <em>A $266,651 annual saving.</em>
+          </>
+        }
+        lead={LOCKEROOM_CASE.summary}
+        graphic="savings"
+        actions={
+          <>
+            <a href="#breakdown" className="btn-gold">Follow the numbers</a>
+            <Link to="/portfolio" className="link-arrow">&larr; All work</Link>
+          </>
+        }
+      />
 
-          <p className="section-eyebrow mt-10">Case Study &middot; {LOCKEROOM_CASE.sector}</p>
+      <StoryStatement
+        eyebrow="The result"
+        body="This is delivered work using FY26 figures: software retired, operating capacity recovered, then the new annual replacement cost deducted."
+      >
+        The headline is not a projection. <em>It reconciles.</em>
+      </StoryStatement>
 
-          <img
-            src={LOCKEROOM_CASE.logo}
-            alt="Lockeroom logo"
-            className="h-12 sm:h-16 md:h-20 w-auto mt-6"
-          />
-
-          <h1 className="heading-display text-4xl sm:text-5xl md:text-6xl text-ink leading-[1.05] mt-10 max-w-3xl">
-            {LOCKEROOM_CASE.tagline}
-          </h1>
-
-          <p className="text-sage text-lg mt-8 max-w-2xl leading-relaxed">
-            {LOCKEROOM_CASE.summary}
-          </p>
-        </div>
-      </section>
-
-      {/* Headline number */}
-      <section className="px-6 pb-16 md:pb-20">
-        <div className="max-w-5xl mx-auto">
+      <section id="breakdown" className="site-story-section case-story__headline-section">
+        <div className="site-story-section__inner">
           <SectionReveal>
-            <div className="p-8 md:p-12 bg-forest rounded-2xl">
-              <p
-                className="text-[0.7rem] tracking-[0.18em] uppercase mb-5"
-                style={{ color: 'var(--color-gold-soft)' }}
-              >
-                {headline.label}
-              </p>
-              <p className="heading-display text-6xl sm:text-7xl md:text-8xl text-cream leading-none">
+            <div className="case-story__headline">
+              <div>
+                <img src={LOCKEROOM_CASE.logo} alt="Lockeroom logo" />
+                <p>{LOCKEROOM_CASE.tagline}</p>
+              </div>
+              <div>
+              <p>{headline.label}</p>
+              <strong>
                 {headline.value}
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-12 pt-10 border-t border-cream/15">
+              </strong>
+              <div className="case-story__secondary">
                 {secondary.map((stat) => (
                   <div key={stat.label}>
-                    <p className="heading-display text-3xl text-gold-soft leading-none">
-                      {stat.value}
-                    </p>
-                    <p className="text-cream/60 text-xs mt-3 leading-relaxed">{stat.label}</p>
+                    <strong>{stat.value}</strong>
+                    <span>{stat.label}</span>
                   </div>
                 ))}
+              </div>
               </div>
             </div>
           </SectionReveal>
         </div>
       </section>
 
-      {/* Where the saving came from */}
-      <section className="section-shell bg-paper border-y border-mist">
-        <div className="max-w-5xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">Where It Came From</p>
-            <h2 className="heading-display text-3xl md:text-4xl text-ink max-w-2xl mb-12">
-              Two streams, one system
-            </h2>
-          </SectionReveal>
-
+      <section className="site-story-section site-story-section--paper">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="01"
+            eyebrow="Where the saving came from"
+            title="Two cost streams. One replacement."
+            body="Software subscriptions were the visible layer. Recovered staff capacity was larger. Both changed because one connected system removed duplicated handling."
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {groups.map((group, index) => (
               <SectionReveal key={group.id} delay={index * 0.1}>
-                <div className="h-full p-8 bg-cream border border-mist rounded-xl">
+                <div className="case-story__stream">
                   <h3 className="heading-display text-2xl text-ink mb-3">{group.title}</h3>
                   <p className="heading-display text-4xl text-forest leading-none mb-1">
                     {group.annual.toLocaleString('en-AU', {
@@ -128,9 +122,9 @@ export default function LockeroomCaseStudy() {
             ))}
           </div>
 
-          {/* Reconciliation */}
           <SectionReveal delay={0.2}>
-            <div className="mt-12 p-8 md:p-10 bg-cream border border-mist rounded-2xl overflow-x-auto">
+            <div className="case-story__reconciliation">
+              <p className="site-story-eyebrow">The reconciliation</p>
               <table className="savings-table">
                 <thead>
                   <tr>
@@ -172,24 +166,19 @@ export default function LockeroomCaseStudy() {
         </div>
       </section>
 
-      {/* What we built */}
-      <section className="section-shell">
-        <div className="max-w-6xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">What We Built</p>
-            <h2 className="heading-display text-3xl md:text-4xl text-ink max-w-2xl mb-4">
-              The system that replaced the stack
-            </h2>
-            <p className="text-sage text-lg mb-12 max-w-2xl leading-relaxed">
-              Seven connected workstreams, built on one restructured database, so member,
-              coach, programming, and billing data all describe the same reality.
-            </p>
-          </SectionReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <section className="site-story-section">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="02"
+            eyebrow="What replaced the stack"
+            title="Seven workstreams. One version of reality."
+            body="Member, coach, programming and billing data now live on one restructured foundation instead of being interpreted separately by disconnected tools."
+          />
+          <div className="case-story__workstreams">
             {workstreams.map((study, index) => (
               <SectionReveal key={study.id} delay={(index % 3) * 0.08}>
-                <div className="h-full p-7 bg-paper border border-mist rounded-xl">
+                <div className="case-story__workstream">
+                  <span>0{index + 1}</span>
                   <p className="text-[0.65rem] tracking-[0.16em] uppercase text-gold mb-4">
                     {study.industry}
                   </p>
@@ -208,21 +197,16 @@ export default function LockeroomCaseStudy() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="section-shell section-shell--forest">
-        <div className="max-w-3xl mx-auto text-center">
-          <SectionReveal>
-            <h2 className="heading-display text-4xl sm:text-5xl text-cream mb-8">
-              What is your stack costing you?
-            </h2>
-            <p className="text-cream/70 text-lg mb-12 max-w-lg mx-auto leading-relaxed">
-              Most businesses have never added it up. We will, and we will tell you
-              honestly whether rebuilding is worth it for you.
-            </p>
-            <EnquireNowButton className="btn-gold" />
-          </SectionReveal>
-        </div>
-      </section>
+      <StoryCloser
+        eyebrow="Your turn"
+        title="What is your stack costing you?"
+        body="Most businesses have never added every subscription and workaround together. We will — and tell you honestly whether rebuilding is worth it."
+      >
+        <EnquireNowButton inquire="subscription" className="btn-gold">
+          Find the saving
+        </EnquireNowButton>
+        <Link to="/learn-more">Why the economics changed &rarr;</Link>
+      </StoryCloser>
     </motion.div>
   );
 }

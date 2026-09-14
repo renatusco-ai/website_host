@@ -1,56 +1,56 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
-import MagneticButton from '../components/MagneticButton';
 import PricingCard from '../components/PricingCard';
 import EntryOfferCard from '../components/EntryOfferCard';
+import {
+  STORY_PAGE_TRANSITION,
+  StoryCloser,
+  StoryHero,
+  StorySectionHeading,
+  StoryStatement,
+} from '../components/SiteStory';
 import { TIERS, PROCESS_STEPS, ENTRY_OFFERS } from '../data/content';
-
-const pageTransition = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-};
 
 export default function Services() {
   return (
-    <motion.div {...pageTransition}>
-      {/* Hero */}
-      <section className="pt-36 pb-20 md:pt-44 md:pb-28 px-6">
-        <div className="max-w-5xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">Services</p>
-          </SectionReveal>
-          <SectionReveal delay={0.1}>
-            <h1 className="heading-display text-5xl sm:text-6xl md:text-7xl text-ink leading-[1.04] max-w-4xl">
-              Solutions, <span className="italic text-forest">not tools</span>.
-            </h1>
-          </SectionReveal>
-          <SectionReveal delay={0.2}>
-            <p className="text-sage text-lg mt-8 max-w-2xl leading-relaxed">
-              We don&rsquo;t hand you software and walk away. Every engagement
-              delivers a working solution: restructured data, automated workflows,
-              and the knowledge your team needs to drive it.
-            </p>
-          </SectionReveal>
-        </div>
-      </section>
+    <motion.div {...STORY_PAGE_TRANSITION} className="services-story">
+      <StoryHero
+        eyebrow="Services"
+        title={
+          <>
+            Find the expensive problem. <em>Build only what pays.</em>
+          </>
+        }
+        lead="We restructure the data, remove the workarounds and build the system around the way your business actually wins."
+        graphic="source"
+        actions={
+          <>
+            <a href="#start" className="btn-gold">Choose a starting point</a>
+            <Link to="/learn-more" className="link-arrow">
+              Why custom makes sense now &rarr;
+            </Link>
+          </>
+        }
+        note="No software pitch. The commercial case comes first."
+      />
 
-      {/* Low-friction entry offers */}
-      <section className="section-shell section-shell--paper border-y border-mist">
-        <div className="max-w-7xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">Where To Start</p>
-            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-4 max-w-2xl">
-              We know how this works. Here&rsquo;s how to start, low-pressure.
-            </h2>
-            <p className="text-sage max-w-2xl mb-16 leading-relaxed">
-              No hard sell, no hidden numbers until you ask. Pick the entry point
-              that matches how ready you are.
-            </p>
-          </SectionReveal>
+      <StoryStatement
+        eyebrow="The rule"
+        body="A beautiful application is worthless if the data underneath is fragmented. Every engagement moves in the same direction: understand the cost, organise the truth, then build the smallest complete solution."
+      >
+        We do not add another tool to the stack.{' '}
+        <em>We remove the need for the stack.</em>
+      </StoryStatement>
 
+      <section id="start" className="site-story-section site-story-section--paper">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="01"
+            eyebrow="Choose the first conversation"
+            title="Start at the depth your decision needs."
+            body="A quick diagnostic can establish whether there is a problem. A paid working session maps the economics. A workshop aligns the people who will need to lead the change."
+          />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {ENTRY_OFFERS.map((offer, i) => (
               <EntryOfferCard key={offer.id} offer={offer} index={i} />
@@ -59,30 +59,22 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Process */}
-      <section className="section-shell">
-        <div className="max-w-7xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">How We Work</p>
-            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-20">
-              The Process
-            </h2>
-          </SectionReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+      <section className="site-story-section">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="02"
+            eyebrow="How the work moves"
+            title="From scattered evidence to one working system."
+            body="Each phase earns the next. We do not jump to a build before the data, workflow and commercial case are understood."
+          />
+          <div className="services-story__process">
             {PROCESS_STEPS.map((step, i) => (
               <SectionReveal key={step.phase} delay={i * 0.15}>
-                <div className="relative">
-                  {i < PROCESS_STEPS.length - 1 && (
-                    <div className="hidden md:block absolute top-6 left-full w-full h-px bg-gradient-to-r from-mist to-transparent" />
-                  )}
-                  <p className="label-upper text-gold mb-4">{step.phase}</p>
-                  <h3 className="heading-display text-3xl md:text-4xl text-ink mb-4">
-                    {step.title}
-                  </h3>
-                  <p className="text-sage text-sm leading-relaxed">
-                    {step.description}
-                  </p>
+                <div className="services-story__process-step">
+                  <span>0{i + 1}</span>
+                  <p>{step.phase}</p>
+                  <h3>{step.title}</h3>
+                  <p>{step.description}</p>
                 </div>
               </SectionReveal>
             ))}
@@ -90,21 +82,15 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Pricing tiers */}
-      <section className="section-shell section-shell--paper border-y border-mist">
-        <div className="max-w-7xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">Service Tiers</p>
-            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-4">
-              How We Transform Your Business
-            </h2>
-            <p className="text-sage max-w-2xl mb-16 leading-relaxed">
-              From spreadsheet clean-up to enterprise transformation, every tier
-              delivers a complete solution, not a tool to figure out on your own.
-            </p>
-          </SectionReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      <section className="site-story-section site-story-section--paper">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="03"
+            eyebrow="How far the transformation goes"
+            title="The scope grows with the problem — not with a package quota."
+            body="From a clean foundation to a fully custom operating system, each tier describes the level of change rather than a box of features to consume."
+          />
+          <div className="services-story__tiers">
             {TIERS.map((tier, i) => (
               <PricingCard key={tier.id} tier={tier} index={i} />
             ))}
@@ -112,62 +98,22 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Narrative */}
-      <section className="section-shell">
-        <div className="max-w-4xl mx-auto text-center">
-          <SectionReveal>
-            <p className="heading-display text-3xl sm:text-4xl md:text-5xl text-ink leading-snug">
-              Your data is the foundation.{' '}
-              <span className="text-gold">We make it AI-ready.</span>
-            </p>
-          </SectionReveal>
-          <SectionReveal delay={0.15}>
-            <p className="text-sage text-lg mt-8 max-w-2xl mx-auto leading-relaxed">
-              Most AI projects fail because the data underneath is a mess. We start
-              by restructuring. cleaning CRMs, unifying databases, connecting
-              siloed systems. so every automation and AI agent has something solid
-              to build on.
-            </p>
-          </SectionReveal>
-        </div>
-      </section>
+      <StoryStatement
+        tone="forest"
+        eyebrow="The build order"
+        body="Clean CRMs. Unified databases. Connected systems. Then — and only then — automations, interfaces and AI agents with something reliable to work from."
+      >
+        Data first. Interface second. <em>AI last.</em>
+      </StoryStatement>
 
-      {/* CTA */}
-      <section className="section-shell section-shell--forest">
-        <div className="max-w-3xl mx-auto text-center">
-          <SectionReveal>
-            <p className="section-eyebrow" style={{ color: 'var(--color-gold-soft)' }}>
-              Not Sure Where to Start?
-            </p>
-          </SectionReveal>
-          <SectionReveal delay={0.1}>
-            <h2 className="heading-display text-4xl sm:text-5xl md:text-6xl text-cream mb-8">
-              Start with a workshop
-            </h2>
-          </SectionReveal>
-          <SectionReveal delay={0.2}>
-            <p className="text-cream/70 text-lg mb-12 max-w-lg mx-auto leading-relaxed">
-              Our AI workshops are the perfect entry point. Understand what&rsquo;s
-              possible, then choose the tier that fits.
-            </p>
-          </SectionReveal>
-          <SectionReveal delay={0.3}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <MagneticButton>
-                <Link to="/workshops" className="btn-gold">
-                  Book an AI Workshop
-                </Link>
-              </MagneticButton>
-              <Link
-                to="/contact"
-                className="text-cream/80 text-sm hover:text-gold-soft transition-colors"
-              >
-                Or discuss your project &rarr;
-              </Link>
-            </div>
-          </SectionReveal>
-        </div>
-      </section>
+      <StoryCloser
+        eyebrow="Not sure where to start?"
+        title="Begin with understanding, not implementation."
+        body="Bring the team into a workshop, or bring the software bills into a diagnostic. We will tell you which conversation is worth having."
+      >
+        <Link to="/workshops" className="btn-gold">Explore company workshops</Link>
+        <Link to="/contact">Compare your starting points &rarr;</Link>
+      </StoryCloser>
     </motion.div>
   );
 }

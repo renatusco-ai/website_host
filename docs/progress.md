@@ -4,13 +4,18 @@
 
 [Architecture](./architecture.md) · [Index](./README.md)
 
-**Last updated:** 14 Sep 2026  
-**Branch:** `main`  
+**Last updated:** 14 Sep 2026
+
+**Branch:** `main`
+
+**Rollback:** remote tag `pre-story-led-redesign-2026-09-14` (`f9bcb42`)
+
 **Blocked on:** Cloudflare / Resend DNS for `renatusco.com`
 
 ## Where we are
 
-The site work for this pass is done and should be on `main`. Enquiry form no longer opens Gmail. It posts to `/api/enquiry` and Resend should deliver to `shaun@renatusco.com`.
+The story-led visual redesign is on `main`. Enquiry form no longer opens Gmail.
+It posts to `/api/enquiry` and Resend should deliver to `shaun@renatusco.com`.
 
 **That send is not live yet.** Resend returned:
 
@@ -35,6 +40,7 @@ Shaun is waiting for Cloudflare to propagate Resend DNS. Checking nameservers / 
 | Resend path (`api/enquiry.js` + Vite middleware) | Wired, not delivering |
 | TidyCal / mailto CTA | Removed from primary path |
 | `/learn-more` software economics parallax story | Done |
+| Site-wide story-led visual redesign | Done |
 
 ## Blocked / next (in order)
 

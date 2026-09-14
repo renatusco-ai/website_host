@@ -1,53 +1,55 @@
 import { Link } from 'react-router-dom';
 import { CONTACT_EMAIL } from '../data/content';
+import EnquireNowButton from './EnquireNowButton';
 
 export default function Footer() {
   return (
-    <footer className="relative z-0 bg-forest text-cream">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+    <footer className="site-footer relative z-0 bg-forest text-cream">
+      <div className="site-footer__inner">
+        <div className="site-footer__lead">
+          <p>There is usually one expensive problem hiding in the stack.</p>
+          <EnquireNowButton className="site-footer__headline">
+            Let&rsquo;s find it. <span aria-hidden="true">&rarr;</span>
+          </EnquireNowButton>
+        </div>
+
+        <div className="site-footer__details">
           <div>
             <span className="heading-display text-3xl text-cream">
               Renatus<span className="text-gold-soft">.</span>
             </span>
-            <p className="mt-4 text-cream/60 text-sm leading-relaxed max-w-xs">
-              AI education and business data restructuring. We help you understand
-              AI, then put it to work, with solutions, not just tools.
+            <p>
+              Owned systems, structured data and practical AI for businesses that
+              refuse to operate like everyone else.
             </p>
           </div>
 
           <div>
-            <span className="label-upper block mb-6 text-cream/50">Navigate</span>
-            <div className="flex flex-col gap-3">
-              <Link to="/" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Home</Link>
-              <Link to="/services" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Services</Link>
-              <Link to="/portfolio" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Portfolio</Link>
-              <Link to="/workshops" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Workshops</Link>
-              <Link to="/contact" className="text-cream/70 text-sm hover:text-gold-soft transition-colors">Contact</Link>
+            <span>Explore</span>
+            <div>
+              <Link to="/">Home</Link>
+              <Link to="/learn-more">The story</Link>
+              <Link to="/services">Services</Link>
+              <Link to="/portfolio">Portfolio</Link>
+              <Link to="/workshops">Workshops</Link>
+              <Link to="/contact">Contact</Link>
             </div>
           </div>
 
           <div>
-            <span className="label-upper block mb-6 text-cream/50">Get in Touch</span>
-            <div className="flex flex-col gap-3">
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className="text-cream/70 text-sm hover:text-gold-soft transition-colors"
-              >
-                {CONTACT_EMAIL}
-              </a>
-              <Link to="/workshops" className="text-gold-soft text-sm hover:text-cream transition-colors">
-                Company workshops &rarr;
-              </Link>
+            <span>Get in touch</span>
+            <div>
+              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              <Link to="/workshops">Company workshops &rarr;</Link>
             </div>
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-cream/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-cream/50 text-xs">
+        <div className="site-footer__base">
+          <p>
             &copy; {new Date().getFullYear()} Renatus. All rights reserved.
           </p>
-          <p className="text-cream/30 text-xs tracking-widest uppercase">
+          <p>
             Understand AI. Then put it to work.
           </p>
         </div>

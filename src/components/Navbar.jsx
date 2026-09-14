@@ -47,8 +47,8 @@ export default function Navbar() {
         style={{ scaleX }}
       />
       <header
-        className={`fixed top-0 left-0 right-0 z-50 mt-[2px] ${
-          solid ? 'bg-cream' : ''
+        className={`site-nav fixed top-0 left-0 right-0 z-50 mt-[2px] ${
+          solid ? 'site-nav--solid' : ''
         }`}
       >
         <div
@@ -59,7 +59,7 @@ export default function Navbar() {
           }`}
         />
 
-        <nav className="relative max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
+        <nav className="site-nav__inner relative max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
           <Link to="/" className="relative z-10">
             <Wordmark />
           </Link>
@@ -69,8 +69,8 @@ export default function Navbar() {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`label-upper transition-colors duration-300 hover:text-gold ${
-                  location.pathname === link.to ? 'text-gold' : ''
+                className={`site-nav__link label-upper transition-colors duration-300 hover:text-gold ${
+                  location.pathname === link.to ? 'site-nav__link--active text-gold' : ''
                 }`}
               >
                 {link.label}

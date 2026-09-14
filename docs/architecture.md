@@ -29,6 +29,8 @@ flowchart LR
 | Enquiry UI | `EnquireNowButton` → `EnquiryProvider` → `EnquiryModal` → `BookDemoForm` | Stays on-page |
 | Enquiry send | `api/enquiry.js` → `api/send-enquiry.js` | Server-only `RESEND_API_KEY` |
 | Local API | Vite plugin in `vite.config.js` | Same handler as Vercel `/api/enquiry` |
+| Story UI | `SiteStory.jsx` + `site-story.css` | Shared editorial heroes, statements, section headings, and closers |
+| Story graphics | `SoftwareStoryGraphic.jsx` | Reusable animated SVG diagrams |
 
 ## Routes
 
@@ -101,6 +103,21 @@ Sources: `assets/logos-src/`. Output: `public/clients/`. Rebuild: `npm run proce
 2. Link that page from this file, [README](./README.md), and the wiki strip on sibling page docs
 3. Update [progress.md](./progress.md) when you stop mid-task
 4. Never commit `.env`
+
+## Visual system
+
+`/learn-more` is the reference experience for the whole site. Other routes reuse
+its visual grammar without copying its exact timeline:
+
+- oversized Fraunces editorial headlines
+- cream grid fields, forest depth, gold evidence markers
+- one narrative claim per viewport-scale section
+- diagrams that explain economics or process
+- proof labels that distinguish documented, modelled, and indicative figures
+- reduced-motion support and single-column mobile sequencing
+
+The rollback point before this site-wide redesign is the remote Git tag
+`pre-story-led-redesign-2026-09-14`.
 
 ## Wiki
 

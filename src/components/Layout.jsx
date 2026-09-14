@@ -6,8 +6,11 @@ export default function Layout({ children }) {
   return (
     <EnquiryProvider>
       <div className="min-h-screen flex flex-col bg-cream">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <Navbar />
-        <main className="flex-1 z-10 relative bg-cream">
+        <main id="main-content" className="flex-1 z-10 relative bg-cream">
           {children}
         </main>
         <Footer />

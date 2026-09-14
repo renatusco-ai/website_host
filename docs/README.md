@@ -80,6 +80,8 @@ official logo.
 | `CaseStudyCard` | `src/components/CaseStudyCard.jsx` | Portfolio cards |
 | `DataReadout` | `src/components/DataReadout.jsx` | Metric stat chips |
 | `HeroGraphic` | `src/components/HeroGraphic.jsx` | Home hero SVG illustration |
+| `SiteStory` | `src/components/SiteStory.jsx` | Shared editorial page primitives |
+| `SoftwareStoryGraphic` | `src/components/SoftwareStoryGraphic.jsx` | Animated story diagrams |
 | `Navbar` | `src/components/Navbar.jsx` | Global nav + scroll progress |
 | `Footer` | `src/components/Footer.jsx` | Global footer |
 

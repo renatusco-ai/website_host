@@ -103,12 +103,13 @@ const pageTransition = {
 
 function Chapter({ chapter, index }) {
   const isEven = index % 2 === 0;
+  const reduceMotion = useReducedMotion();
 
   return (
     <section className={`story-chapter ${isEven ? 'story-chapter--left' : 'story-chapter--right'}`}>
       <motion.span
         className="story-chapter__node"
-        initial={{ scale: 0.5, opacity: 0 }}
+        initial={reduceMotion ? false : { scale: 0.5, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
         viewport={{ once: true, amount: 0.6 }}
         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -118,7 +119,7 @@ function Chapter({ chapter, index }) {
 
       <motion.div
         className="story-chapter__copy"
-        initial={{ opacity: 0, y: 70 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 70 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
@@ -143,7 +144,11 @@ function Chapter({ chapter, index }) {
 
       <motion.div
         className="story-chapter__visual"
-        initial={{ opacity: 0, y: 100, rotate: isEven ? 1.5 : -1.5 }}
+        initial={
+          reduceMotion
+            ? false
+            : { opacity: 0, y: 100, rotate: isEven ? 1.5 : -1.5 }
+        }
         whileInView={{ opacity: 1, y: 0, rotate: 0 }}
         viewport={{ once: true, amount: 0.25 }}
         transition={{ duration: 1, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
@@ -180,14 +185,14 @@ export default function WhyCustom() {
         <div className="story-hero__inner">
           <motion.p
             className="story-hero__eyebrow"
-            initial={{ opacity: 0, y: 20 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.1 }}
           >
             The economics of custom software
           </motion.p>
           <motion.h1
-            initial={{ opacity: 0, y: 35 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
@@ -196,7 +201,7 @@ export default function WhyCustom() {
           </motion.h1>
           <motion.p
             className="story-hero__lead"
-            initial={{ opacity: 0, y: 24 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.38 }}
           >
@@ -206,7 +211,7 @@ export default function WhyCustom() {
           <motion.a
             href="#the-story"
             className="story-scroll-cue"
-            initial={{ opacity: 0 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.8 }}
           >
@@ -245,14 +250,14 @@ export default function WhyCustom() {
       <section className="story-ending">
         <motion.p
           className="story-ending__eyebrow"
-          initial={{ opacity: 0 }}
+          initial={reduceMotion ? false : { opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
           The new default
         </motion.p>
         <motion.h2
-          initial={{ opacity: 0, y: 45 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 45 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
@@ -263,7 +268,7 @@ export default function WhyCustom() {
         </motion.h2>
         <motion.div
           className="story-ending__actions"
-          initial={{ opacity: 0, y: 24 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.15 }}

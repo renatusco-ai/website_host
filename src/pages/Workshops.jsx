@@ -4,14 +4,14 @@ import SectionReveal from '../components/SectionReveal';
 import MagneticButton from '../components/MagneticButton';
 import BookDemoForm from '../components/BookDemoForm';
 import EnquireNowButton from '../components/EnquireNowButton';
+import {
+  STORY_PAGE_TRANSITION,
+  StoryCloser,
+  StoryHero,
+  StorySectionHeading,
+  StoryStatement,
+} from '../components/SiteStory';
 import { WORKSHOP_TOPICS } from '../data/content';
-
-const pageTransition = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-};
 
 const WHO_ITS_FOR = [
   'Leadership and management teams preparing to roll out AI across the business',
@@ -44,91 +44,53 @@ const FORMAT_POINTS = [
 
 export default function Workshops() {
   return (
-    <motion.div {...pageTransition}>
-      {/* Hero */}
-      <section className="pt-36 pb-20 md:pt-44 md:pb-28 px-6">
-        <div className="max-w-5xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">Company Workshops</p>
-          </SectionReveal>
-          <SectionReveal delay={0.1}>
-            <h1 className="heading-display text-5xl sm:text-6xl md:text-7xl text-ink leading-[1.04] max-w-4xl">
-              Discuss AI implementation with your{' '}
-              <span className="italic text-forest">team</span>.
-            </h1>
-          </SectionReveal>
-          <SectionReveal delay={0.2}>
-            <p className="text-sage text-lg md:text-xl mt-8 max-w-2xl leading-relaxed">
-              An open education workshop for leadership and management teams.
-              We teach practical AI skills, then layer in company-specific discussion
-              so your people leave ready to implement, not just inspired.
-            </p>
-          </SectionReveal>
-          <SectionReveal delay={0.3}>
-            <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-              <MagneticButton>
-                <a href="#book" className="btn-gold">
-                  Enquire about a workshop
-                </a>
-              </MagneticButton>
-              <EnquireNowButton inquire="subscription" className="link-arrow">
-                Need the numbers now? Subscription Diagnostic &rarr;
-              </EnquireNowButton>
-            </div>
-            <p className="text-sage text-sm mt-5 max-w-xl leading-relaxed">
-              Workshops are built for education and team alignment. If you want a
-              true strategy-to-action plan for your software spend now, the paid
-              Subscription Diagnostic is the better fit.
-            </p>
-          </SectionReveal>
-        </div>
-      </section>
+    <motion.div {...STORY_PAGE_TRANSITION} className="workshop-story">
+      <StoryHero
+        eyebrow="Company workshops"
+        title={
+          <>
+            Give the whole team a way to think about <em>AI together.</em>
+          </>
+        }
+        lead="Practical education first. Your company’s real workflows second. A facilitated session that turns uncertainty into a shared language and a clear next move."
+        graphic="workshop"
+        actions={
+          <>
+            <MagneticButton>
+              <a href="#book" className="btn-gold">Enquire about a workshop</a>
+            </MagneticButton>
+            <EnquireNowButton inquire="subscription" className="link-arrow">
+              Need the numbers now? Subscription Diagnostic &rarr;
+            </EnquireNowButton>
+          </>
+        }
+        note="Workshops align the team. The Subscription Diagnostic is the paid strategy-to-action path for software spend."
+      />
 
-      {/* Positioning strip */}
-      <section className="px-6 py-16 md:py-20 bg-paper border-y border-mist">
-        <div className="max-w-4xl mx-auto text-center">
-          <SectionReveal>
-            <p className="heading-display text-3xl sm:text-4xl text-ink leading-snug">
-              Education first. Your company context second.
-            </p>
-            <p className="text-sage text-lg mt-5 max-w-2xl mx-auto leading-relaxed">
-              This is not a software demo. It is a facilitated session where your
-              team learns the fundamentals, then works through how AI should show up
-              in your operations, hiring, and day-to-day systems. We will discuss
-              implementation, but the focus is literacy and shared understanding,
-              not a custom strategy sprint.
-            </p>
-          </SectionReveal>
-        </div>
-      </section>
+      <StoryStatement
+        eyebrow="What this is"
+        body="This is not a software demo or an afternoon of generic prompts. Your team learns the fundamentals, then applies them to operations, hiring and day-to-day systems while the right people are in the room."
+      >
+        Inspiration fades. <em>Shared understanding compounds.</em>
+      </StoryStatement>
 
-      {/* Agenda / modules */}
-      <section className="section-shell">
-        <div className="max-w-7xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">Workshop Agenda</p>
-            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-4 max-w-3xl">
-              From literacy to your implementation plan
-            </h2>
-            <p className="text-sage max-w-2xl mb-16 leading-relaxed">
-              Four focused modules. The first half builds shared skill. The second
-              half applies it to your business.
-            </p>
-          </SectionReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <section className="site-story-section">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="01"
+            eyebrow="The room changes in four acts"
+            title="From AI literacy to a company-specific next move."
+            body="The first half builds a shared foundation. The second half turns that understanding toward your own workflows, risks and opportunities."
+          />
+          <div className="workshop-story__agenda">
             {WORKSHOP_TOPICS.map((topic, i) => (
               <SectionReveal key={topic.title} delay={i * 0.08}>
-                <div className="h-full bg-paper p-8 md:p-10 rounded-xl border border-mist">
-                  <span className="heading-display text-2xl text-gold block mb-4">
-                    0{i + 1}
-                  </span>
-                  <h3 className="heading-display text-2xl text-ink mb-3">
-                    {topic.title}
-                  </h3>
-                  <p className="text-sage text-sm leading-relaxed">
-                    {topic.description}
-                  </p>
+                <div className="workshop-story__module">
+                  <span>0{i + 1}</span>
+                  <div>
+                    <h3>{topic.title}</h3>
+                    <p>{topic.description}</p>
+                  </div>
                 </div>
               </SectionReveal>
             ))}
@@ -136,14 +98,18 @@ export default function Workshops() {
         </div>
       </section>
 
-      {/* Who + outcomes */}
-      <section className="section-shell section-shell--paper border-y border-mist">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+      <section className="site-story-section site-story-section--paper">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="02"
+            eyebrow="Who enters. What leaves."
+            title="The workshop creates alignment you can act on."
+          />
+          <div className="workshop-story__outcomes">
           <SectionReveal>
-            <p className="section-eyebrow">Who It&rsquo;s For</p>
-            <h2 className="heading-display text-3xl text-ink mb-8">
-              Built for companies ready to lead on AI
-            </h2>
+            <div className="workshop-story__list">
+            <p className="site-story-eyebrow">Who it is for</p>
+            <h3>Companies ready to lead deliberately.</h3>
             <ul className="space-y-4">
               {WHO_ITS_FOR.map((item) => (
                 <li key={item} className="text-ink/80 flex items-start gap-3">
@@ -152,13 +118,13 @@ export default function Workshops() {
                 </li>
               ))}
             </ul>
+            </div>
           </SectionReveal>
 
           <SectionReveal delay={0.15}>
-            <p className="section-eyebrow">What Your Team Leaves With</p>
-            <h2 className="heading-display text-3xl text-ink mb-8">
-              Alignment you can act on
-            </h2>
+            <div className="workshop-story__list workshop-story__list--forest">
+            <p className="site-story-eyebrow">What the team leaves with</p>
+            <h3>A shared language and a visible next step.</h3>
             <ul className="space-y-4">
               {OUTCOMES.map((item) => (
                 <li key={item} className="text-ink/80 flex items-start gap-3">
@@ -167,98 +133,71 @@ export default function Workshops() {
                 </li>
               ))}
             </ul>
+            </div>
           </SectionReveal>
+          </div>
         </div>
       </section>
 
-      {/* Format */}
-      <section className="section-shell">
-        <div className="max-w-7xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">How It Runs</p>
-            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-16 max-w-3xl">
-              A workshop your management team can actually use
-            </h2>
-          </SectionReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <section className="site-story-section">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            number="03"
+            eyebrow="How it runs"
+            title="Built around the people who will lead the change."
+            body="A live half-day session, usually three to four hours, delivered in your workplace or online using your real scenarios and constraints."
+          />
+          <div className="site-story-cards">
             {FORMAT_POINTS.map((point, i) => (
               <SectionReveal key={point.title} delay={i * 0.1}>
-                <div className="h-full">
-                  <h3 className="heading-display text-2xl text-ink mb-3">
-                    {point.title}
-                  </h3>
-                  <p className="text-sage text-sm leading-relaxed">{point.body}</p>
+                <div className="site-story-card">
+                  <span className="site-story-card__number">0{i + 1}</span>
+                  <h3>{point.title}</h3>
+                  <p>{point.body}</p>
                 </div>
               </SectionReveal>
             ))}
           </div>
 
           <SectionReveal delay={0.2}>
-            <div className="p-8 md:p-10 bg-forest text-cream rounded-xl max-w-3xl">
-              <p className="label-upper mb-4" style={{ color: 'var(--color-gold-soft)' }}>
-                Session format
-              </p>
-              <p className="heading-display text-2xl md:text-3xl text-cream mb-4">
-                Half-day live workshop
-              </p>
-              <p className="text-cream/75 leading-relaxed">
-                Typically 3-4 hours with your leadership or management group.
-                Delivered in person at your workplace or online. We use your real
-                scenarios, systems, and constraints, not canned examples.
-              </p>
+            <div className="workshop-story__format">
+              <span>Typical format</span>
+              <strong>3–4 hours</strong>
+              <p>Live with your leadership or management group. In person or online. Your real business, never canned examples.</p>
             </div>
           </SectionReveal>
         </div>
       </section>
 
-      {/* Booking */}
-      <section id="book" className="section-shell section-shell--paper border-t border-mist">
-        <div className="max-w-3xl mx-auto">
+      <section id="book" className="site-story-section site-story-section--paper">
+        <div className="site-story-section__inner workshop-story__booking">
+          <StorySectionHeading
+            number="04"
+            eyebrow="Bring the room together"
+            title="Tell us who needs to leave ready."
+            body="Share the team size, who would attend and what you want them able to do. We will return with a tailored format, timing and proposed agenda."
+          />
           <SectionReveal>
-            <p className="section-eyebrow">Book a Company Workshop</p>
-            <h2 className="heading-display text-3xl md:text-4xl text-ink mb-4">
-              Bring AI education into your business
-            </h2>
+            <div className="workshop-story__form">
             <p className="text-sage text-sm leading-relaxed mb-10 max-w-xl">
               Tell us about your team size, who would attend, and what you want
               them to walk away able to do. We will come back with format, timing,
               and a proposed agenda tailored to your company.
             </p>
             <BookDemoForm />
-          </SectionReveal>
-        </div>
-      </section>
-
-      {/* Bridge */}
-      <section className="section-shell section-shell--forest">
-        <div className="max-w-3xl mx-auto text-center">
-          <SectionReveal>
-            <p className="section-eyebrow" style={{ color: 'var(--color-gold-soft)' }}>
-              After the workshop
-            </p>
-            <h2 className="heading-display text-3xl md:text-4xl text-cream mb-6">
-              From shared literacy to working systems
-            </h2>
-            <p className="text-cream/70 mb-10 leading-relaxed">
-              Many companies start with a workshop so leadership is aligned, then
-              move into a diagnostic or build engagement when they are ready to
-              put systems in place.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <Link to="/services" className="btn-gold">
-                Explore services
-              </Link>
-              <Link
-                to="/contact"
-                className="text-cream/80 text-sm hover:text-gold-soft transition-colors"
-              >
-                Talk to us &rarr;
-              </Link>
             </div>
           </SectionReveal>
         </div>
       </section>
+
+      <StoryCloser
+        eyebrow="After the workshop"
+        title="Shared literacy becomes a better implementation."
+        body="When leadership is aligned, the next decision gets easier: investigate the economics, restructure the data or begin the build."
+      >
+        <Link to="/services" className="btn-gold">See how the work moves</Link>
+        <Link to="/contact">Talk to us &rarr;</Link>
+      </StoryCloser>
     </motion.div>
   );
 }

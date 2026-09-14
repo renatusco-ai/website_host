@@ -22,7 +22,7 @@ export default function PricingCard({ tier, index = 0 }) {
   return (
     <SectionReveal delay={index * 0.08}>
       <div
-        className={`group relative flex flex-col h-full p-8 md:p-10 rounded-xl border transition-all duration-500 bg-paper ${
+        className={`pricing-story-card group relative flex flex-col h-full p-8 md:p-10 rounded-xl border transition-all duration-500 bg-paper ${
           tier.popular
             ? 'border-gold ring-2 ring-gold/30 shadow-[0_16px_40px_rgba(32,57,47,0.10)]'
             : 'border-mist hover:border-gold/40 hover:shadow-[0_16px_40px_rgba(32,57,47,0.08)]'

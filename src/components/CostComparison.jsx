@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import SectionReveal from './SectionReveal';
+import { StorySectionHeading } from './SiteStory';
 import { COST_EXAMPLES, COST_MODEL, COST_MODEL_DISCLAIMER } from '../data/content';
 
 const money = (value) =>
@@ -60,24 +61,23 @@ export default function CostComparison() {
   const stackLabel = active.stackLabel ?? 'Every year, before anything else';
 
   return (
-    <section className="section-shell">
-      <div className="max-w-6xl mx-auto">
-        <SectionReveal>
-          <p className="section-eyebrow">How We Charge</p>
-          <h2 className="heading-display text-4xl md:text-5xl text-ink max-w-3xl leading-tight">
-            You should pay for what you <span className="italic text-forest">use</span>,
-            not for how many people you hired.
-          </h2>
-          <p className="text-sage text-lg mt-5 max-w-2xl leading-relaxed">
-            Nearly every platform your business runs on charges by the seat. That is a
-            pricing model built for the vendor, not for you.
-          </p>
-        </SectionReveal>
+    <section className="site-story-section cost-story">
+      <div className="site-story-section__inner">
+        <StorySectionHeading
+          number="02"
+          eyebrow="The economics"
+          title={
+            <>
+              Growth should increase your return. <em>Not your rent.</em>
+            </>
+          }
+          body="Nearly every platform charges by the seat. That is a pricing model built for the vendor. An owned system lets the number of people using it grow without moving the bill."
+        />
 
-        {/* Two-column model comparison */}
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="cost-story__models">
+          <span className="cost-story__versus" aria-hidden="true">vs</span>
           <SectionReveal delay={0.1}>
-            <div className="h-full p-8 bg-paper border border-mist rounded-xl">
+            <div className="cost-story__model cost-story__model--old">
               <p className="text-[0.7rem] tracking-[0.18em] uppercase text-sage mb-2">
                 {COST_MODEL.traditional.subtitle}
               </p>
@@ -98,7 +98,7 @@ export default function CostComparison() {
           </SectionReveal>
 
           <SectionReveal delay={0.2}>
-            <div className="h-full p-8 bg-cream border border-forest/25 rounded-xl">
+            <div className="cost-story__model cost-story__model--new">
               <p className="text-[0.7rem] tracking-[0.18em] uppercase text-gold mb-2">
                 {COST_MODEL.ours.subtitle}
               </p>
@@ -119,12 +119,11 @@ export default function CostComparison() {
           </SectionReveal>
         </div>
 
-        {/* Industry-specific worked example */}
         <SectionReveal delay={0.1}>
-          <div className="mt-16 md:mt-20">
-            <p className="section-eyebrow">What This Looks Like</p>
-            <h3 className="heading-display text-3xl md:text-4xl text-ink max-w-2xl mb-8">
-              Pick your industry
+          <div className="cost-story__example">
+            <p className="site-story-eyebrow">What this looks like</p>
+            <h3>
+              Follow the money in your industry.
             </h3>
 
             <div
@@ -153,7 +152,7 @@ export default function CostComparison() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="p-8 md:p-10 bg-paper border border-mist rounded-2xl"
+                className="cost-story__example-panel"
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-3 mb-8">
                   <p className="text-sage text-sm">{active.context}</p>
