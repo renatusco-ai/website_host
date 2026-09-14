@@ -26,11 +26,12 @@ Landing page. Primary entry point for Renatus positioning: approachable AI educa
 ## Page sections (top → bottom)
 
 1. **Hero**: Headline, subline, `HeroGraphic`, dual CTAs
-2. **Manifesto strip**: "Solutions, not tools" + partnership line
-3. **What We Do**: Three static pillar cards (Restructure / Automate / Educate)
-4. **Selected Portfolio**: First 3 case study teasers from `CASE_STUDIES`
-5. **Workshop CTA band**: Forest-green section, book workshop
-6. **Closing CTA**: Book workshop or contact
+2. **Who We Build For**: `ClientLogoWall`: featured Lockeroom block + seven client logos
+3. **How We Charge**: `CostComparison`: per-seat vs usage, plus industry-switchable example
+4. **Closing CTA**: Subscription audit. We only take projects where savings can be quantified.
+
+Sections 4 and 5 alternate `bg-paper` and `bg-cream` deliberately, so do not reorder them
+without checking the background rhythm against the neighbouring sections.
 
 ## Components used
 
@@ -38,15 +39,30 @@ Landing page. Primary entry point for Renatus positioning: approachable AI educa
 |-----------|--------|
 | `HeroGraphic` | `src/components/HeroGraphic.jsx` |
 | `SectionReveal` | `src/components/SectionReveal.jsx` |
-| `MagneticButton` | `src/components/MagneticButton.jsx` |
-| `CaseStudyCard` | `src/components/CaseStudyCard.jsx` (`compact`, `linkable`) |
+| `BookDiscoveryButton` | `src/components/BookDiscoveryButton.jsx` |
+| `ClientLogoWall` | `src/components/ClientLogoWall.jsx` |
+| `CostComparison` | `src/components/CostComparison.jsx` |
 
 ## Data dependencies
 
 | Export | From | Usage |
 |--------|------|-------|
-| `VALUE_PILLARS` | `src/data/content.js` | Three pillar cards |
-| `CASE_STUDIES` | `src/data/content.js` | `.slice(0, 3)` for teasers |
+| `CLIENTS`, `FEATURED_CLIENT_ID` | `src/data/content.js` | Logo wall; `scale` optically balances each logo |
+| `LOCKEROOM_CASE` | `src/data/content.js` | Featured block tagline and headline figure |
+| `COST_MODEL`, `COST_EXAMPLES` | `src/data/content.js` | Per-seat vs usage columns and industry tabs |
+
+## Cost figures
+
+`COST_EXAMPLES[].status` is one of `documented`, `modelled`, or `indicative`:
+
+- `fitness` / Lockeroom — `documented`. Delivered FY26 figures.
+- `fitness` / Lockeroom — right-hand headline is **$266,651 saved every year**.
+- `marketing` / White Key Marketing — right-hand headline is **$188,000 saved over 3 years**.
+  Left is stay-as-you-are ($333k). The $16k + $25k + $105k = $146k is the new cost, listed
+  under the saving. Phase 3 ($105k) is Stripe processing only.
+- Construction and property — `indicative` list-rate arithmetic.
+
+Do not drop the status flag or `COST_MODEL_DISCLAIMER` when editing those numbers.
 
 ## CTAs and outbound links
 
@@ -70,7 +86,6 @@ Landing page. Primary entry point for Renatus positioning: approachable AI educa
 |----------|---------|----------------------|
 | Hero A/B copy test | Page load | Feature flag or CMS variant |
 | Case study images | Section render | `CASE_STUDIES[].image` + CDN URLs |
-| Social proof logos | Below hero or manifesto | Static array or CMS |
 | Newsletter capture | Optional footer band | Mailchimp / ConvertKit API |
 | Analytics page view | Route `/` | `VITE_ANALYTICS_ID` |
 

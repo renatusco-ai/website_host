@@ -1,5 +1,76 @@
 export const CONTACT_EMAIL = 'info@renatusco.com';
 
+/**
+ * Clients shown on the home page logo wall. Logos are pre-flattened to one ink tone
+ * by `npm run process-logos`.
+ *
+ * `scale` optically balances the set: wide wordmarks read large at a given height,
+ * stacked or square lockups read small, so each logo gets a multiplier on the base
+ * row height rather than all sharing one.
+ */
+export const CLIENTS = [
+  {
+    id: 'lockeroom',
+    name: 'Lockeroom',
+    sector: 'Fitness operations',
+    logo: '/clients/lockeroom.png',
+    scale: 1,
+    href: '/portfolio/lockeroom',
+  },
+  {
+    id: 'aspire',
+    name: 'Aspire Constructions',
+    sector: 'Construction',
+    logo: '/clients/aspire.png',
+    scale: 1,
+  },
+  {
+    id: 'ajw',
+    name: 'The AJW Group',
+    sector: 'Renovation & restoration',
+    logo: '/clients/ajw.png',
+    scale: 1.62,
+  },
+  {
+    id: 'mobility-collective',
+    name: 'The Mobility Collective',
+    sector: 'Health & wellness',
+    logo: '/clients/mobility-collective.png',
+    scale: 1.58,
+  },
+  {
+    id: 'ipa',
+    name: 'IPA',
+    sector: 'Posing academy',
+    logo: '/clients/ipa.png',
+    scale: 1.2,
+  },
+  {
+    id: 'jd-financial',
+    name: 'JD Financial Group',
+    sector: 'Financial services',
+    logo: '/clients/jd-financial.png',
+    scale: 0.85,
+  },
+  {
+    id: 'apg-property',
+    name: 'APG Property',
+    sector: 'Commercial property',
+    logo: '/clients/apg-property.svg',
+    scale: 1.05,
+  },
+  {
+    id: 'white-key',
+    name: 'White Key Marketing',
+    sector: 'Marketing',
+    logo: '/clients/white-key.png',
+    scale: 1.5,
+  },
+];
+
+/** The client given hero treatment on the wall. Must match a CLIENTS id. */
+export const FEATURED_CLIENT_ID = 'lockeroom';
+
 export const TIERS = [
   {
     id: 'bronze',
@@ -230,6 +301,15 @@ export const BOOKING_SESSIONS = {
     embedPath: 'mnl09r0/operations-ai-optimization-audit',
     url: 'https://tidycal.com/mnl09r0/operations-ai-optimization-audit',
   },
+  subscriptionAudit: {
+    id: 'subscriptionAudit',
+    eyebrow: 'Subscription Audit',
+    title: 'Subscription & Stack Audit',
+    description:
+      'We add up what you are paying to rent software, and whether rebuilding it would create a saving large enough to take the project on. You leave with the numbers either way.',
+    embedPath: 'mnl09r0/operations-ai-optimization-audit',
+    url: 'https://tidycal.com/mnl09r0/operations-ai-optimization-audit',
+  },
 };
 
 export const ENTRY_OFFERS = [
@@ -328,6 +408,188 @@ export const PROCESS_STEPS = [
       'We build, deploy, and hand over a working solution. Not a tool to figure out: a system that runs from day one.',
   },
 ];
+
+/**
+ * Per-seat vs usage cost model, shown on the home page.
+ *
+ * Figures in COST_EXAMPLES are arithmetic on stated seat counts and published list
+ * rates, not quotes. Every example carries its own `basis` string so the assumption
+ * is visible on the page rather than buried here.
+ */
+export const COST_MODEL = {
+  traditional: {
+    label: 'Per-seat software',
+    subtitle: 'What the big platforms charge you',
+    points: [
+      'Billed per seat, so the admin who logs in twice a month costs exactly the same as your heaviest power user.',
+      'Each function needs its own subscription, and every one of them bills per seat again.',
+      'A ten to twenty person business routinely pays for thirty-plus seats, because the same people get counted in every tool.',
+      'AI features are bundled into the seat price whether your team ever opens them or not.',
+      'Hire someone and the bill rises across every tool at once.',
+    ],
+  },
+  ours: {
+    label: 'Built and hosted by us',
+    subtitle: 'What we charge you',
+    points: [
+      'One flat hosting rate. Staff logins are unlimited, so there is no seat maths to do.',
+      'One system covers the jobs you were paying three or four separate tools to do.',
+      'Hire someone and hosting does not move. Cost tracks usage, not headcount.',
+      'AI is billed on what you actually use. If your team does not find it useful, you do not pay for it.',
+      'You own the system. Leaving does not mean losing your data.',
+    ],
+  },
+};
+
+export const COST_EXAMPLES = [
+  {
+    id: 'fitness',
+    label: 'Fitness & wellness',
+    status: 'documented',
+    client: 'Lockeroom',
+    context: '14 staff, 500+ members, six subscriptions',
+    rows: [
+      { label: 'Health-data platform', basis: 'features later rebuilt in-house', annual: 35280 },
+      { label: 'Five smaller subscriptions', basis: 'booking, admin, and reporting tools', annual: 26490 },
+    ],
+    ours: {
+      value: 266651,
+      period: 'saved every year',
+      body:
+        'Net of the $8,899 a year it costs to run the replacement. Documented FY26 figures, not a projection.',
+    },
+    footnote:
+      'Actual documented FY26 figures. The system that replaced all six runs at $8,899 a year, hosting and AI usage included.',
+    href: '/portfolio/lockeroom',
+  },
+  {
+    id: 'marketing',
+    label: 'Marketing & creative',
+    status: 'modelled',
+    client: 'White Key Marketing',
+    context: '30+ staff, three rented platforms · three-year view',
+    amountSuffix: 'over 3 years',
+    stackLabel: 'Three years, staying as you are',
+    rows: [
+      { label: 'Workspace & docs', basis: 'Notion · $15,000/yr × 3', annual: 45000 },
+      { label: 'File storage & sharing', basis: 'Dropbox · $20,000/yr × 3', annual: 60000 },
+      {
+        label: 'Proposals, signatures & payments',
+        basis: 'Ignition · ~$76,000/yr × 3, modelled on $2M processed',
+        annual: 228000,
+      },
+    ],
+    ours: {
+      value: 188000,
+      period: 'saved over 3 years',
+      body:
+        'That is the gap between staying on Notion, Dropbox, and Ignition ($333k) and owning the stack ($146k). New cost is $16k for docs, $25k for storage, and $105k for payments on Stripe.',
+      rows: [
+        { label: 'Docs you own', basis: '$12,500 build + running', amount: 16000 },
+        { label: 'Storage you own', basis: '$15,500 build + hosting', amount: 25000 },
+        { label: 'Payments on Stripe', basis: 'processing only · build not yet scoped', amount: 105000 },
+      ],
+    },
+    footnote:
+      'Modelled stack review, excl. GST. Phase 1 and 2 build-and-run figures are firm. Phase 3 is processing cost only — its build fee is still to be scoped, and Ignition needs confirming against actual invoices.',
+  },
+  {
+    id: 'construction',
+    label: 'Construction & trades',
+    status: 'indicative',
+    context: '18 on the tools, 6 in the office',
+    rows: [
+      { label: 'Project management platform', basis: '12 seats × $99/user/mo', annual: 14256 },
+      { label: 'Job scheduling & field app', basis: '18 seats × $39/user/mo', annual: 8424 },
+    ],
+    replacement: null,
+    footnote:
+      'Field staff who only need to see today\u2019s job are billed the same as the project manager who lives in it.',
+  },
+  {
+    id: 'property',
+    label: 'Commercial property',
+    status: 'indicative',
+    context: '8 in the office, two portfolios',
+    rows: [
+      { label: 'Lease & portfolio management', basis: '8 seats × $85/user/mo', annual: 8160 },
+      { label: 'Invoicing & receivables chasing', basis: '8 seats × $45/user/mo', annual: 4320 },
+    ],
+    replacement: null,
+    footnote:
+      'The same eight people are counted twice, once in each platform, to get one view of money owed.',
+  },
+];
+
+export const COST_MODEL_DISCLAIMER =
+  'Documented figures are from delivered work. Modelled figures come from a stack review and exclude GST. Indicative figures are arithmetic on published list rates, not quotes.';
+
+/**
+ * Flagship case study. Line items from the FY26 workbook are grouped into two streams
+ * so the page shows the shape of the saving without publishing the full internal
+ * breakdown of individual roles and tools.
+ */
+export const LOCKEROOM_CASE = {
+  client: 'Lockeroom',
+  sector: 'Fitness operations',
+  logo: '/clients/lockeroom.png',
+  tagline: 'A quarter of a million dollars in recurring cost, removed permanently.',
+  summary:
+    'Documented FY26 contribution value. Subscriptions retired, paid features rebuilt in-house, and staff capacity unlocked across client workbooks, scheduling, marketing, programming, and admin.',
+  headline: { value: '$266,651', label: 'Net recurring cost removed, every year' },
+  secondary: [
+    { value: '$22,221', label: 'Removed per month' },
+    { value: '6', label: 'Subscriptions retired' },
+    { value: '96.8%', label: 'Of the old spend eliminated' },
+  ],
+  groups: [
+    {
+      id: 'software',
+      title: 'Software retired',
+      description:
+        'Five subscriptions cancelled outright, plus a health-data platform whose features we rebuilt in-house. Figures are net of the one API we chose to keep.',
+      monthly: 5147.52,
+      annual: 61770.24,
+      items: [
+        'Five SaaS subscriptions cancelled',
+        'Health-data platform features rebuilt in-house',
+      ],
+    },
+    {
+      id: 'capacity',
+      title: 'Staff capacity unlocked',
+      description:
+        'Roles collapsed and manual work removed once the system did the job instead of a person. This is the larger half of the saving, and the half most software business cases ignore.',
+      monthly: 17815,
+      annual: 213780,
+      items: [
+        'Client workbook efficiency',
+        'Schedule builder',
+        'Marketing manager role collapsed',
+        'Programming engine replaced a specialist role',
+        'Two admin assistant roles no longer needed',
+      ],
+    },
+  ],
+  subtotal: { monthly: 22962.52, annual: 275550.24 },
+  newCosts: {
+    monthly: 741.6,
+    annual: 8899.2,
+    label: 'Less: what the replacement costs to run',
+    note: 'Hosting, database, AI usage, and integrations combined.',
+  },
+  net: { monthly: 22220.92, annual: 266651.04 },
+  /** Existing CASE_STUDIES ids that make up this engagement. */
+  workstreams: [
+    'exercise-programming-engine',
+    'client-workbook',
+    'member-health-dashboard',
+    'staff-rostering',
+    'member-app',
+    'referral-tracking-crm',
+    'renewal-automation',
+  ],
+};
 
 export const VALUE_PILLARS = [
   {

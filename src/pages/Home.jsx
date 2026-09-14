@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import HeroGraphic from '../components/HeroGraphic';
 import SectionReveal from '../components/SectionReveal';
 import BookDiscoveryButton from '../components/BookDiscoveryButton';
-import { VALUE_PILLARS } from '../data/content';
+import ClientLogoWall from '../components/ClientLogoWall';
+import CostComparison from '../components/CostComparison';
 
 const pageTransition = {
   initial: { opacity: 0 },
@@ -64,75 +65,38 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Simple manifesto line */}
-      <section className="px-6 py-16 md:py-20 bg-paper border-y border-mist">
-        <div className="max-w-4xl mx-auto text-center">
-          <SectionReveal>
-            <p className="heading-display text-3xl sm:text-4xl text-ink leading-snug">
-              Built for founders ready to scale.
-            </p>
-            <p className="text-sage text-lg mt-5 max-w-2xl mx-auto leading-relaxed">
-              We help solo founders and SMEs build people-first AI systems, so you
-              can hire with confidence, run the business without everything sitting
-              in your head, and get the operational edge that lets growth stick.
-            </p>
-          </SectionReveal>
-        </div>
-      </section>
+      <ClientLogoWall />
 
-      {/* Three simple pillars */}
-      <section className="section-shell">
-        <div className="max-w-7xl mx-auto">
-          <SectionReveal>
-            <p className="section-eyebrow">What We Do</p>
-            <h2 className="heading-display text-4xl md:text-5xl text-ink mb-16 max-w-2xl">
-              Systems that scale with your team
-            </h2>
-          </SectionReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {VALUE_PILLARS.map((pillar, i) => (
-              <SectionReveal key={pillar.number} delay={i * 0.1}>
-                <div className="h-full p-8 bg-paper border border-mist rounded-xl">
-                  <span className="heading-display text-2xl text-gold block mb-5">
-                    {pillar.number}
-                  </span>
-                  <h3 className="heading-display text-2xl text-ink mb-3">
-                    {pillar.title}
-                  </h3>
-                  <p className="text-sage text-sm leading-relaxed">
-                    {pillar.description}
-                  </p>
-                </div>
-              </SectionReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      <CostComparison />
 
       {/* Closing CTA */}
       <section className="section-shell section-shell--forest">
         <div className="max-w-3xl mx-auto text-center">
           <SectionReveal>
             <p className="section-eyebrow" style={{ color: 'var(--color-gold-soft)' }}>
-              Ready?
+              How we choose work
             </p>
           </SectionReveal>
           <SectionReveal delay={0.1}>
             <h2 className="heading-display text-4xl sm:text-5xl md:text-6xl text-cream mb-8">
-              Book a Free AI &amp; Ops Diagnostic
+              We only take projects where the savings can be quantified.
             </h2>
           </SectionReveal>
           <SectionReveal delay={0.2}>
             <p className="text-cream/70 text-lg mb-12 max-w-lg mx-auto leading-relaxed">
-              Tell us what is broken and we will tell you honestly whether we can fix
-              it. Intro sessions are reserved for businesses generating over $1M in
-              annual revenue.
+              If we cannot show a substantial, measurable reduction in what you are
+              paying to rent software, we will not take the work. A subscription
+              audit is how we find out.
             </p>
           </SectionReveal>
           <SectionReveal delay={0.3}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <BookDiscoveryButton className="btn-gold" />
+              <BookDiscoveryButton
+                className="btn-gold"
+                bookingType="subscriptionAudit"
+              >
+                Book a Subscription Audit
+              </BookDiscoveryButton>
               <Link
                 to="/portfolio"
                 className="text-cream/80 text-sm hover:text-gold-soft transition-colors"

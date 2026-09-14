@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "process-portfolio": "node scripts/process-portfolio-images.mjs"
+    "process-portfolio": "node scripts/process-portfolio-images.mjs",
+    "process-logos": "node scripts/process-client-logos.mjs"
   },
   "dependencies": {
     "framer-motion": "^11.15.0",

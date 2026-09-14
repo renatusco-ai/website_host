@@ -9,6 +9,7 @@ import Services from './pages/Services';
 import Contact from './pages/Contact';
 import Workshops from './pages/Workshops';
 import Portfolio from './pages/Portfolio';
+import LockeroomCaseStudy from './pages/LockeroomCaseStudy';
 
 export default function App() {
   const location = useLocation();
@@ -23,6 +24,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/services" element={<Services />} />
             <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/portfolio/lockeroom" element={<LockeroomCaseStudy />} />
             <Route path="/workshops" element={<Workshops />} />
             <Route path="/work" element={<Navigate to="/portfolio" replace />} />
             <Route path="/about" element={<Navigate to="/workshops" replace />} />

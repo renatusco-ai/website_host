@@ -20,6 +20,7 @@
 | `/` | `src/pages/Home.jsx` | [pages/home.md](./pages/home.md) |
 | `/services` | `src/pages/Services.jsx` | [pages/services.md](./pages/services.md) |
 | `/portfolio` | `src/pages/Portfolio.jsx` | [pages/portfolio.md](./pages/portfolio.md) |
+| `/portfolio/lockeroom` | `src/pages/LockeroomCaseStudy.jsx` | [pages/lockeroom.md](./pages/lockeroom.md) |
 | `/workshops` | `src/pages/Workshops.jsx` | [pages/workshops.md](./pages/workshops.md) |
 | `/contact` | `src/pages/Contact.jsx` | [pages/contact.md](./pages/contact.md) |
 | `/about` | Redirect → `/workshops` | (removed) |
@@ -49,7 +50,19 @@ flowchart TD
 | `CASE_STUDIES` | Home (teasers), Portfolio (full grid) |
 | `WORKSHOP_TOPICS` | Workshops |
 | `PROCESS_STEPS` | Services |
-| `VALUE_PILLARS` | Home |
+| `CLIENTS`, `FEATURED_CLIENT_ID` | Home (logo wall) |
+| `COST_MODEL`, `COST_EXAMPLES`, `COST_MODEL_DISCLAIMER` | Home (per-seat vs usage) |
+| `LOCKEROOM_CASE` | Home (logo wall stat), Lockeroom case study |
+
+## Client logos
+
+Source files live in `assets/logos-src/` (not served). `npm run process-logos` flattens each
+one to a single ink tone on transparency and writes `public/clients/*.png`, so logos with
+black, navy, or white backgrounds can share the cream page. Per-logo mask settings, crops,
+and knockouts are in `scripts/process-client-logos.mjs`.
+
+`public/clients/apg-property.svg` is hand-drawn, not a real brand asset: APG Property had no
+official logo.
 
 ## Shared components (cross-page)
 

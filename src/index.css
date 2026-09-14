@@ -259,6 +259,165 @@ body {
   line-height: 1;
 }
 
+.client-logo-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 128px;
+  padding: 1.25rem 1.5rem;
+  border-radius: 10px;
+  transition: background 0.4s ease, opacity 0.4s ease;
+  opacity: 0.78;
+}
+
+.client-logo-tile:hover {
+  opacity: 1;
+  background: var(--color-cream);
+}
+
+.client-logo-tile img {
+  object-fit: contain;
+}
+
+/*
+ * Logo carousel. The track holds the client set three times and slides exactly one set
+ * width (-33.333%), so the next copy lands where the first started and the loop has no
+ * visible seam. Three copies rather than two, so the track still covers wide viewports.
+ * Transform-only, so it stays on the compositor and costs nothing on the main thread.
+ */
+.logo-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 10%,
+    #000 90%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+.logo-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: logo-marquee-scroll 46s linear infinite;
+  will-change: transform;
+}
+
+.logo-marquee:hover .logo-marquee__track {
+  animation-play-state: paused;
+}
+
+.logo-marquee__item {
+  flex: 0 0 auto;
+  width: 240px;
+}
+
+@keyframes logo-marquee-scroll {
+  to {
+    transform: translateX(-33.3333%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+    overflow-x: auto;
+  }
+
+  .logo-marquee__track {
+    animation: none;
+  }
+}
+
+.industry-tab {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: var(--color-sage);
+  padding: 0.55rem 1.1rem;
+  border: 1px solid var(--color-mist);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.industry-tab:hover {
+  color: var(--color-forest);
+  border-color: rgba(32, 57, 47, 0.3);
+}
+
+.industry-tab--active {
+  color: var(--color-cream);
+  background: var(--color-forest);
+  border-color: var(--color-forest);
+}
+
+.cost-flag {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-sage);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--color-mist);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.cost-flag--verified {
+  color: var(--color-gold);
+  border-color: rgba(176, 132, 60, 0.4);
+}
+
+.savings-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.savings-table th,
+.savings-table td {
+  padding: 1rem 0.5rem;
+  text-align: right;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--color-mist);
+}
+
+.savings-table th:first-child,
+.savings-table td:first-child {
+  text-align: left;
+  padding-left: 0;
+}
+
+.savings-table th {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-sage);
+  font-weight: 400;
+}
+
+.savings-table tr:last-child td {
+  border-bottom: none;
+}
+
+.savings-table__total td {
+  font-weight: 500;
+  color: var(--color-ink);
+  border-top: 1px solid rgba(32, 57, 47, 0.25);
+}
+
+.savings-table__net td {
+  background: rgba(176, 132, 60, 0.08);
+  color: var(--color-forest);
+  font-weight: 500;
+}
+
+.savings-table__deduct td {
+  color: var(--color-sage);
+}
+
 .case-study-card {
   padding: 2rem;
   border: 1px solid var(--color-mist);
