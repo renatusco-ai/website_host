@@ -357,11 +357,11 @@ function EvolutionGraphic() {
       </motion.g>
 
       <text x="36" y="48" className="story-svg-panel-label">THE BUILDING METHOD MOVED ON</text>
-      <text x="36" y="118" className="story-svg-panel-head">THEN</text>
-      <text x="284" y="118" className="story-svg-panel-head story-svg-panel-head--now">NOW</text>
+      <text x="36" y="104" className="story-svg-panel-head">THEN</text>
+      <text x="284" y="104" className="story-svg-panel-head story-svg-panel-head--now">NOW</text>
 
       {EVOLUTION_ROWS.map((row, index) => {
-        const y = 138 + index * 52;
+        const y = 122 + index * 48;
         return (
           <g key={row.then}>
             <motion.g variants={POP} custom={index * 0.1}>
@@ -383,7 +383,12 @@ function EvolutionGraphic() {
 
       <motion.path d="M248 190 H272 M263 181 L272 190 L263 199" className="story-svg-panel-arrow" variants={DRAW} />
 
-      <text x="36" y="326" className="story-svg-panel-label">SAME OUTCOME. A FRACTION OF THE TEAM.</text>
+      <motion.g variants={POP} custom={0.7}>
+        <text x="36" y="300" className="story-svg-panel-headline">Same outcome.</text>
+        <text x="36" y="332" className="story-svg-panel-headline story-svg-panel-headline--accent">
+          A fraction of the team.
+        </text>
+      </motion.g>
     </GraphicFrame>
   );
 }
