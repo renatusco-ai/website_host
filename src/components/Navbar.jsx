@@ -19,9 +19,13 @@ const NAV_LINKS = [
 
 function Wordmark() {
   return (
-    <span className="heading-display text-2xl tracking-tight text-ink">
-      Renatus<span className="text-gold">.</span>
-    </span>
+    <img
+      src="/brand/renatus-logo.svg"
+      alt="Renatus"
+      width="154"
+      height="28"
+      className="block h-7 w-auto"
+    />
   );
 }
 
@@ -43,7 +47,7 @@ export default function Navbar() {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[2px] bg-gold origin-left z-[60]"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-spring origin-left z-[60]"
         style={{ scaleX }}
       />
       <header
@@ -54,8 +58,8 @@ export default function Navbar() {
         <div
           className={`absolute inset-0 pointer-events-none ${
             solid
-              ? 'bg-cream'
-              : 'bg-gradient-to-b from-cream via-cream/80 to-transparent'
+              ? 'bg-canvas'
+              : 'bg-gradient-to-b from-canvas via-canvas/80 to-transparent'
           }`}
         />
 
@@ -69,14 +73,14 @@ export default function Navbar() {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`site-nav__link label-upper transition-colors duration-300 hover:text-gold ${
-                  location.pathname === link.to ? 'site-nav__link--active text-gold' : ''
+                className={`site-nav__link label-upper transition-colors duration-300 hover:text-forest ${
+                  location.pathname === link.to ? 'site-nav__link--active text-forest' : ''
                 }`}
               >
                 {link.label}
               </Link>
             ))}
-            <EnquireNowButton className="btn-gold text-sm py-2.5 px-5" />
+            <EnquireNowButton className="btn-primary text-sm py-2.5 px-5" />
           </div>
 
           <button
@@ -109,7 +113,7 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:hidden fixed inset-0 bg-cream z-40 flex flex-col items-center justify-center gap-8"
+              className="lg:hidden fixed inset-0 bg-canvas z-40 flex flex-col items-center justify-center gap-8"
             >
               {NAV_LINKS.map((link, i) => (
                 <motion.div
@@ -120,8 +124,8 @@ export default function Navbar() {
                 >
                   <Link
                     to={link.to}
-                    className={`heading-display text-4xl transition-colors hover:text-gold ${
-                      location.pathname === link.to ? 'text-gold' : 'text-ink'
+                    className={`heading-display text-4xl transition-colors hover:text-spring ${
+                      location.pathname === link.to ? 'text-spring' : 'text-ink'
                     }`}
                     onClick={() => setMobileOpen(false)}
                   >
@@ -135,7 +139,7 @@ export default function Navbar() {
                 transition={{ delay: 0.45 }}
               >
                 <EnquireNowButton
-                  className="btn-gold mt-4"
+                  className="btn-primary mt-4"
                   onClick={() => setMobileOpen(false)}
                 />
               </motion.div>

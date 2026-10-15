@@ -31,7 +31,7 @@ export default function Contact() {
         graphic="pioneer"
         actions={
           <>
-            <a href="#choose" className="btn-gold">Choose your starting point</a>
+            <a href="#choose" className="btn-primary">Choose your starting point</a>
             <a href="#write" className="link-arrow">Write a note instead &rarr;</a>
           </>
         }
@@ -49,26 +49,26 @@ export default function Contact() {
           <div className="contact-story__paths">
           <SectionReveal>
             <div className="contact-story__path contact-story__path--paid">
-              <p className="label-upper mb-4" style={{ color: 'var(--color-gold-soft)' }}>
+              <p className="label-upper mb-4" style={{ color: 'var(--color-spring)' }}>
                 Paid working session
               </p>
-              <h2 className="heading-display text-3xl text-cream mb-4">
+              <h2 className="heading-display text-3xl text-canvas mb-4">
                 Subscription Diagnostic
               </h2>
-              <p className="text-cream/75 text-sm leading-relaxed mb-6">
+              <p className="text-canvas/75 text-sm leading-relaxed mb-6">
                 We identify where your software subscriptions are leaking money and
                 write an actionable plan to reduce that spend. You keep the plan
                 either way.
               </p>
               <ul className="space-y-3 mb-8">
                 {SUBSCRIPTION_LEAVE_WITH.map((item) => (
-                  <li key={item} className="text-cream/80 text-sm flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gold-soft mt-1.5 shrink-0" />
+                  <li key={item} className="text-canvas/80 text-sm flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-spring mt-1.5 shrink-0" />
                     {item}
                   </li>
                 ))}
               </ul>
-              <EnquireNowButton inquire="subscription" className="btn-gold w-full justify-center">
+              <EnquireNowButton inquire="subscription" className="btn-primary w-full justify-center">
                 Enquire Now
               </EnquireNowButton>
             </div>
@@ -76,11 +76,11 @@ export default function Contact() {
 
           <SectionReveal delay={0.1}>
             <div className="contact-story__path">
-              <p className="label-upper text-gold mb-4">15 minutes · Free</p>
+              <p className="label-upper text-forest mb-4">15 minutes · Free</p>
               <h2 className="heading-display text-3xl text-ink mb-4">
                 AI &amp; Ops Diagnostic
               </h2>
-              <p className="text-sage text-sm leading-relaxed mb-6">
+              <p className="text-graphite text-sm leading-relaxed mb-6">
                 A quick, no-pressure conversation. You tell us what is broken. We
                 tell you honestly whether it is worth a deeper look.
               </p>
@@ -90,8 +90,8 @@ export default function Contact() {
                   'No pitch, no deck',
                   'An honest yes, no, or not yet',
                 ].map((item) => (
-                  <li key={item} className="text-sage text-sm flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 shrink-0" />
+                  <li key={item} className="text-graphite text-sm flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-spring mt-1.5 shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -123,7 +123,7 @@ export default function Contact() {
           />
           <SectionReveal>
             <div className="contact-story__form">
-              <p className="text-sage text-sm leading-relaxed mb-8 max-w-xl">
+              <p className="text-graphite text-sm leading-relaxed mb-8 max-w-xl">
                 Fill in the form below. Mobile, email, and company are required so we
                 can get back to the right person.
               </p>

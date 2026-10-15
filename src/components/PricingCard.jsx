@@ -22,14 +22,14 @@ export default function PricingCard({ tier, index = 0 }) {
   return (
     <SectionReveal delay={index * 0.08}>
       <div
-        className={`pricing-story-card group relative flex flex-col h-full p-8 md:p-10 rounded-xl border transition-all duration-500 bg-paper ${
+        className={`pricing-story-card group relative flex flex-col h-full p-8 md:p-10 rounded-xl border transition-all duration-500 bg-cloud ${
           tier.popular
-            ? 'border-gold ring-2 ring-gold/30 shadow-[0_16px_40px_rgba(32,57,47,0.10)]'
-            : 'border-mist hover:border-gold/40 hover:shadow-[0_16px_40px_rgba(32,57,47,0.08)]'
+            ? 'border-spring ring-2 ring-spring/30 shadow-[0_16px_40px_rgba(18,102,86,0.10)]'
+            : 'border-smoke hover:border-spring/40 hover:shadow-[0_16px_40px_rgba(18,102,86,0.08)]'
         }`}
       >
         {tier.popular && (
-          <span className="absolute -top-3 left-8 text-[0.65rem] font-semibold tracking-[0.18em] uppercase bg-gold text-cream px-3 py-1 rounded">
+          <span className="absolute -top-3 left-8 text-[0.65rem] font-semibold tracking-[0.18em] uppercase bg-spring text-forest px-3 py-1 rounded-full">
             Most Popular
           </span>
         )}
@@ -38,8 +38,8 @@ export default function PricingCard({ tier, index = 0 }) {
           <p className={`label-upper mb-2 ${labelClass}`}>
             {tier.metal} &middot; {tier.name}
           </p>
-          <p className="text-ink/70 text-base italic mt-1">{tier.price}</p>
-          <p className="text-sage text-sm mt-2">{tier.audience}</p>
+          <p className="text-ink/70 text-base mt-1">{tier.price}</p>
+          <p className="text-graphite text-sm mt-2">{tier.audience}</p>
         </div>
 
         <ul className="space-y-3 flex-1 mb-8">
@@ -53,7 +53,7 @@ export default function PricingCard({ tier, index = 0 }) {
 
         <Link
           to="/contact"
-          className={tier.popular ? 'btn-gold w-full justify-center text-center' : 'btn-ghost w-full justify-center text-center'}
+          className={tier.popular ? 'btn-primary w-full justify-center text-center' : 'btn-ghost w-full justify-center text-center'}
         >
           Enquire
         </Link>

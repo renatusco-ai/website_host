@@ -2,7 +2,7 @@ import MagneticButton from './MagneticButton';
 import { useBooking } from '../context/BookingContext';
 
 export default function BookDiscoveryButton({
-  className = 'btn-gold',
+  className = 'btn-primary',
   children = 'Book Free Diagnostic',
   bookingType = 'discovery',
   ...props

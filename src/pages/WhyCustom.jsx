@@ -273,7 +273,7 @@ export default function WhyCustom() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.15 }}
         >
-          <EnquireNowButton inquire="subscription" className="btn-gold">
+          <EnquireNowButton inquire="subscription" className="btn-primary">
             Find the saving
           </EnquireNowButton>
           <Link to="/portfolio/lockeroom">

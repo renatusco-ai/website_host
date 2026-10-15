@@ -51,7 +51,7 @@ const BUNDLE = ['n1', 'n2', 'n3'];
 function NodeIcon({ icon }) {
   if (icon === 'bar') {
     return (
-      <g stroke="var(--color-gold)" strokeWidth="1.4" fill="none">
+      <g stroke="var(--color-spring)" strokeWidth="1.4" fill="none">
         <line x1="-5" y1="3" x2="-5" y2="-2" />
         <line x1="0" y1="3" x2="0" y2="-5" />
         <line x1="5" y1="3" x2="5" y2="-1" />
@@ -68,7 +68,7 @@ function NodeIcon({ icon }) {
   }
   if (icon === 'db') {
     return (
-      <g stroke="var(--color-gold)" strokeWidth="1.4" fill="none">
+      <g stroke="var(--color-spring)" strokeWidth="1.4" fill="none">
         <ellipse cx="0" cy="-4" rx="5" ry="2" />
         <path d="M-5,-4 V4 C-5,6 5,6 5,4 V-4" />
       </g>
@@ -101,7 +101,7 @@ export default function HeroGraphic() {
           <motion.path
             key={`chaos-${i}`}
             d={p.d}
-            stroke={p.gold ? 'var(--color-gold)' : 'var(--color-sage)'}
+            stroke={p.gold ? 'var(--color-spring)' : 'var(--color-graphite)'}
             strokeWidth="1.3"
             strokeLinecap="round"
             opacity={p.gold ? 0.65 : 0.45}
@@ -122,13 +122,13 @@ export default function HeroGraphic() {
             {m.type === 'tri' && (
               <path
                 d={`M${m.x},${m.y - 4} L${m.x + 4},${m.y + 3} L${m.x - 4},${m.y + 3} Z`}
-                fill="var(--color-sage)"
+                fill="var(--color-graphite)"
               />
             )}
             {m.type === 'sq' && (
-              <rect x={m.x - 3} y={m.y - 3} width="6" height="6" fill="var(--color-gold)" opacity="0.7" />
+              <rect x={m.x - 3} y={m.y - 3} width="6" height="6" fill="var(--color-spring)" opacity="0.7" />
             )}
-            {m.type === 'dot' && <circle cx={m.x} cy={m.y} r="3" fill="var(--color-sage)" />}
+            {m.type === 'dot' && <circle cx={m.x} cy={m.y} r="3" fill="var(--color-graphite)" />}
           </motion.g>
         ))}
 
@@ -149,7 +149,7 @@ export default function HeroGraphic() {
           cx={FOCAL.x}
           cy={FOCAL.y}
           r="4"
-          fill="var(--color-gold)"
+          fill="var(--color-spring)"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.4, delay: 1.0 }}
@@ -184,7 +184,7 @@ export default function HeroGraphic() {
           >
             {n.icon ? (
               <>
-                <circle cx={n.x} cy={n.y} r="15" fill="var(--color-paper)" stroke="var(--color-mist)" strokeWidth="1.2" />
+                <circle cx={n.x} cy={n.y} r="15" fill="var(--color-cloud)" stroke="var(--color-smoke)" strokeWidth="1.2" />
                 <g transform={`translate(${n.x}, ${n.y})`}>
                   <NodeIcon icon={n.icon} />
                 </g>
@@ -194,7 +194,7 @@ export default function HeroGraphic() {
                 cx={n.x}
                 cy={n.y}
                 r={id === 'n6' || id === 'n9' ? 6 : 5}
-                fill={id === 'n6' || id === 'n10' || id === 'n8' ? 'var(--color-gold)' : 'var(--color-forest)'}
+                fill={id === 'n6' || id === 'n10' || id === 'n8' ? 'var(--color-spring)' : 'var(--color-forest)'}
               />
             )}
           </motion.g>

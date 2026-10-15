@@ -60,20 +60,20 @@ export default function CaseStudyModal({ study, onClose }) {
             <button
               type="button"
               onClick={onClose}
-              className="absolute -top-9 right-0 text-cream/70 hover:text-cream text-sm flex items-center gap-1.5 transition-colors"
+              className="absolute -top-9 right-0 text-canvas/70 hover:text-canvas text-sm flex items-center gap-1.5 transition-colors"
             >
               Close
               <span className="text-lg leading-none" aria-hidden="true">&times;</span>
             </button>
 
-            <div className="overflow-hidden rounded-xl border border-mist bg-paper shadow-2xl">
+            <div className="overflow-hidden rounded-xl border border-smoke bg-cloud shadow-2xl">
               {/* Designed browser frame */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-mist bg-cream">
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-smoke bg-canvas">
                 <span className="w-3 h-3 rounded-full bg-[#e6685b]" />
                 <span className="w-3 h-3 rounded-full bg-[#f0bf4c]" />
                 <span className="w-3 h-3 rounded-full bg-[#5fb85f]" />
                 <div className="ml-3 flex-1 max-w-xs">
-                  <div className="text-[0.7rem] text-sage bg-paper border border-mist rounded-full px-3 py-1 truncate">
+                  <div className="text-[0.7rem] text-graphite bg-cloud border border-smoke rounded-full px-3 py-1 truncate">
                     app.lockeroom.com
                   </div>
                 </div>
@@ -89,7 +89,7 @@ export default function CaseStudyModal({ study, onClose }) {
                 />
 
                 {current.placeholder && (
-                  <span className="absolute top-3 left-3 text-[0.6rem] uppercase tracking-wider text-cream bg-ink/70 px-2.5 py-1 rounded">
+                  <span className="absolute top-3 left-3 text-[0.6rem] uppercase tracking-wider text-canvas bg-ink/70 px-2.5 py-1 rounded">
                     Preview: anonymised capture pending
                   </span>
                 )}
@@ -100,7 +100,7 @@ export default function CaseStudyModal({ study, onClose }) {
                       type="button"
                       onClick={() => setIndex((i) => Math.max(i - 1, 0))}
                       disabled={index === 0}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-paper/90 border border-mist flex items-center justify-center text-ink text-xl leading-none disabled:opacity-30 hover:bg-paper transition-colors"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-cloud/90 border border-smoke flex items-center justify-center text-ink text-xl leading-none disabled:opacity-30 hover:bg-cloud transition-colors"
                       aria-label="Previous image"
                     >
                       &lsaquo;
@@ -109,7 +109,7 @@ export default function CaseStudyModal({ study, onClose }) {
                       type="button"
                       onClick={() => setIndex((i) => Math.min(i + 1, media.length - 1))}
                       disabled={index === media.length - 1}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-paper/90 border border-mist flex items-center justify-center text-ink text-xl leading-none disabled:opacity-30 hover:bg-paper transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-cloud/90 border border-smoke flex items-center justify-center text-ink text-xl leading-none disabled:opacity-30 hover:bg-cloud transition-colors"
                       aria-label="Next image"
                     >
                       &rsaquo;
@@ -119,11 +119,11 @@ export default function CaseStudyModal({ study, onClose }) {
               </div>
 
               {/* Caption + gallery dots */}
-              <div className="flex items-center justify-between gap-4 px-5 py-4 border-t border-mist">
+              <div className="flex items-center justify-between gap-4 px-5 py-4 border-t border-smoke">
                 <div className="min-w-0">
                   <h3 className="heading-display text-lg text-ink">{study.title}</h3>
                   {current.caption && (
-                    <p className="text-sage text-sm mt-0.5">{current.caption}</p>
+                    <p className="text-graphite text-sm mt-0.5">{current.caption}</p>
                   )}
                 </div>
                 {hasMultiple && (
@@ -134,7 +134,7 @@ export default function CaseStudyModal({ study, onClose }) {
                         type="button"
                         onClick={() => setIndex(i)}
                         className={`w-2 h-2 rounded-full transition-colors ${
-                          i === index ? 'bg-gold' : 'bg-mist hover:bg-sage'
+                          i === index ? 'bg-spring' : 'bg-smoke hover:bg-graphite'
                         }`}
                         aria-label={`Go to image ${i + 1}`}
                       />

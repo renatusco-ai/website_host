@@ -26,7 +26,7 @@ export default function Services() {
         graphic="source"
         actions={
           <>
-            <a href="#start" className="btn-gold">Choose a starting point</a>
+            <a href="#start" className="btn-primary">Choose a starting point</a>
             <Link to="/learn-more" className="link-arrow">
               Why custom makes sense now &rarr;
             </Link>
@@ -111,7 +111,7 @@ export default function Services() {
         title="Begin with understanding, not implementation."
         body="Bring the team into a workshop, or bring the software bills into a diagnostic. We will tell you which conversation is worth having."
       >
-        <Link to="/workshops" className="btn-gold">Explore company workshops</Link>
+        <Link to="/workshops" className="btn-primary">Explore company workshops</Link>
         <Link to="/contact">Compare your starting points &rarr;</Link>
       </StoryCloser>
     </motion.div>

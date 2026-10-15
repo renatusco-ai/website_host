@@ -18,20 +18,20 @@ export default function EntryOfferCard({ offer, index = 0 }) {
   const labelClass = ACCENT_LABEL[offer.accent] || ACCENT_LABEL.gold;
   const dotClass = ACCENT_DOT[offer.accent] || ACCENT_DOT.gold;
   const ctaClassName = offer.popular
-    ? 'btn-gold w-full justify-center text-center'
+    ? 'btn-primary w-full justify-center text-center'
     : 'btn-ghost w-full justify-center text-center';
 
   return (
     <SectionReveal delay={index * 0.08} className={offer.popular ? 'md:-my-4 relative z-10' : ''}>
       <div
-        className={`entry-story-card group relative flex flex-col h-full p-8 md:p-10 rounded-xl border transition-all duration-500 bg-paper ${
+        className={`entry-story-card group relative flex flex-col h-full p-8 md:p-10 rounded-xl border transition-all duration-500 bg-cloud ${
           offer.popular
-            ? 'border-gold ring-2 ring-gold/30 shadow-[0_20px_48px_rgba(32,57,47,0.14)] md:p-12'
-            : 'border-mist hover:border-gold/40 hover:shadow-[0_16px_40px_rgba(32,57,47,0.08)]'
+            ? 'border-spring ring-2 ring-spring/30 shadow-[0_20px_48px_rgba(18,102,86,0.14)] md:p-12'
+            : 'border-smoke hover:border-spring/40 hover:shadow-[0_16px_40px_rgba(18,102,86,0.08)]'
         }`}
       >
         {offer.popular && (
-          <span className="absolute -top-3 left-8 text-[0.65rem] font-semibold tracking-[0.18em] uppercase bg-gold text-cream px-3 py-1 rounded">
+          <span className="absolute -top-3 left-8 text-[0.65rem] font-semibold tracking-[0.18em] uppercase bg-spring text-forest px-3 py-1 rounded-full">
             Most Popular
           </span>
         )}
@@ -43,11 +43,11 @@ export default function EntryOfferCard({ offer, index = 0 }) {
           </p>
           <h3 className={`heading-display text-ink mt-1 ${offer.popular ? 'text-2xl' : 'text-xl'}`}>{offer.title}</h3>
           {offer.note && (
-            <p className="text-gold text-sm font-medium mt-3 leading-snug">{offer.note}</p>
+            <p className="text-forest text-sm font-medium mt-3 leading-snug">{offer.note}</p>
           )}
         </div>
 
-        <p className="text-sage text-sm leading-relaxed mb-6">{offer.description}</p>
+        <p className="text-graphite text-sm leading-relaxed mb-6">{offer.description}</p>
 
         <ul className="space-y-3 flex-1 mb-8">
           {offer.features.map((feature) => (

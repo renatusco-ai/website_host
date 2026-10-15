@@ -320,7 +320,7 @@ function WorkshopGraphic() {
       ))}
       <motion.g variants={POP} custom={0.25}>
         <circle cx="260" cy="180" r="66" className="story-svg-solid" />
-        <circle cx="260" cy="180" r="52" fill="none" stroke="var(--color-gold)" strokeWidth="1" opacity="0.5" />
+        <circle cx="260" cy="180" r="52" fill="none" stroke="var(--color-spring)" strokeWidth="1" opacity="0.5" />
         <text x="260" y="170" textAnchor="middle" className="story-svg-product">SHARED</text>
         <text x="260" y="192" textAnchor="middle" className="story-svg-product">LANGUAGE</text>
       </motion.g>

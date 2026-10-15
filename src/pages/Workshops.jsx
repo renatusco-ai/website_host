@@ -57,7 +57,7 @@ export default function Workshops() {
         actions={
           <>
             <MagneticButton>
-              <a href="#book" className="btn-gold">Enquire about a workshop</a>
+              <a href="#book" className="btn-primary">Enquire about a workshop</a>
             </MagneticButton>
             <EnquireNowButton inquire="subscription" className="link-arrow">
               Need the numbers now? Subscription Diagnostic &rarr;
@@ -113,7 +113,7 @@ export default function Workshops() {
             <ul className="space-y-4">
               {WHO_ITS_FOR.map((item) => (
                 <li key={item} className="text-ink/80 flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gold mt-2 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-spring mt-2 shrink-0" />
                   {item}
                 </li>
               ))}
@@ -128,7 +128,7 @@ export default function Workshops() {
             <ul className="space-y-4">
               {OUTCOMES.map((item) => (
                 <li key={item} className="text-ink/80 flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gold mt-2 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-spring mt-2 shrink-0" />
                   {item}
                 </li>
               ))}
@@ -179,7 +179,7 @@ export default function Workshops() {
           />
           <SectionReveal>
             <div className="workshop-story__form">
-            <p className="text-sage text-sm leading-relaxed mb-10 max-w-xl">
+            <p className="text-graphite text-sm leading-relaxed mb-10 max-w-xl">
               Tell us about your team size, who would attend, and what you want
               them to walk away able to do. We will come back with format, timing,
               and a proposed agenda tailored to your company.
@@ -195,7 +195,7 @@ export default function Workshops() {
         title="Shared literacy becomes a better implementation."
         body="When leadership is aligned, the next decision gets easier: investigate the economics, restructure the data or begin the build."
       >
-        <Link to="/services" className="btn-gold">See how the work moves</Link>
+        <Link to="/services" className="btn-primary">See how the work moves</Link>
         <Link to="/contact">Talk to us &rarr;</Link>
       </StoryCloser>
     </motion.div>

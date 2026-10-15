@@ -4,7 +4,7 @@ import EnquireNowButton from './EnquireNowButton';
 
 export default function Footer() {
   return (
-    <footer className="site-footer relative z-0 bg-forest text-cream">
+    <footer className="site-footer relative z-0 bg-forest text-canvas">
       <div className="site-footer__inner">
         <div className="site-footer__lead">
           <p>There is usually one expensive problem hiding in the stack.</p>
@@ -15,9 +15,13 @@ export default function Footer() {
 
         <div className="site-footer__details">
           <div>
-            <span className="heading-display text-3xl text-cream">
-              Renatus<span className="text-gold-soft">.</span>
-            </span>
+            <img
+              src="/brand/renatus-logo-on-dark.svg"
+              alt="Renatus"
+              width="198"
+              height="36"
+              className="block h-9 w-auto"
+            />
             <p>
               Owned systems, structured data and practical AI for businesses that
               refuse to operate like everyone else.

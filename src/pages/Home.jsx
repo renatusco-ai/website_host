@@ -56,7 +56,7 @@ export default function Home() {
         title="If the saving cannot be quantified, we do not take the project."
         body="A Subscription Diagnostic maps the real cost of your stack and tests whether rebuilding makes commercial sense. You keep the plan either way."
       >
-        <EnquireNowButton inquire="subscription" className="btn-gold">
+        <EnquireNowButton inquire="subscription" className="btn-primary">
           Find the saving
         </EnquireNowButton>
         <Link to="/portfolio">See the proof &rarr;</Link>

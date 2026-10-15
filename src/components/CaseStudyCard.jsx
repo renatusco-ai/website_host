@@ -17,11 +17,11 @@ function CardContent({ study, compact, onViewMedia }) {
         )}
       </div>
 
-      <h3 className="heading-display text-2xl md:text-3xl text-ink group-hover:text-gold transition-colors duration-500 mb-4">
+      <h3 className="heading-display text-2xl md:text-3xl text-ink group-hover:text-spring transition-colors duration-500 mb-4">
         {study.title}
       </h3>
 
-      <p className={`text-sage leading-relaxed ${compact ? 'text-sm line-clamp-3' : 'text-sm md:text-base'}`}>
+      <p className={`text-graphite leading-relaxed ${compact ? 'text-sm line-clamp-3' : 'text-sm md:text-base'}`}>
         {study.outcome}
       </p>
 
@@ -29,7 +29,7 @@ function CardContent({ study, compact, onViewMedia }) {
         {study.tags.map((tag) => (
           <span
             key={tag}
-            className="text-[0.65rem] uppercase tracking-wider text-sage border border-mist px-2 py-1 rounded"
+            className="text-[0.65rem] uppercase tracking-wider text-graphite border border-smoke px-2 py-1 rounded"
           >
             {tag}
           </span>
@@ -40,7 +40,7 @@ function CardContent({ study, compact, onViewMedia }) {
         <button
           type="button"
           onClick={() => onViewMedia(study)}
-          className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-forest border-b border-gold pb-0.5 hover:text-gold transition-colors"
+          className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-forest border-b border-spring pb-0.5 hover:border-forest transition-colors"
         >
           View interface
           <span aria-hidden="true">&#8599;</span>
@@ -48,8 +48,8 @@ function CardContent({ study, compact, onViewMedia }) {
       )}
 
       {showDemoNote && (
-        <p className="mt-6 text-sm text-sage leading-relaxed">
-          <Link to="/contact" className="text-forest hover:text-gold transition-colors">
+        <p className="mt-6 text-sm text-graphite leading-relaxed">
+          <Link to="/contact" className="text-forest underline decoration-spring underline-offset-4 hover:decoration-forest transition-colors">
             Book a call for a live demo
           </Link>
           {' '}to see this in action.

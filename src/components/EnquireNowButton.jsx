@@ -8,7 +8,7 @@ const INTENT_FROM_PRESET = {
 };
 
 export default function EnquireNowButton({
-  className = 'btn-gold',
+  className = 'btn-primary',
   children = 'Enquire Now',
   inquire = 'default',
   ...props

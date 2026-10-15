@@ -86,7 +86,7 @@ export default function EnquiryModal({ isOpen, intent = 'general', onClose }) {
             >
               {intro.title}
             </h2>
-            <p className="text-sage text-sm leading-relaxed mb-8">{intro.body}</p>
+            <p className="text-graphite text-sm leading-relaxed mb-8">{intro.body}</p>
 
             <BookDemoForm
               key={intent}

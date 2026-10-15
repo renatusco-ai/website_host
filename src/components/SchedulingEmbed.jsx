@@ -69,9 +69,9 @@ export default function SchedulingEmbed({ title = 'Schedule a call', embedPath, 
       ) : (
         <div className="scheduling-embed__placeholder">
           <p className="text-ink text-sm mb-2">Booking link coming soon</p>
-          <p className="text-sage text-xs leading-relaxed">
+          <p className="text-graphite text-xs leading-relaxed">
             Your booking calendar will appear here. Until then, email{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} className="text-gold hover:text-forest transition-colors">
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-forest underline decoration-spring underline-offset-4 hover:decoration-forest transition-colors">
               {CONTACT_EMAIL}
             </a>{' '}
             to request a time.

@@ -39,7 +39,7 @@ export default function LockeroomCaseStudy() {
         graphic="savings"
         actions={
           <>
-            <a href="#breakdown" className="btn-gold">Follow the numbers</a>
+            <a href="#breakdown" className="btn-primary">Follow the numbers</a>
             <Link to="/portfolio" className="link-arrow">&larr; All work</Link>
           </>
         }
@@ -98,9 +98,9 @@ export default function LockeroomCaseStudy() {
                       currency: 'AUD',
                       maximumFractionDigits: 0,
                     })}
-                    <span className="text-base text-sage">/yr</span>
+                    <span className="text-base text-graphite">/yr</span>
                   </p>
-                  <p className="text-sage text-xs mb-6">
+                  <p className="text-graphite text-xs mb-6">
                     {group.monthly.toLocaleString('en-AU', {
                       style: 'currency',
                       currency: 'AUD',
@@ -108,11 +108,11 @@ export default function LockeroomCaseStudy() {
                     })}{' '}
                     per month
                   </p>
-                  <p className="text-sage text-sm leading-relaxed mb-6">{group.description}</p>
+                  <p className="text-graphite text-sm leading-relaxed mb-6">{group.description}</p>
                   <ul className="space-y-2">
                     {group.items.map((item) => (
                       <li key={item} className="text-ink/70 text-sm flex gap-3">
-                        <span className="text-gold">&mdash;</span>
+                        <span className="text-spring">&mdash;</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -179,15 +179,15 @@ export default function LockeroomCaseStudy() {
               <SectionReveal key={study.id} delay={(index % 3) * 0.08}>
                 <div className="case-story__workstream">
                   <span>0{index + 1}</span>
-                  <p className="text-[0.65rem] tracking-[0.16em] uppercase text-gold mb-4">
+                  <p className="text-[0.65rem] tracking-[0.16em] uppercase text-forest mb-4">
                     {study.industry}
                   </p>
                   <h3 className="heading-display text-xl text-ink mb-3">{study.title}</h3>
-                  <p className="text-sage text-sm leading-relaxed">{study.outcome}</p>
+                  <p className="text-graphite text-sm leading-relaxed">{study.outcome}</p>
                   {study.metrics && (
                     <p className="text-forest text-sm mt-5">
                       <span className="heading-display text-lg">{study.metrics.value}</span>{' '}
-                      <span className="text-sage text-xs">{study.metrics.label}</span>
+                      <span className="text-graphite text-xs">{study.metrics.label}</span>
                     </p>
                   )}
                 </div>
@@ -202,7 +202,7 @@ export default function LockeroomCaseStudy() {
         title="What is your stack costing you?"
         body="Most businesses have never added every subscription and workaround together. We will — and tell you honestly whether rebuilding is worth it."
       >
-        <EnquireNowButton inquire="subscription" className="btn-gold">
+        <EnquireNowButton inquire="subscription" className="btn-primary">
           Find the saving
         </EnquireNowButton>
         <Link to="/learn-more">Why the economics changed &rarr;</Link>

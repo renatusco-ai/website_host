@@ -80,7 +80,7 @@ export default function BookDemoForm({
     return (
       <div className="enquiry-form enquiry-form--sent">
         <p className="heading-display text-2xl text-ink mb-3">Enquiry sent.</p>
-        <p className="text-sage text-sm leading-relaxed">
+        <p className="text-graphite text-sm leading-relaxed">
           It is in our inbox. We will reply within 24 hours.
         </p>
       </div>
@@ -224,7 +224,7 @@ export default function BookDemoForm({
       {error && <p className="enquiry-error">{error}</p>}
 
       <MagneticButton>
-        <button type="submit" className="btn-gold w-full justify-center" disabled={sending}>
+        <button type="submit" className="btn-primary w-full justify-center" disabled={sending}>
           {sending ? 'Sending…' : submitLabel}
         </button>
       </MagneticButton>

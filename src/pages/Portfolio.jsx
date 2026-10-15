@@ -25,11 +25,11 @@ function ProofCard({ example, featured = false }) {
   return (
     <div
       className={`proof-story-card h-full p-8 md:p-10 rounded-2xl border ${
-        featured ? 'proof-story-card--featured bg-cream border-forest/20' : 'bg-paper border-mist'
+        featured ? 'proof-story-card--featured bg-canvas border-forest/20' : 'bg-cloud border-smoke'
       }`}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-3 mb-6">
-        <p className="text-[0.7rem] tracking-[0.18em] uppercase text-gold">
+        <p className="text-[0.7rem] tracking-[0.18em] uppercase text-forest">
           {featured ? 'Documented savings' : 'Potential'}
         </p>
         {example.status === 'documented' && (
@@ -48,21 +48,21 @@ function ProofCard({ example, featured = false }) {
       </div>
 
       <h2 className="heading-display text-3xl text-ink mb-2">{example.label}</h2>
-      <p className="text-sage text-sm mb-8">{example.context}</p>
+      <p className="text-graphite text-sm mb-8">{example.context}</p>
 
       {example.ours && (
         <p className="heading-display text-4xl md:text-5xl text-forest leading-none mb-8">
           {money(example.ours.value)}
-          <span className="text-lg text-sage"> {example.ours.period}</span>
+          <span className="text-lg text-graphite"> {example.ours.period}</span>
         </p>
       )}
 
-      <ul className="divide-y divide-mist mb-6">
+      <ul className="divide-y divide-smoke mb-6">
         {example.rows.map((row) => (
           <li key={row.label} className="py-3 flex items-start justify-between gap-6">
             <span>
               <span className="block text-ink text-sm">{row.label}</span>
-              <span className="block text-sage text-xs mt-1">{row.basis}</span>
+              <span className="block text-graphite text-xs mt-1">{row.basis}</span>
             </span>
             <span className="text-ink text-sm whitespace-nowrap tabular-nums">
               {money(row.annual)}
@@ -80,7 +80,7 @@ function ProofCard({ example, featured = false }) {
         </li>
       </ul>
 
-      <p className="text-sage text-xs leading-relaxed">{example.footnote}</p>
+      <p className="text-graphite text-xs leading-relaxed">{example.footnote}</p>
 
       {example.href && (
         <Link to={example.href} className="link-arrow inline-block mt-7">
@@ -111,7 +111,7 @@ export default function Portfolio() {
         graphic="savings"
         actions={
           <>
-            <a href="#flagship" className="btn-gold">See the documented result</a>
+            <a href="#flagship" className="btn-primary">See the documented result</a>
             <Link to="/learn-more" className="link-arrow">Understand the model &rarr;</Link>
           </>
         }
@@ -190,7 +190,7 @@ export default function Portfolio() {
         title="What is your stack costing you?"
         body="Most businesses have never put every subscription, workaround and duplicated hour in one place. We will — and tell you honestly whether rebuilding is worth it."
       >
-        <EnquireNowButton inquire="subscription" className="btn-gold">
+        <EnquireNowButton inquire="subscription" className="btn-primary">
           Map the real cost
         </EnquireNowButton>
         <Link to="/contact">Compare the ways to start &rarr;</Link>

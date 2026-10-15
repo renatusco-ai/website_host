@@ -65,15 +65,15 @@ export default function BookingModal({ isOpen, bookingType = 'discovery', onClos
             <h2 id="booking-modal-title" className="heading-display text-3xl md:text-4xl text-ink mb-4">
               {session.title}
             </h2>
-            <p className="text-sage text-sm leading-relaxed mb-6">{session.description}</p>
+            <p className="text-graphite text-sm leading-relaxed mb-6">{session.description}</p>
 
             {bookingType === 'discovery' && (
-              <div className="mb-8 p-5 bg-paper border border-mist rounded-xl">
+              <div className="mb-8 p-5 bg-cloud border border-smoke rounded-xl">
                 <p className="label-upper mb-4">Please prepare</p>
                 <ul className="space-y-3">
                   {PREP_ITEMS.map((item) => (
-                    <li key={item} className="text-sage text-sm flex items-start gap-3">
-                      <span className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 shrink-0" />
+                    <li key={item} className="text-graphite text-sm flex items-start gap-3">
+                      <span className="w-1.5 h-1.5 rounded-full bg-spring mt-1.5 shrink-0" />
                       {item}
                     </li>
                   ))}

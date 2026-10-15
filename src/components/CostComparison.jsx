@@ -43,7 +43,7 @@ function CheckIcon() {
       <path
         d="M6 10.4l2.6 2.6L14.2 7.4"
         fill="none"
-        stroke="var(--color-cream)"
+        stroke="var(--color-canvas)"
         strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -78,7 +78,7 @@ export default function CostComparison() {
           <span className="cost-story__versus" aria-hidden="true">vs</span>
           <SectionReveal delay={0.1}>
             <div className="cost-story__model cost-story__model--old">
-              <p className="text-[0.7rem] tracking-[0.18em] uppercase text-sage mb-2">
+              <p className="text-[0.7rem] tracking-[0.18em] uppercase text-graphite mb-2">
                 {COST_MODEL.traditional.subtitle}
               </p>
               <h3 className="heading-display text-2xl text-ink mb-7">
@@ -86,8 +86,8 @@ export default function CostComparison() {
               </h3>
               <ul className="space-y-4">
                 {COST_MODEL.traditional.points.map((point) => (
-                  <li key={point} className="flex gap-3 text-sage text-sm leading-relaxed">
-                    <span className="text-sage">
+                  <li key={point} className="flex gap-3 text-graphite text-sm leading-relaxed">
+                    <span className="text-graphite">
                       <CrossIcon />
                     </span>
                     <span>{point}</span>
@@ -99,7 +99,7 @@ export default function CostComparison() {
 
           <SectionReveal delay={0.2}>
             <div className="cost-story__model cost-story__model--new">
-              <p className="text-[0.7rem] tracking-[0.18em] uppercase text-gold mb-2">
+              <p className="text-[0.7rem] tracking-[0.18em] uppercase text-forest mb-2">
                 {COST_MODEL.ours.subtitle}
               </p>
               <h3 className="heading-display text-2xl text-ink mb-7">
@@ -155,7 +155,7 @@ export default function CostComparison() {
                 className="cost-story__example-panel"
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-3 mb-8">
-                  <p className="text-sage text-sm">{active.context}</p>
+                  <p className="text-graphite text-sm">{active.context}</p>
                   <span className={`cost-flag${flag.verified ? ' cost-flag--verified' : ''}`}>
                     {flag.text}
                   </span>
@@ -163,10 +163,10 @@ export default function CostComparison() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-14">
                   <div>
-                    <p className="text-[0.7rem] tracking-[0.18em] uppercase text-sage mb-5">
+                    <p className="text-[0.7rem] tracking-[0.18em] uppercase text-graphite mb-5">
                       The per-seat stack
                     </p>
-                    <ul className="divide-y divide-mist">
+                    <ul className="divide-y divide-smoke">
                       {active.rows.map((row) => (
                         <li
                           key={row.label}
@@ -174,7 +174,7 @@ export default function CostComparison() {
                         >
                           <span>
                             <span className="block text-ink text-sm">{row.label}</span>
-                            <span className="block text-sage text-xs mt-1">{row.basis}</span>
+                            <span className="block text-graphite text-xs mt-1">{row.basis}</span>
                           </span>
                           <span className="text-ink text-sm whitespace-nowrap tabular-nums">
                             {money(row.annual)}
@@ -191,23 +191,23 @@ export default function CostComparison() {
                         </span>
                       </li>
                     </ul>
-                    <p className="text-sage text-xs mt-5 leading-relaxed max-w-md">
+                    <p className="text-graphite text-xs mt-5 leading-relaxed max-w-md">
                       {active.footnote}
                     </p>
                   </div>
 
-                  <div className="lg:border-l lg:border-mist lg:pl-12">
-                    <p className="text-[0.7rem] tracking-[0.18em] uppercase text-gold mb-5">
+                  <div className="lg:border-l lg:border-smoke lg:pl-12">
+                    <p className="text-[0.7rem] tracking-[0.18em] uppercase text-forest mb-5">
                       {active.ours ? 'Saved by working with us' : 'With us'}
                     </p>
                     {active.ours ? (
                       <>
                         <p className="heading-display text-4xl md:text-5xl text-forest leading-none">
                           {money(active.ours.value)}
-                          <span className="text-lg text-sage"> {active.ours.period}</span>
+                          <span className="text-lg text-graphite"> {active.ours.period}</span>
                         </p>
                         {active.ours.rows && (
-                          <ul className="mt-6 divide-y divide-mist">
+                          <ul className="mt-6 divide-y divide-smoke">
                             {active.ours.rows.map((row) => (
                               <li
                                 key={row.label}
@@ -215,7 +215,7 @@ export default function CostComparison() {
                               >
                                 <span>
                                   <span className="block text-ink text-sm">{row.label}</span>
-                                  <span className="block text-sage text-xs mt-1">{row.basis}</span>
+                                  <span className="block text-graphite text-xs mt-1">{row.basis}</span>
                                 </span>
                                 <span className="text-ink text-sm whitespace-nowrap tabular-nums">
                                   {money(row.amount)}
@@ -224,7 +224,7 @@ export default function CostComparison() {
                             ))}
                           </ul>
                         )}
-                        <p className="text-sage text-sm mt-4 leading-relaxed">
+                        <p className="text-graphite text-sm mt-4 leading-relaxed">
                           {active.ours.body}
                         </p>
                       </>
@@ -232,9 +232,9 @@ export default function CostComparison() {
                       <>
                         <p className="heading-display text-4xl md:text-5xl text-forest leading-none">
                           {money(active.replacement)}
-                          <span className="text-lg text-sage">/yr</span>
+                          <span className="text-lg text-graphite">/yr</span>
                         </p>
-                        <p className="text-sage text-sm mt-4 leading-relaxed">
+                        <p className="text-graphite text-sm mt-4 leading-relaxed">
                           Flat hosting plus the AI usage they actually used, replacing
                           every tool listed on the left.
                         </p>
@@ -244,7 +244,7 @@ export default function CostComparison() {
                         <p className="heading-display text-3xl text-forest leading-tight">
                           One flat hosting rate, plus usage.
                         </p>
-                        <p className="text-sage text-sm mt-4 leading-relaxed">
+                        <p className="text-graphite text-sm mt-4 leading-relaxed">
                           Unlimited staff logins, so the number on the left stops moving
                           every time you hire. AI is billed only if your team uses it.
                         </p>
@@ -260,7 +260,7 @@ export default function CostComparison() {
               </motion.div>
             </AnimatePresence>
 
-            <p className="text-sage/70 text-xs mt-6 max-w-2xl leading-relaxed">
+            <p className="text-graphite/70 text-xs mt-6 max-w-2xl leading-relaxed">
               {COST_MODEL_DISCLAIMER}
             </p>
           </div>
