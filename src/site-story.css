@@ -464,6 +464,24 @@
   line-height: 1.7;
 }
 
+.site-story-card--forest {
+  border-color: var(--color-forest);
+  background: var(--color-forest);
+}
+
+.site-story-card--forest .site-story-card__number {
+  border-color: rgba(0, 224, 147, 0.5);
+  color: var(--color-spring);
+}
+
+.site-story-card--forest h3 {
+  color: var(--color-canvas);
+}
+
+.site-story-card--forest p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
 .client-story {
   overflow: hidden;
 }

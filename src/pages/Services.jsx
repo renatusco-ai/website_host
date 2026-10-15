@@ -10,7 +10,7 @@ import {
   StorySectionHeading,
   StoryStatement,
 } from '../components/SiteStory';
-import { TIERS, PROCESS_STEPS, ENTRY_OFFERS } from '../data/content';
+import { TIERS, PROCESS_STEPS, ENTRY_OFFERS, SERVICE_OPTIONS } from '../data/content';
 
 export default function Services() {
   return (
@@ -34,6 +34,34 @@ export default function Services() {
         }
         note="No software pitch. The commercial case comes first."
       />
+
+      <section className="site-story-section site-story-section--paper">
+        <div className="site-story-section__inner">
+          <StorySectionHeading
+            align="center"
+            eyebrow="Your options"
+            title={
+              <>
+                Three ways forward. <em>Each one built to stick.</em>
+              </>
+            }
+            body="Make the stack you have work harder, replace it with something you own, or do either with someone whose job is getting your team to actually use it."
+          />
+          <div className="site-story-cards">
+            {SERVICE_OPTIONS.map((option, i) => (
+              <SectionReveal key={option.title} delay={i * 0.1}>
+                <div
+                  className={`site-story-card${option.featured ? ' site-story-card--forest' : ''}`}
+                >
+                  <span className="site-story-card__number">0{i + 1}</span>
+                  <h3>{option.title}</h3>
+                  <p>{option.body}</p>
+                </div>
+              </SectionReveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <StoryStatement
         eyebrow="The rule"

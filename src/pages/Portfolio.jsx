@@ -7,7 +7,6 @@ import {
   StoryCloser,
   StoryHero,
   StorySectionHeading,
-  StoryStatement,
 } from '../components/SiteStory';
 import { COST_EXAMPLES, LOCKEROOM_CASE } from '../data/content';
 
@@ -28,10 +27,7 @@ function ProofCard({ example, featured = false }) {
         featured ? 'proof-story-card--featured bg-canvas border-forest/20' : 'bg-cloud border-smoke'
       }`}
     >
-      <div className="flex flex-wrap items-baseline justify-between gap-3 mb-6">
-        <p className="text-[0.7rem] tracking-[0.18em] uppercase text-forest">
-          {featured ? 'Documented savings' : 'Potential'}
-        </p>
+      <div className="flex flex-wrap items-baseline gap-3 mb-6">
         {example.status === 'documented' && (
           <span className="cost-flag cost-flag--verified">
             Documented &middot; {example.client}
@@ -116,14 +112,6 @@ export default function Portfolio() {
           </>
         }
       />
-
-      <StoryStatement
-        eyebrow="Three standards of proof"
-        body="Lockeroom is delivered work with documented numbers. Marketing is a modelled stack review. Other industries are indicative list-rate arithmetic — useful for seeing the shape of the opportunity, never presented as a result."
-      >
-        Documented when it happened. Modelled when it is scoped.{' '}
-        <em>Indicative when it is only potential.</em>
-      </StoryStatement>
 
       <section id="flagship" className="site-story-section portfolio-story__flagship-section">
         <div className="site-story-section__inner">
