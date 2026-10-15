@@ -424,6 +424,36 @@ export const PROCESS_STEPS = [
   },
 ];
 
+/** How a business's software changes as it grows, shown on the home page. The last stage is ours. */
+export const BUSINESS_TIMELINE = [
+  {
+    stage: 'Day one',
+    title: 'Starting out',
+    body: 'A spreadsheet, an inbox and a group chat. It works because everyone is in the same room.',
+  },
+  {
+    stage: '5 people',
+    title: 'First hires',
+    body: 'Subscriptions arrive one at a time. Each fixes a problem and adds another login.',
+  },
+  {
+    stage: '15 people',
+    title: 'Growing',
+    body: 'Customer data now lives in six places. Someone spends Friday stitching it together.',
+  },
+  {
+    stage: '30+ people',
+    title: 'Outgrowing it',
+    body: 'The business has changed shape. The tools have not. Workarounds become the job.',
+  },
+  {
+    stage: 'With Renatus',
+    title: 'Rebuilt around you',
+    body: 'One system shaped to how your team works, implemented alongside them, and owned by you.',
+    ours: true,
+  },
+];
+
 /**
  * Per-seat vs usage cost model, shown on the home page.
  *

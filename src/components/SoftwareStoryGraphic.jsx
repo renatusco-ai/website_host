@@ -328,61 +328,62 @@ function WorkshopGraphic() {
   );
 }
 
+const EMBLEM_PATHS = [
+  'M.08,201.1l-.08.03v203.74s337.1-66.79,337.1-66.79l-66.8,337.09,203.65-.08c27.91-140.83-20.16-273.28-110.42-363.54C273.3,221.31,140.88,173.23.08,201.1',
+  'M193.29,7.9l-.08.03v203.74s337.1-66.79,337.1-66.79l-66.8,337.09,203.65-.08c27.91-140.83-20.16-273.28-110.42-363.54C466.5,28.1,334.09-19.98,193.29,7.9',
+];
+
+const EVOLUTION_ROWS = [
+  { then: '20+ ENGINEERS', now: 'A SMALL TEAM' },
+  { then: '18-MONTH BUILD', now: 'WEEKS, NOT YEARS' },
+  { then: 'VENTURE FUNDING', now: 'BUILT AROUND YOU' },
+];
+
 function EvolutionGraphic() {
   return (
-    <GraphicFrame label="Software production evolving from a heavy mechanical model to a compact connected system">
-      <text x="40" y="32" className="story-svg-label">THE BUILDING METHOD MOVED ON</text>
-
-      <motion.g variants={POP}>
-        <text x="58" y="72" className="story-svg-small">SOFTWARE BUILD — THEN</text>
-        <rect x="62" y="96" width="150" height="170" rx="8" className="story-svg-machine-frame" />
-        <path d="M82 116 H192 V176 H82 Z" className="story-svg-machine-line" />
-        <path d="M103 176 V224 H171 V176" className="story-svg-machine-line" />
-        <path d="M92 224 H182 V244 H92 Z" className="story-svg-machine-line" />
-        <motion.circle cx="192" cy="205" r="26" className="story-svg-machine-wheel" variants={DRAW} />
-        <circle cx="192" cy="205" r="6" className="story-svg-machine-hub" />
-        {[0, 45, 90, 135].map((angle) => (
-          <line
-            key={angle}
-            x1="192"
-            y1="205"
-            x2={192 + Math.cos((angle * Math.PI) / 180) * 24}
-            y2={205 + Math.sin((angle * Math.PI) / 180) * 24}
-            className="story-svg-machine-line"
-          />
-        ))}
-        <path d="M113 126 H161 M113 139 H174 M113 152 H151" className="story-svg-machine-copy" />
-        <text x="62" y="300" className="story-svg-era-title">HEAVY</text>
-        <text x="62" y="319" className="story-svg-small">TEAMS · YEARS · FUNDING</text>
+    <GraphicFrame label="Software used to need twenty engineers, eighteen months and venture funding. Now a small team builds it around you in weeks.">
+      <defs>
+        <clipPath id="evolution-panel">
+          <rect width="520" height="360" rx="22" />
+        </clipPath>
+      </defs>
+      <rect width="520" height="360" rx="22" className="story-svg-panel" />
+      <motion.g clipPath="url(#evolution-panel)" variants={POP} custom={0.1}>
+        <g transform="translate(392 -58) scale(0.26)">
+          {EMBLEM_PATHS.map((d) => (
+            <path key={d} d={d} className="story-svg-panel-emblem" />
+          ))}
+        </g>
       </motion.g>
 
-      <motion.path
-        d="M238 180 H286 M274 168 L286 180 L274 192"
-        className="story-svg-evolution-arrow"
-        variants={DRAW}
-      />
+      <text x="36" y="48" className="story-svg-panel-label">THE BUILDING METHOD MOVED ON</text>
+      <text x="36" y="118" className="story-svg-panel-head">THEN</text>
+      <text x="284" y="118" className="story-svg-panel-head story-svg-panel-head--now">NOW</text>
 
-      <motion.g variants={POP} custom={0.25}>
-        <text x="314" y="72" className="story-svg-small story-svg-small--gold">SOFTWARE BUILD — NOW</text>
-        <rect x="326" y="111" width="130" height="130" rx="22" className="story-svg-modern-core" />
-        <rect x="346" y="132" width="90" height="58" rx="10" className="story-svg-modern-screen" />
-        <path d="M359 173 L376 156 L391 166 L422 143" className="story-svg-evolution-line" />
-        <circle cx="359" cy="173" r="3" className="story-svg-star" />
-        <circle cx="376" cy="156" r="3" className="story-svg-star" />
-        <circle cx="391" cy="166" r="3" className="story-svg-star" />
-        <circle cx="422" cy="143" r="3" className="story-svg-star" />
-        <path d="M354 214 H428" className="story-svg-modern-slot" />
-        <motion.path d="M326 146 C302 146 302 114 282 114" className="story-svg-source-line" variants={DRAW} />
-        <motion.path d="M456 146 C480 146 480 114 496 114" className="story-svg-source-line" variants={DRAW} />
-        <motion.path d="M326 208 C302 208 302 238 282 238" className="story-svg-source-line" variants={DRAW} />
-        <motion.path d="M456 208 C480 208 480 238 496 238" className="story-svg-source-line" variants={DRAW} />
-        <circle cx="282" cy="114" r="7" className="story-svg-road-dot" />
-        <circle cx="496" cy="114" r="7" className="story-svg-road-dot" />
-        <circle cx="282" cy="238" r="7" className="story-svg-road-dot" />
-        <circle cx="496" cy="238" r="7" className="story-svg-road-dot" />
-        <text x="326" y="300" className="story-svg-era-title story-svg-era-title--gold">ADAPTIVE</text>
-        <text x="326" y="319" className="story-svg-small">SMALL TEAM · FAST · OWNED</text>
-      </motion.g>
+      {EVOLUTION_ROWS.map((row, index) => {
+        const y = 138 + index * 52;
+        return (
+          <g key={row.then}>
+            <motion.g variants={POP} custom={index * 0.1}>
+              <rect x="36" y={y} width="200" height="40" rx="20" className="story-svg-pill story-svg-pill--then" />
+              <text x="56" y={y + 24} className="story-svg-pill-text story-svg-pill-text--then">{row.then}</text>
+            </motion.g>
+            <motion.path
+              d={`M52 ${y + 20} H${60 + row.then.length * 7.6}`}
+              className="story-svg-strike"
+              variants={DRAW}
+            />
+            <motion.g variants={POP} custom={0.35 + index * 0.1}>
+              <rect x="284" y={y} width="200" height="40" rx="20" className="story-svg-pill story-svg-pill--now" />
+              <text x="304" y={y + 24} className="story-svg-pill-text story-svg-pill-text--now">{row.now}</text>
+            </motion.g>
+          </g>
+        );
+      })}
+
+      <motion.path d="M248 190 H272 M263 181 L272 190 L263 199" className="story-svg-panel-arrow" variants={DRAW} />
+
+      <text x="36" y="326" className="story-svg-panel-label">SAME OUTCOME. A FRACTION OF THE TEAM.</text>
     </GraphicFrame>
   );
 }

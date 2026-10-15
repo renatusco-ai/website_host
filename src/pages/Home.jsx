@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import EnquireNowButton from '../components/EnquireNowButton';
+import BusinessTimeline from '../components/BusinessTimeline';
 import ClientLogoWall from '../components/ClientLogoWall';
 import CostComparison from '../components/CostComparison';
 import {
@@ -35,19 +36,15 @@ export default function Home() {
 
       <StoryStatement
         eyebrow="The mismatch"
-        body="Every workaround is evidence. Every extra subscription is another clue. The problem is rarely your team — it is a generic stack trying to contain a business that has moved beyond it."
+        body="Off-the-shelf software is built by venture-funded teams half a world away, for the widest possible market. They sell you the login and leave the rollout to you. But software was never the product — it is the tool that helps your team get the job done. It should fit the way you work, change when your business does, and come with someone who stays to make it stick."
       >
         The average tool was built for the average business.{' '}
-        <em>You did not build one.</em>
+        <em>Not for the way your team works.</em>
       </StoryStatement>
 
       <ClientLogoWall />
 
-      <div className="story-transition" aria-hidden="true">
-        <span>Rent</span>
-        <span>Measure</span>
-        <span>Own</span>
-      </div>
+      <BusinessTimeline />
 
       <CostComparison />
 

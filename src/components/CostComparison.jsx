@@ -71,7 +71,7 @@ export default function CostComparison() {
               Growth should increase your return. <em>Not your rent.</em>
             </>
           }
-          body="Nearly every platform charges by the seat. That is a pricing model built for the vendor. An owned system lets the number of people using it grow without moving the bill."
+          body="Nearly every platform charges by the seat. That is a pricing model built for the vendor, and none of it pays for anyone to help your team adopt the tool. An owned system lets your headcount grow without moving the bill, and we stay to implement it with you."
         />
 
         <div className="cost-story__models">

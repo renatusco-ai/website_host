@@ -37,7 +37,7 @@ export default function ClientLogoWall() {
           number="01"
           eyebrow="Who we build for"
           title="Different industries. The same moment of outgrowing the system."
-          body="Gyms, builders, property groups, practices and agencies come to us when the business has become more capable than the software holding it together."
+          body="Gyms, builders, property groups, practices and agencies come to us when the business has outgrown the software holding it together. We rebuild the system around how they work, then stay to bring the team through the change."
         />
 
         {featured && (

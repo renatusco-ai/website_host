@@ -1153,68 +1153,72 @@ h3 em,
   stroke: var(--color-spring);
 }
 
-.story-svg-machine-frame {
-  fill: rgba(110, 113, 128, 0.035);
-  stroke: rgba(110, 113, 128, 0.58);
-  stroke-width: 1.4;
-}
-
-.story-svg-machine-line,
-.story-svg-machine-copy,
-.story-svg-machine-wheel {
-  fill: none;
-  stroke: var(--color-graphite);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.4;
-}
-
-.story-svg-machine-copy {
-  opacity: 0.5;
-}
-
-.story-svg-machine-wheel {
-  opacity: 0.72;
-}
-
-.story-svg-machine-hub {
-  fill: var(--color-graphite);
-}
-
-.story-svg-era-title {
+.story-svg-panel {
   fill: var(--color-forest);
-  font-family: var(--font-display);
-  font-size: 20px;
 }
 
-.story-svg-era-title--gold {
+.story-svg-panel-emblem {
   fill: var(--color-spring);
 }
 
-.story-svg-evolution-arrow,
-.story-svg-evolution-line,
-.story-svg-modern-slot {
+.story-svg-panel-label,
+.story-svg-panel-head,
+.story-svg-pill-text {
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+.story-svg-panel-label {
+  fill: rgba(255, 255, 255, 0.62);
+  font-size: 10px;
+  letter-spacing: 1.6px;
+}
+
+.story-svg-panel-head {
+  fill: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  letter-spacing: 1.8px;
+}
+
+.story-svg-panel-head--now {
+  fill: var(--color-spring);
+}
+
+.story-svg-pill--then {
+  fill: rgba(255, 255, 255, 0.06);
+  stroke: rgba(255, 255, 255, 0.16);
+}
+
+.story-svg-pill--now {
+  fill: var(--color-spring);
+}
+
+.story-svg-pill-text {
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.story-svg-pill-text--then {
+  fill: rgba(255, 255, 255, 0.55);
+}
+
+.story-svg-pill-text--now {
+  fill: var(--color-forest);
+}
+
+.story-svg-strike {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-linecap: round;
+  stroke-width: 1.4;
+}
+
+.story-svg-panel-arrow {
   fill: none;
   stroke: var(--color-spring);
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1.7;
-}
-
-.story-svg-modern-core {
-  fill: var(--color-forest);
-  stroke: rgba(0, 224, 147, 0.72);
-  stroke-width: 1.4;
-}
-
-.story-svg-modern-screen {
-  fill: rgba(255, 255, 255, 0.08);
-  stroke: rgba(255, 255, 255, 0.35);
-}
-
-.story-svg-modern-slot {
-  opacity: 0.42;
-  stroke: var(--color-canvas);
+  stroke-width: 1.8;
 }
 
 .story-ending {
