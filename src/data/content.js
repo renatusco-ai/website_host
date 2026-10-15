@@ -406,14 +406,17 @@ export const WORKSHOP_TOPICS = [
 /** The three ways forward, shown at the top of the services page. */
 export const SERVICE_OPTIONS = [
   {
+    id: 'optimise',
     title: 'Optimise your stack',
     body: 'Keep the tools you already pay for and make them work properly. We clean the data, connect the systems and automate the manual steps in between.',
   },
   {
+    id: 'custom',
     title: 'Build something custom',
     body: 'Replace the patchwork with one system built around how your business runs. You own it, and it is ready for the next five to ten years of growth.',
   },
   {
+    id: 'change',
     title: 'Either one, with change management',
     body: 'Option one or two, plus a change lead who translates between your team and whoever is building, us or your own developers, and stays until the new way of working is embedded.',
     featured: true,

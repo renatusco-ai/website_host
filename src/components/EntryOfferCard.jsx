@@ -31,7 +31,7 @@ export default function EntryOfferCard({ offer, index = 0 }) {
         }`}
       >
         {offer.popular && (
-          <span className="absolute -top-3 left-8 text-[0.65rem] font-semibold tracking-[0.18em] uppercase bg-spring text-forest px-3 py-1 rounded-full">
+          <span className="self-start mb-5 text-[0.65rem] font-semibold tracking-[0.18em] uppercase bg-spring text-forest px-3 py-1 rounded-full">
             Most Popular
           </span>
         )}

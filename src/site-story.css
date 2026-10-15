@@ -464,6 +464,20 @@
   line-height: 1.7;
 }
 
+.site-story-card--option {
+  display: flex;
+  flex-direction: column;
+}
+
+.site-story-card__cta {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.site-story-card--option p {
+  margin-bottom: 2rem;
+}
+
 .site-story-card--forest {
   border-color: var(--color-forest);
   background: var(--color-forest);

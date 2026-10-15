@@ -1,5 +1,7 @@
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import IntakeWizard from '../components/IntakeWizard';
 import SectionReveal from '../components/SectionReveal';
 import PricingCard from '../components/PricingCard';
 import EntryOfferCard from '../components/EntryOfferCard';
@@ -13,8 +15,12 @@ import {
 import { TIERS, PROCESS_STEPS, ENTRY_OFFERS, SERVICE_OPTIONS } from '../data/content';
 
 export default function Services() {
+  const [activeWizard, setActiveWizard] = useState(null);
+  const closeWizard = useCallback(() => setActiveWizard(null), []);
+
   return (
     <motion.div {...STORY_PAGE_TRANSITION} className="services-story">
+      <IntakeWizard wizardId={activeWizard} onClose={closeWizard} />
       <StoryHero
         eyebrow="Services"
         title={
@@ -51,11 +57,18 @@ export default function Services() {
             {SERVICE_OPTIONS.map((option, i) => (
               <SectionReveal key={option.title} delay={i * 0.1}>
                 <div
-                  className={`site-story-card${option.featured ? ' site-story-card--forest' : ''}`}
+                  className={`site-story-card site-story-card--option${option.featured ? ' site-story-card--forest' : ''}`}
                 >
                   <span className="site-story-card__number">0{i + 1}</span>
                   <h3>{option.title}</h3>
                   <p>{option.body}</p>
+                  <button
+                    type="button"
+                    className="btn-primary site-story-card__cta"
+                    onClick={() => setActiveWizard(option.id)}
+                  >
+                    Get started <span aria-hidden="true">&rarr;</span>
+                  </button>
                 </div>
               </SectionReveal>
             ))}
