@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/write-route-html.mjs",
     "preview": "vite preview",
     "process-portfolio": "node scripts/process-portfolio-images.mjs",
     "process-logos": "node scripts/process-client-logos.mjs"

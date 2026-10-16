@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { ReactLenis } from 'lenis/react';
 import Layout from './components/Layout';
+import PageMeta from './components/PageMeta';
 import ScrollToTop from './components/ScrollToTop';
 import PageTransition from './components/PageTransition';
 import Home from './pages/Home';
@@ -18,6 +19,7 @@ export default function App() {
   return (
     <ReactLenis root options={{ lerp: 0.1, duration: 1.2, smoothTouch: false }}>
       <ScrollToTop />
+      <PageMeta />
       <div className="grain-overlay" aria-hidden="true" />
       <Layout>
         <AnimatePresence mode="wait">
