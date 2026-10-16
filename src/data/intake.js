@@ -130,9 +130,9 @@ export const INTAKE_WIZARDS = {
       {
         id: 'ideal',
         kind: 'longtext',
-        prompt: 'Imagine the ideal scenario. What does a normal day look like once this is solved?',
-        helper: 'Think five to ten years out. What would the system do for you and your team?',
-        placeholder: 'Describe the end outcome you are imagining',
+        prompt: 'What does a perfectly operating system look like?',
+        helper: 'Please be specific for your business.',
+        placeholder: 'Describe it for your business',
         required: true,
       },
       STACK_STEP,

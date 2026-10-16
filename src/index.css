@@ -1517,6 +1517,62 @@ h3 em,
   line-height: 1.55;
 }
 
+.intake-dictate {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.intake-dictate__mic {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.95rem;
+  border: 1px solid var(--color-smoke);
+  border-radius: 999px;
+  background: var(--color-canvas);
+  color: var(--color-forest);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.intake-dictate__mic:hover {
+  border-color: var(--color-forest);
+}
+
+.intake-dictate__mic--on {
+  border-color: transparent;
+  background: var(--color-spring);
+}
+
+.intake-dictate__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.intake-dictate__mic--on .intake-dictate__dot {
+  animation: intake-dictate-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes intake-dictate-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intake-dictate__mic--on .intake-dictate__dot {
+    animation: none;
+  }
+}
+
 .intake-choices {
   display: grid;
   gap: 0.6rem;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLenis } from 'lenis/react';
@@ -164,6 +164,152 @@ function StackField({ value, onChange }) {
   );
 }
 
+function MicIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+      <rect x="6" y="1.25" width="4" height="8.5" rx="2" fill="currentColor" />
+      <path
+        d="M3.75 7.5a4.25 4.25 0 0 0 8.5 0M8 11.75V14.25"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function getSpeechRecognition() {
+  if (typeof window === 'undefined') return null;
+  return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+}
+
+function joinDictation(base, spoken) {
+  const left = base.replace(/\s+$/, '');
+  const right = spoken.replace(/^\s+/, '');
+  if (!left) return right;
+  if (!right) return left;
+  return `${left} ${right}`;
+}
+
+function LongTextField({ id, step, value, onChange, onNext }) {
+  const supported = Boolean(getSpeechRecognition());
+  const [listening, setListening] = useState(false);
+  const [micError, setMicError] = useState('');
+  const recognitionRef = useRef(null);
+  const baseRef = useRef('');
+
+  useEffect(() => {
+    return () => {
+      const recognition = recognitionRef.current;
+      recognitionRef.current = null;
+      recognition?.abort();
+    };
+  }, []);
+
+  const start = () => {
+    const SpeechRecognition = getSpeechRecognition();
+    if (!SpeechRecognition) return;
+
+    setMicError('');
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-AU';
+    baseRef.current = value ?? '';
+
+    recognition.onresult = (event) => {
+      if (recognitionRef.current !== recognition) return;
+      let spoken = '';
+      for (let i = 0; i < event.results.length; i += 1) {
+        spoken += event.results[i][0].transcript;
+      }
+      onChange(joinDictation(baseRef.current, spoken));
+    };
+
+    recognition.onerror = (event) => {
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        setMicError('Microphone access was blocked. Allow it in the browser, then tap Speak again.');
+      } else if (event.error === 'audio-capture') {
+        setMicError('No microphone was found.');
+      } else if (event.error !== 'aborted' && event.error !== 'no-speech') {
+        setMicError('Dictation stopped. Tap Speak to try again.');
+      }
+      setListening(false);
+    };
+
+    recognition.onend = () => {
+      if (recognitionRef.current === recognition) recognitionRef.current = null;
+      setListening(false);
+    };
+
+    recognitionRef.current = recognition;
+    try {
+      recognition.start();
+      setListening(true);
+    } catch {
+      recognitionRef.current = null;
+      setMicError('Dictation stopped. Tap Speak to try again.');
+    }
+  };
+
+  const toggle = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      return;
+    }
+    start();
+  };
+
+  return (
+    <div className="intake-dictate">
+      <textarea
+        id={id}
+        className="intake-wizard__input intake-wizard__input--area"
+        placeholder={step.placeholder}
+        rows={5}
+        value={value ?? ''}
+        onChange={(event) => {
+          const recognition = recognitionRef.current;
+          if (recognition) {
+            recognitionRef.current = null;
+            recognition.stop();
+          }
+          onChange(event.target.value);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+            event.preventDefault();
+            onNext();
+          }
+        }}
+        autoFocus
+      />
+      {supported && (
+        <button
+          type="button"
+          className={`intake-dictate__mic${listening ? ' intake-dictate__mic--on' : ''}`}
+          aria-pressed={listening}
+          aria-label={listening ? 'Stop dictation' : 'Speak your answer'}
+          onClick={toggle}
+        >
+          {listening ? (
+            <span className="intake-dictate__dot" aria-hidden="true" />
+          ) : (
+            <MicIcon />
+          )}
+          {listening ? 'Listening' : 'Speak'}
+        </button>
+      )}
+      {micError && (
+        <p className="enquiry-error" role="alert">
+          {micError}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function StepField({ step, value, onChange, onNext }) {
   const id = `intake-${step.id}`;
 
@@ -188,23 +334,7 @@ function StepField({ step, value, onChange, onNext }) {
         />
       );
     case 'longtext':
-      return (
-        <textarea
-          id={id}
-          className="intake-wizard__input intake-wizard__input--area"
-          placeholder={step.placeholder}
-          rows={5}
-          value={value ?? ''}
-          onChange={(event) => onChange(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
-              event.preventDefault();
-              onNext();
-            }
-          }}
-          autoFocus
-        />
-      );
+      return <LongTextField id={id} step={step} value={value} onChange={onChange} onNext={onNext} />;
     case 'choice':
       return (
         <div className="intake-choices" role="radiogroup" aria-labelledby={`${id}-prompt`}>
