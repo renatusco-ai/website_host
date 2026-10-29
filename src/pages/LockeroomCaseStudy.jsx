@@ -200,11 +200,9 @@ export default function LockeroomCaseStudy() {
       <StoryCloser
         eyebrow="Your turn"
         title="What is your stack costing you?"
-        body="Most businesses have never added every subscription and workaround together. We will — and tell you honestly whether rebuilding is worth it."
+        body="Most businesses have never added every subscription and workaround together. Start with a free 15-minute conversation and we will tell you honestly whether rebuilding is worth it."
       >
-        <EnquireNowButton inquire="subscription" className="btn-primary">
-          Find the saving
-        </EnquireNowButton>
+        <EnquireNowButton className="btn-primary" />
         <Link to="/learn-more">Why the economics changed &rarr;</Link>
       </StoryCloser>
     </motion.div>

@@ -9,11 +9,6 @@ const INTRO = {
     title: 'Tell us what is not working.',
     body: 'Fill this in and we will reply within 24 hours with an honest take.',
   },
-  strategy: {
-    eyebrow: 'Subscription Diagnostic',
-    title: 'Map the spend. Keep the plan.',
-    body: 'A paid working session. You leave with an actionable plan to reduce software subscriptions.',
-  },
   scoping: {
     eyebrow: '15 min · Free',
     title: 'AI & Ops Diagnostic',

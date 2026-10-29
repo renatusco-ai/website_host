@@ -25,10 +25,15 @@ Landing page. Primary entry point for Renatus positioning: approachable AI educa
 
 ## Page sections (top → bottom)
 
-1. **Hero**: Headline, subline, `HeroGraphic`, dual CTAs
-2. **Who We Build For**: `ClientLogoWall`: featured Lockeroom block + seven client logos
-3. **How We Charge**: `CostComparison`: per-seat vs usage, plus industry-switchable example
-4. **Closing CTA**: Subscription audit. We only take projects where savings can be quantified.
+Reordered on 29 Oct 2026 after SEO feedback: the call to action and proof must sit near the top.
+
+1. **Hero**: Change-management subline, Enquire Now + "See the $266k result"
+2. **Who We Build For (01)**: `ClientLogoWall`: featured Lockeroom block + client logos
+3. **What makes us different (02)**: `ChangeDifference`: `DIFFERENCE_POINTS` cards, Enquire Now + Meet the founder
+4. **The mismatch**: statement
+5. **How businesses change**: `BusinessTimeline`
+6. **The economics (03)**: `CostComparison`
+7. **Closing CTA**: Enquire Now for a free 15-minute conversation
 
 Sections 4 and 5 alternate `bg-paper` and `bg-cream` deliberately, so do not reorder them
 without checking the background rhythm against the neighbouring sections.

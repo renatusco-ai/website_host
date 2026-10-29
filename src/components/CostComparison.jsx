@@ -64,7 +64,7 @@ export default function CostComparison() {
     <section className="site-story-section cost-story">
       <div className="site-story-section__inner">
         <StorySectionHeading
-          number="02"
+          number="03"
           eyebrow="The economics"
           title={
             <>

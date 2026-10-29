@@ -3,7 +3,6 @@ import { useEnquiry } from '../context/EnquiryContext';
 
 const INTENT_FROM_PRESET = {
   default: 'general',
-  subscription: 'strategy',
   diagnostic: 'scoping',
 };
 

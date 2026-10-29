@@ -59,12 +59,12 @@ export default function Workshops() {
             <MagneticButton>
               <a href="#book" className="btn-primary">Enquire about a workshop</a>
             </MagneticButton>
-            <EnquireNowButton inquire="subscription" className="link-arrow">
-              Need the numbers now? Subscription Diagnostic &rarr;
+            <EnquireNowButton inquire="diagnostic" className="link-arrow">
+              Rather talk about your systems? Free 15-min chat &rarr;
             </EnquireNowButton>
           </>
         }
-        note="Workshops align the team. The Subscription Diagnostic is the paid strategy-to-action path for software spend."
+        note="Workshops align the team. The free 15-minute conversation is the fastest way to talk through a specific problem."
       />
 
       <StoryStatement

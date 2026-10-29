@@ -5,10 +5,6 @@ export const INQUIRE = {
   default: {
     subject: 'Inquiry from renatusco.com',
   },
-  subscription: {
-    subject: 'Subscription Diagnostic',
-    body: 'I would like to book a paid Subscription Diagnostic: map my software spend and leave with an actionable plan to reduce it.',
-  },
   diagnostic: {
     subject: 'Free AI & Ops Diagnostic (15 min)',
     body: 'I would like a quick, no-pressure 15-minute AI & Ops Diagnostic.',
@@ -316,15 +312,6 @@ export const BOOKING_SESSIONS = {
     embedPath: 'mnl09r0/operations-ai-optimization-audit',
     url: 'https://tidycal.com/mnl09r0/operations-ai-optimization-audit',
   },
-  subscriptionAudit: {
-    id: 'subscriptionAudit',
-    eyebrow: 'Subscription Audit',
-    title: 'Subscription & Stack Audit',
-    description:
-      'We add up what you are paying to rent software, and whether rebuilding it would create a saving large enough to take the project on. You leave with the numbers either way.',
-    embedPath: 'mnl09r0/operations-ai-optimization-audit',
-    url: 'https://tidycal.com/mnl09r0/operations-ai-optimization-audit',
-  },
 };
 
 export const ENTRY_OFFERS = [
@@ -342,23 +329,6 @@ export const ENTRY_OFFERS = [
     ],
     cta: 'Enquire Now',
     inquire: 'diagnostic',
-    accent: 'bronze',
-  },
-  {
-    id: 'audit',
-    label: 'Paid',
-    duration: 'Working session · Video or in person',
-    title: 'Subscription Diagnostic',
-    note: 'Credited towards your project if you engage with us',
-    description:
-      'A paid working session. We map what you are paying to rent software and hand you an actionable plan to reduce that spend, whether or not you ever hire us.',
-    features: [
-      'An actionable plan you can take wherever you like',
-      'A clearer picture of your current software landscape',
-      'An honest read on whether rebuilding would create a quantified saving',
-    ],
-    cta: 'Enquire Now',
-    inquire: 'subscription',
     accent: 'gold',
     popular: true,
   },
@@ -443,6 +413,100 @@ export const PROCESS_STEPS = [
       'We build, deploy, and hand over a working solution. Not a tool to figure out: a system that runs from day one.',
   },
 ];
+
+/** The point of difference: software paired with change management. Shown on the home page. */
+export const DIFFERENCE_POINTS = [
+  {
+    title: 'Diagnose the real problem',
+    body: 'We start with the business, not the software: where time, money and attention are leaking, and why the current tools have not fixed it.',
+  },
+  {
+    title: 'Build around your people',
+    body: 'Custom software and automation shaped to how your team already works, so the new way is the easy way.',
+  },
+  {
+    title: 'Lead the change',
+    body: 'Training, new routines and hands-on support until your team runs it without us. Software only pays off once people use it.',
+  },
+];
+
+/**
+ * Founder story for the about page, told as scroll chapters.
+ * `visual.kind` is one of: photo, metrics, graphic. The $266,651 figure must match LOCKEROOM_CASE.
+ */
+export const FOUNDER = {
+  name: 'Shaun Townsend',
+  role: 'Founder & MD',
+  portrait: '/about/shaun-portrait.webp',
+  lead: 'Scaled an elite Health and Fitness Brand from zero to near eight figures in revenue, built the software to run it, and led the team through the change. Now he does the same for Australian businesses.',
+  chapters: [
+    {
+      stage: 'The start',
+      title: 'A founding leader at Lockeroom.',
+      body: 'Australia\u2019s elite team of personal trainers, serving founders and executives.',
+      visual: {
+        kind: 'photo',
+        src: '/about/lockeroom-meeting.webp',
+        alt: 'Shaun leading a Lockeroom team meeting',
+      },
+    },
+    {
+      stage: 'The foundations',
+      title: 'Operations came first.',
+      body: 'A highly specialised service where every client, coach and session had to be right.',
+      tags: [
+        'People management',
+        'Organisational structure',
+        'Roles & responsibilities',
+        'Scheduling',
+        'Process automation',
+      ],
+      stats: [
+        { value: '4 \u2192 40+', label: 'Staff' },
+        { value: 'Near 8 figures', label: 'Revenue, from zero' },
+      ],
+      visual: {
+        kind: 'photo',
+        src: '/about/lockeroom-team.webp',
+        alt: 'Shaun working with a teammate at Lockeroom',
+      },
+    },
+    {
+      stage: 'The software',
+      title: 'Then he built the software to run it.',
+      body: 'As the business grew and his role became more senior, the systems had to scale with it.',
+      tags: ['Custom software', 'One source of truth', 'Automation', 'Live reporting'],
+      visual: { kind: 'graphic', type: 'source' },
+    },
+    {
+      stage: 'The change',
+      title: 'Change management from day one.',
+      body: 'New software only pays off when the people running it change how they work.',
+      tags: ['Organisational psychology', 'Team-based incentives', 'Training', 'New routines'],
+      visual: { kind: 'graphic', type: 'workshop' },
+    },
+    {
+      stage: 'The full arc',
+      title: 'Scale. Growth. Software. Change.',
+      body: 'Shaun has done every stage inside one business. Now he brings that playbook to yours.',
+      visual: { kind: 'saving' },
+    },
+  ],
+  principles: [
+    {
+      title: 'People before platforms',
+      body: 'A system is only as good as the habits around it. We design the routines, training and ownership alongside the software.',
+    },
+    {
+      title: 'Solve the problem, not the brief',
+      body: 'The request is often a symptom. We find the problem underneath, then build the smallest thing that fixes it.',
+    },
+    {
+      title: 'Stay until it sticks',
+      body: 'Handover is not the finish line. We stay with your team until the new way of working is how the business runs.',
+    },
+  ],
+};
 
 /** How a business's software changes as it grows, shown on the home page. The last stage is ours. */
 export const BUSINESS_TIMELINE = [
@@ -655,6 +719,31 @@ export const LOCKEROOM_CASE = {
     'renewal-automation',
   ],
 };
+
+/** Where the Lockeroom gross saving came from. Amounts are the documented FY26 figures. */
+const fitnessStack = COST_EXAMPLES.find((example) => example.id === 'fitness');
+const staffSaving = LOCKEROOM_CASE.groups.find((group) => group.id === 'capacity');
+
+export const LOCKEROOM_SAVING_SPLIT = [
+  {
+    id: 'staff',
+    label: 'Staff efficiency',
+    amount: staffSaving.annual,
+    color: 'forest',
+  },
+  {
+    id: 'subscriptions',
+    label: 'Software subscriptions',
+    amount: fitnessStack.rows.find((row) => row.label === 'Five smaller subscriptions').annual,
+    color: 'spring',
+  },
+  {
+    id: 'platform',
+    label: 'Health-data platform',
+    amount: fitnessStack.rows.find((row) => row.label === 'Health-data platform').annual,
+    color: 'graphite',
+  },
+];
 
 export const VALUE_PILLARS = [
   {

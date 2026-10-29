@@ -41,6 +41,9 @@ Shaun is waiting for Cloudflare to propagate Resend DNS. Checking nameservers / 
 | TidyCal / mailto CTA | Removed from primary path |
 | `/learn-more` software economics parallax story | Done |
 | Site-wide story-led visual redesign | Done |
+| SEO feedback pass (29 Oct): one CTA (Enquire Now), home reorder, change-management positioning, sticky mobile CTA | Done |
+| Subscription Diagnostic retired site-wide | Done |
+| `/about` founder page (replaces redirect to `/workshops`) | Done; founder photo pending |
 
 ## Blocked / next (in order)
 

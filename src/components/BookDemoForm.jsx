@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import MagneticButton from './MagneticButton';
 
-const INTENT_LABELS = {
-  scoping: 'Free AI & Ops Diagnostic (15 min)',
-  strategy: 'Subscription Diagnostic',
-  general: 'General enquiry',
-};
-
 function RequiredMark() {
   return (
     <span className="enquiry-required" aria-hidden="true">
@@ -70,11 +64,7 @@ export default function BookDemoForm({
   };
 
   const submitLabel =
-    formData.intent === 'scoping'
-      ? 'Enquire: 15-min Diagnostic'
-      : formData.intent === 'strategy'
-        ? 'Enquire: Subscription Diagnostic'
-        : 'Send enquiry';
+    formData.intent === 'scoping' ? 'Enquire: 15-min Diagnostic' : 'Send enquiry';
 
   if (submitted) {
     return (
@@ -104,7 +94,6 @@ export default function BookDemoForm({
         >
           <option value="general">Not sure: general enquiry</option>
           <option value="scoping">Free AI & Ops Diagnostic (15 min)</option>
-          <option value="strategy">Subscription Diagnostic (paid working session)</option>
         </select>
       </div>
 

@@ -42,9 +42,9 @@ flowchart LR
 | `/portfolio` | `src/pages/Portfolio.jsx` | [portfolio.md](./pages/portfolio.md) |
 | `/portfolio/lockeroom` | `src/pages/LockeroomCaseStudy.jsx` | [lockeroom.md](./pages/lockeroom.md) |
 | `/workshops` | `src/pages/Workshops.jsx` | [workshops.md](./pages/workshops.md) |
+| `/about` | `src/pages/About.jsx` | [about.md](./pages/about.md) |
 | `/contact` | `src/pages/Contact.jsx` | [contact.md](./pages/contact.md) |
 | `/work` | Redirect → `/portfolio` | — |
-| `/about` | Redirect → `/workshops` | — |
 
 ## Page graph
 
@@ -63,6 +63,8 @@ flowchart TD
 ```
 
 Primary CTA everywhere: **Enquire Now** (modal form). Not TidyCal. Not mailto.
+On screens under 1024px, `MobileEnquireBar` shows a sticky Enquire Now pill once the visitor scrolls past the hero (hidden on `/contact` and while the modal is open).
+The paid Subscription Diagnostic was retired on 29 Oct 2026. Enquiry intents are `general` and `scoping` only.
 
 ## Content that must stay in sync
 
@@ -73,10 +75,12 @@ Primary CTA everywhere: **Enquire Now** (modal form). Not TidyCal. Not mailto.
 | `COST_EXAMPLES` | Home comparison tabs, Portfolio proof cards |
 | `CASE_STUDIES` | Lockeroom workstreams (by id) |
 | `ENTRY_OFFERS` | Services cards |
+| `DIFFERENCE_POINTS` | Home "What makes us different" cards |
+| `FOUNDER` | About page story, stats and principles (stats must match `LOCKEROOM_CASE`) |
 
 ## Enquiry pipeline
 
-1. User clicks Enquire Now (`inquire`: `default` / `subscription` / `diagnostic`)
+1. User clicks Enquire Now (`inquire`: `default` / `diagnostic`)
 2. Modal opens with `BookDemoForm` pre-set to that intent
 3. Required: mobile, email, company
 4. `POST /api/enquiry` JSON

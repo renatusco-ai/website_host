@@ -273,9 +273,7 @@ export default function WhyCustom() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.15 }}
         >
-          <EnquireNowButton inquire="subscription" className="btn-primary">
-            Find the saving
-          </EnquireNowButton>
+          <EnquireNowButton className="btn-primary" />
           <Link to="/portfolio/lockeroom">
             See the documented numbers <span aria-hidden="true">→</span>
           </Link>

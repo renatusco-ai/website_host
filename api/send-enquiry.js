@@ -2,7 +2,6 @@ import { Resend } from 'resend';
 
 const INTENTS = {
   scoping: 'Free AI & Ops Diagnostic (15 min)',
-  strategy: 'Subscription Diagnostic',
   general: 'General enquiry',
 };
 

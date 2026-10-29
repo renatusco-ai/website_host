@@ -9,13 +9,16 @@ import {
 } from 'framer-motion';
 import EnquireNowButton from './EnquireNowButton';
 
+/** `match` lists extra paths that should highlight the link, e.g. workshops live under Services. */
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
-  { to: '/services', label: 'Services' },
-  { to: '/portfolio', label: 'Portfolio' },
-  { to: '/workshops', label: 'Workshops' },
+  { to: '/about', label: 'About' },
+  { to: '/services', label: 'Services', match: ['/workshops'] },
+  { to: '/portfolio', label: 'Portfolio', match: ['/portfolio/lockeroom'] },
   { to: '/contact', label: 'Contact' },
 ];
+
+const isActive = (link, pathname) => link.to === pathname || Boolean(link.match?.includes(pathname));
 
 function Wordmark() {
   return (
@@ -68,13 +71,13 @@ export default function Navbar() {
             <Wordmark />
           </Link>
 
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-6 xl:gap-8">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 className={`site-nav__link label-upper transition-colors duration-300 hover:text-forest ${
-                  location.pathname === link.to ? 'site-nav__link--active text-forest' : ''
+                  isActive(link, location.pathname) ? 'site-nav__link--active text-forest' : ''
                 }`}
               >
                 {link.label}
@@ -125,7 +128,7 @@ export default function Navbar() {
                   <Link
                     to={link.to}
                     className={`heading-display text-4xl transition-colors hover:text-spring ${
-                      location.pathname === link.to ? 'text-spring' : 'text-ink'
+                      isActive(link, location.pathname) ? 'text-spring' : 'text-ink'
                     }`}
                     onClick={() => setMobileOpen(false)}
                   >

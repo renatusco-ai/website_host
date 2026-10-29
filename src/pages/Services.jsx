@@ -5,6 +5,7 @@ import IntakeWizard from '../components/IntakeWizard';
 import SectionReveal from '../components/SectionReveal';
 import PricingCard from '../components/PricingCard';
 import EntryOfferCard from '../components/EntryOfferCard';
+import EnquireNowButton from '../components/EnquireNowButton';
 import {
   STORY_PAGE_TRANSITION,
   StoryCloser,
@@ -90,15 +91,26 @@ export default function Services() {
             number="01"
             eyebrow="Choose the first conversation"
             title="Start at the depth your decision needs."
-            body="A quick diagnostic can establish whether there is a problem. A paid working session maps the economics. A workshop aligns the people who will need to lead the change."
+            body="A quick conversation can establish whether there is a problem worth solving. A workshop aligns the people who will need to lead the change."
           />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {ENTRY_OFFERS.map((offer, i) => (
               <EntryOfferCard key={offer.id} offer={offer} index={i} />
             ))}
           </div>
         </div>
       </section>
+
+      <StoryStatement
+        tone="forest"
+        eyebrow="Company workshops"
+        body="A half-day session for your leadership team: practical AI literacy first, then your real workflows, ending with a shared plan and clear owners. It is often the right first step before any build."
+      >
+        Change starts with the room.{' '}
+        <Link to="/workshops" className="site-story-statement__link">
+          Explore workshops &rarr;
+        </Link>
+      </StoryStatement>
 
       <section className="site-story-section">
         <div className="site-story-section__inner">
@@ -150,10 +162,10 @@ export default function Services() {
       <StoryCloser
         eyebrow="Not sure where to start?"
         title="Begin with understanding, not implementation."
-        body="Bring the team into a workshop, or bring the software bills into a diagnostic. We will tell you which conversation is worth having."
+        body="Tell us what is slow, manual or expensive. We will tell you honestly whether the answer is software, a process change, or nothing yet."
       >
-        <Link to="/workshops" className="btn-primary">Explore company workshops</Link>
-        <Link to="/contact">Compare your starting points &rarr;</Link>
+        <EnquireNowButton className="btn-primary" />
+        <Link to="/workshops">Explore company workshops &rarr;</Link>
       </StoryCloser>
     </motion.div>
   );

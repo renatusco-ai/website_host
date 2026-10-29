@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import EnquireNowButton from '../components/EnquireNowButton';
 import BusinessTimeline from '../components/BusinessTimeline';
+import ChangeDifference from '../components/ChangeDifference';
 import ClientLogoWall from '../components/ClientLogoWall';
 import CostComparison from '../components/CostComparison';
 import {
@@ -15,24 +16,28 @@ export default function Home() {
   return (
     <motion.div {...STORY_PAGE_TRANSITION} className="home-story">
       <StoryHero
-        eyebrow="Software for businesses that refuse to be average"
+        eyebrow="Custom software & change management · Australia"
         title={
           <>
             The software changed. <em>Your business hasn&rsquo;t.</em>
           </>
         }
-        lead="You settled for off-the-shelf because custom wasn’t an option. Now it is — and the numbers can be extraordinary."
+        lead="We build custom software and business automation around the way your team works, then lead the change so your people actually use it. That is how productivity goes up while costs come down."
         graphic="evolution"
         actions={
           <>
-              <EnquireNowButton />
-              <Link to="/learn-more" className="link-arrow max-w-xs">
-                Learn how businesses are making crazy savings &rarr;
-              </Link>
+            <EnquireNowButton />
+            <Link to="/portfolio/lockeroom" className="link-arrow max-w-xs">
+              See the $266k result &rarr;
+            </Link>
           </>
         }
-        note="We only recommend custom where the measurable saving justifies it."
+        note="Free 15-minute first conversation. We reply within 24 hours."
       />
+
+      <ClientLogoWall />
+
+      <ChangeDifference />
 
       <StoryStatement
         eyebrow="The mismatch"
@@ -42,20 +47,16 @@ export default function Home() {
         <em>Not for the way your team works.</em>
       </StoryStatement>
 
-      <ClientLogoWall />
-
       <BusinessTimeline />
 
       <CostComparison />
 
       <StoryCloser
-        eyebrow="How we choose work"
-        title="If the saving cannot be quantified, we do not take the project."
-        body="A Subscription Diagnostic maps the real cost of your stack and tests whether rebuilding makes commercial sense. You keep the plan either way."
+        eyebrow="Start with a conversation"
+        title="Tell us what is not working. We will tell you honestly if we can fix it."
+        body="A free 15-minute conversation. No pitch. If custom software is not the answer, we will say so."
       >
-        <EnquireNowButton inquire="subscription" className="btn-primary">
-          Find the saving
-        </EnquireNowButton>
+        <EnquireNowButton className="btn-primary" />
         <Link to="/portfolio">See the proof &rarr;</Link>
       </StoryCloser>
     </motion.div>

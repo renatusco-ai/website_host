@@ -32,10 +32,10 @@ export default function Footer() {
             <span>Explore</span>
             <div>
               <Link to="/">Home</Link>
-              <Link to="/learn-more">The story</Link>
+              <Link to="/about">About</Link>
               <Link to="/services">Services</Link>
               <Link to="/portfolio">Portfolio</Link>
-              <Link to="/workshops">Workshops</Link>
+              <Link to="/learn-more">The story</Link>
               <Link to="/contact">Contact</Link>
             </div>
           </div>

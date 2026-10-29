@@ -1,5 +1,6 @@
 import Navbar from './Navbar';
 import Footer from './Footer';
+import MobileEnquireBar from './MobileEnquireBar';
 import { EnquiryProvider } from '../context/EnquiryContext';
 
 export default function Layout({ children }) {
@@ -14,6 +15,7 @@ export default function Layout({ children }) {
           {children}
         </main>
         <Footer />
+        <MobileEnquireBar />
       </div>
     </EnquiryProvider>
   );

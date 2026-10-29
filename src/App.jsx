@@ -12,6 +12,7 @@ import Workshops from './pages/Workshops';
 import Portfolio from './pages/Portfolio';
 import LockeroomCaseStudy from './pages/LockeroomCaseStudy';
 import WhyCustom from './pages/WhyCustom';
+import About from './pages/About';
 
 export default function App() {
   const location = useLocation();
@@ -31,7 +32,7 @@ export default function App() {
             <Route path="/learn-more" element={<WhyCustom />} />
             <Route path="/workshops" element={<Workshops />} />
             <Route path="/work" element={<Navigate to="/portfolio" replace />} />
-            <Route path="/about" element={<Navigate to="/workshops" replace />} />
+            <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </AnimatePresence>

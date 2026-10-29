@@ -1,8 +1,7 @@
 {
   "cleanUrls": true,
   "redirects": [
-    { "source": "/work", "destination": "/portfolio", "permanent": true },
-    { "source": "/about", "destination": "/workshops", "permanent": true }
+    { "source": "/work", "destination": "/portfolio", "permanent": true }
   ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

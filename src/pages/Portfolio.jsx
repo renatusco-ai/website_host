@@ -176,11 +176,9 @@ export default function Portfolio() {
       <StoryCloser
         eyebrow="Your evidence"
         title="What is your stack costing you?"
-        body="Most businesses have never put every subscription, workaround and duplicated hour in one place. We will — and tell you honestly whether rebuilding is worth it."
+        body="Most businesses have never put every subscription, workaround and duplicated hour in one place. Start with a free 15-minute conversation and we will tell you honestly whether rebuilding is worth it."
       >
-        <EnquireNowButton inquire="subscription" className="btn-primary">
-          Map the real cost
-        </EnquireNowButton>
+        <EnquireNowButton className="btn-primary" />
         <Link to="/contact">Compare the ways to start &rarr;</Link>
       </StoryCloser>
     </motion.div>

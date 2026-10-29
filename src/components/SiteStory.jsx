@@ -19,6 +19,7 @@ export function StoryHero({
   title,
   lead,
   graphic,
+  visual,
   actions,
   note,
   compact = false,
@@ -99,7 +100,7 @@ export function StoryHero({
           )}
         </motion.div>
 
-        {graphic && (
+        {(visual || graphic) && (
           <motion.div
             className="site-story-hero__visual"
             style={reduceMotion ? undefined : { y: graphicY }}
@@ -107,7 +108,7 @@ export function StoryHero({
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <SoftwareStoryGraphic type={graphic} />
+            {visual ?? <SoftwareStoryGraphic type={graphic} />}
           </motion.div>
         )}
       </div>

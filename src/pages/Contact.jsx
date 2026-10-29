@@ -7,14 +7,19 @@ import {
   STORY_PAGE_TRANSITION,
   StoryHero,
   StorySectionHeading,
-  StoryStatement,
 } from '../components/SiteStory';
 import { CONTACT_EMAIL } from '../data/content';
 
-const SUBSCRIPTION_LEAVE_WITH = [
-  'An actionable plan you can take wherever you like',
-  'A clearer picture of your current software landscape',
-  'An honest read on whether rebuilding would create a quantified saving',
+const CONVERSATION_POINTS = [
+  'Fifteen minutes, phone or video',
+  'No pitch, no deck',
+  'An honest yes, no, or not yet',
+];
+
+const WORKSHOP_POINTS = [
+  'Half-day session for leadership and management',
+  'Practical AI literacy, then your real workflows',
+  'Leave with a shared plan and clear owners',
 ];
 
 export default function Contact() {
@@ -27,11 +32,11 @@ export default function Contact() {
             Two ways in. <em>Both honest.</em>
           </>
         }
-        lead="Tell us what feels expensive, fragmented or harder than it should be. We will help you decide whether the next move is a quick conversation, a proper diagnostic — or nothing yet."
+        lead="Tell us what feels expensive, fragmented or harder than it should be. We will tell you whether the answer is software, a change in how the team works, or nothing yet."
         graphic="pioneer"
         actions={
           <>
-            <a href="#choose" className="btn-primary">Choose your starting point</a>
+            <EnquireNowButton inquire="diagnostic" />
             <a href="#write" className="link-arrow">Write a note instead &rarr;</a>
           </>
         }
@@ -42,33 +47,32 @@ export default function Contact() {
         <div className="site-story-section__inner">
           <StorySectionHeading
             number="01"
-            eyebrow="Choose the depth"
-            title="A quick signal, or a decision-ready plan."
-            body="Both paths begin with your real operating problem. The difference is how much evidence and action you need to leave with."
+            eyebrow="Choose the starting point"
+            title="A quick conversation, or the whole room."
+            body="Both paths begin with your real operating problem. Talk it through with us one-on-one, or bring your leadership team into a workshop first."
           />
           <div className="contact-story__paths">
           <SectionReveal>
             <div className="contact-story__path contact-story__path--paid">
               <p className="label-upper mb-4" style={{ color: 'var(--color-spring)' }}>
-                Paid working session
+                15 minutes · Free
               </p>
               <h2 className="heading-display text-3xl text-canvas mb-4">
-                Subscription Diagnostic
+                AI &amp; Ops Diagnostic
               </h2>
               <p className="text-canvas/75 text-sm leading-relaxed mb-6">
-                We identify where your software subscriptions are leaking money and
-                write an actionable plan to reduce that spend. You keep the plan
-                either way.
+                A quick, no-pressure conversation. You tell us what is broken. We
+                tell you honestly whether it is worth a deeper look.
               </p>
               <ul className="space-y-3 mb-8">
-                {SUBSCRIPTION_LEAVE_WITH.map((item) => (
+                {CONVERSATION_POINTS.map((item) => (
                   <li key={item} className="text-canvas/80 text-sm flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-spring mt-1.5 shrink-0" />
                     {item}
                   </li>
                 ))}
               </ul>
-              <EnquireNowButton inquire="subscription" className="btn-primary w-full justify-center">
+              <EnquireNowButton inquire="diagnostic" className="btn-primary w-full justify-center">
                 Enquire Now
               </EnquireNowButton>
             </div>
@@ -76,42 +80,30 @@ export default function Contact() {
 
           <SectionReveal delay={0.1}>
             <div className="contact-story__path">
-              <p className="label-upper text-forest mb-4">15 minutes · Free</p>
+              <p className="label-upper text-forest mb-4">Team session</p>
               <h2 className="heading-display text-3xl text-ink mb-4">
-                AI &amp; Ops Diagnostic
+                Company AI Workshop
               </h2>
               <p className="text-graphite text-sm leading-relaxed mb-6">
-                A quick, no-pressure conversation. You tell us what is broken. We
-                tell you honestly whether it is worth a deeper look.
+                The right first move when the people need alignment before the
+                systems need changing.
               </p>
               <ul className="space-y-3 mb-8">
-                {[
-                  'Fifteen minutes, phone or video',
-                  'No pitch, no deck',
-                  'An honest yes, no, or not yet',
-                ].map((item) => (
+                {WORKSHOP_POINTS.map((item) => (
                   <li key={item} className="text-graphite text-sm flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-spring mt-1.5 shrink-0" />
                     {item}
                   </li>
                 ))}
               </ul>
-              <EnquireNowButton inquire="diagnostic" className="btn-ghost w-full justify-center">
-                Enquire Now
-              </EnquireNowButton>
+              <Link to="/workshops" className="btn-ghost w-full justify-center">
+                Explore workshops
+              </Link>
             </div>
           </SectionReveal>
           </div>
         </div>
       </section>
-
-      <StoryStatement
-        tone="forest"
-        eyebrow="Bringing the team?"
-        body="A company workshop creates shared AI literacy before implementation. It is the right first move when the people need alignment before the systems need changing."
-      >
-        Start with the room. <Link to="/workshops"><em>Explore workshops &rarr;</em></Link>
-      </StoryStatement>
 
       <section id="write" className="site-story-section site-story-section--paper">
         <div className="site-story-section__inner contact-story__write">
