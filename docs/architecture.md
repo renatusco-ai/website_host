@@ -6,7 +6,7 @@
 
 ## What this is
 
-A Vite + React marketing SPA for Renatus. Pages are static. The only live backend call is `POST /api/enquiry`, which sends the enquiry form through Resend.
+A Vite + React marketing SPA for Renatus. Pages are static. The live backend calls are `POST /api/enquiry` (enquiry form through Resend) and `GET /api/mission` (home hero figure).
 
 ```mermaid
 flowchart LR
@@ -28,6 +28,7 @@ flowchart LR
 | Copy + numbers | `src/data/content.js` | Single source. Edit figures here, not in JSX |
 | Enquiry UI | `EnquireNowButton` → `EnquiryProvider` → `EnquiryModal` → `BookDemoForm` | Stays on-page |
 | Enquiry send | `api/enquiry.js` → `api/send-enquiry.js` | Server-only `RESEND_API_KEY` |
+| Mission figure | `api/mission.js` + `src/hooks/useMissionTotal.js` + `src/data/mission.js` | `GET /api/mission`; optional `RENATUS_OS_SAVINGS_URL`, falls back to the documented figure. Not served by `vite dev` |
 | Local API | Vite plugin in `vite.config.js` | Same handler as Vercel `/api/enquiry` |
 | Story UI | `SiteStory.jsx` + `site-story.css` | Shared editorial heroes, statements, section headings, and closers |
 | Story graphics | `SoftwareStoryGraphic.jsx` | Reusable animated SVG diagrams |

@@ -27,7 +27,7 @@ Landing page. Primary entry point for Renatus positioning: approachable AI educa
 
 Reordered on 29 Oct 2026 after SEO feedback: the call to action and proof must sit near the top.
 
-1. **Hero**: Change-management subline, Enquire Now + "See the $266k result"
+1. **Hero** (`MissionHero`): "Our mission" eyebrow, $100 million headline, the live annual-saving figure, the milestone track ($100k, $1M, $10M, $100M, evenly spaced, linear fill inside each segment, honest linear % as text), Enquire Now + "See the $266k result"
 2. **Who We Build For (01)**: `ClientLogoWall`: featured Lockeroom block + client logos
 3. **What makes us different (02)**: `ChangeDifference`: `DIFFERENCE_POINTS` cards, Enquire Now + Meet the founder
 4. **The mismatch**: statement
@@ -42,6 +42,7 @@ without checking the background rhythm against the neighbouring sections.
 
 | Component | Source |
 |-----------|--------|
+| `MissionHero` | `src/components/MissionHero.jsx` (styles in `src/site-story.css`, `.mission-*`) |
 | `HeroGraphic` | `src/components/HeroGraphic.jsx` |
 | `SectionReveal` | `src/components/SectionReveal.jsx` |
 | `BookDiscoveryButton` | `src/components/BookDiscoveryButton.jsx` |
@@ -55,6 +56,7 @@ without checking the background rhythm against the neighbouring sections.
 | `CLIENTS`, `FEATURED_CLIENT_ID` | `src/data/content.js` | Logo wall; `scale` optically balances each logo |
 | `LOCKEROOM_CASE` | `src/data/content.js` | Featured block tagline and headline figure |
 | `COST_MODEL`, `COST_EXAMPLES` | `src/data/content.js` | Per-seat vs usage columns and industry tabs |
+| `MISSION_*`, `missionProgress` | `src/data/mission.js` | Goal, milestones, fallback figure, milestone-scale maths |
 
 ## Cost figures
 
@@ -81,7 +83,7 @@ Do not drop the status flag or `COST_MODEL_DISCLAIMER` when editing those number
 
 ### Current
 
-- None. Static content only.
+- `GET /api/mission` (`api/mission.js`): confirmed annual saving for the hero. If `RENATUS_OS_SAVINGS_URL` is set it is fetched server-side (5s timeout) and expected to return `{ confirmedAnnualSaving, clientCount, updatedAt }`. Unset, failed, invalid or zero values return the fallback from `src/data/mission.js` (`"source": "fallback"`, otherwise `"live"`). Always 200, cached `s-maxage=300`. The hook `src/hooks/useMissionTotal.js` starts on the fallback and refetches every 60s while the tab is visible. Under plain `vite dev` the route does not exist and the hero stays on the fallback.
 
 ### Planned
 

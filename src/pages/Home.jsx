@@ -5,35 +5,17 @@ import BusinessTimeline from '../components/BusinessTimeline';
 import ChangeDifference from '../components/ChangeDifference';
 import ClientLogoWall from '../components/ClientLogoWall';
 import CostComparison from '../components/CostComparison';
+import MissionHero from '../components/MissionHero';
 import {
   STORY_PAGE_TRANSITION,
   StoryCloser,
-  StoryHero,
   StoryStatement,
 } from '../components/SiteStory';
 
 export default function Home() {
   return (
     <motion.div {...STORY_PAGE_TRANSITION} className="home-story">
-      <StoryHero
-        eyebrow="Custom software & change management · Australia"
-        title={
-          <>
-            The software changed. <em>Your business hasn&rsquo;t.</em>
-          </>
-        }
-        lead="We build custom software and business automation around the way your team works, then lead the change so your people actually use it. That is how productivity goes up while costs come down."
-        graphic="evolution"
-        actions={
-          <>
-            <EnquireNowButton />
-            <Link to="/portfolio/lockeroom" className="link-arrow max-w-xs">
-              See the $266k result &rarr;
-            </Link>
-          </>
-        }
-        note="Free 15-minute first conversation. We reply within 24 hours."
-      />
+      <MissionHero />
 
       <ClientLogoWall />
 
