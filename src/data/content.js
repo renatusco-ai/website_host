@@ -664,7 +664,7 @@ export const LOCKEROOM_CASE = {
   logo: '/clients/lockeroom.png',
   tagline: 'A quarter of a million dollars in recurring cost, removed permanently.',
   summary:
-    'Documented FY26 contribution value. Subscriptions retired, paid features rebuilt in-house, and staff capacity unlocked across scheduling, the staff home page, and reporting.',
+    'Documented FY26 contribution value. Subscriptions retired, paid features rebuilt in-house, and staff capacity unlocked across scheduling, team operations, and reporting.',
   headline: { value: '$266,651', label: 'Net recurring cost removed, every year' },
   secondary: [
     { value: '$22,221', label: 'Removed per month' },
@@ -688,13 +688,14 @@ export const LOCKEROOM_CASE = {
       id: 'capacity',
       title: 'Staff capacity unlocked',
       description:
-        'Manual work removed once the system did the job instead of a person. This is the larger half of the saving, and the half most software business cases ignore.',
+        'Roles restructured and manual work removed once the system took on the job. This is the larger half of the saving, and the half most software business cases ignore.',
       monthly: 17815,
       annual: 213780,
       items: [
         'Rebuilding the scheduling system',
-        'Reformatting the Staff Home page',
+        'Reformatting and retraining the team on a new operating system',
         'Data pipelines for faster, more accurate data visualisation',
+        'Roles restructured around the new system',
       ],
     },
   ],
