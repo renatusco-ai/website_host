@@ -115,7 +115,7 @@ function MissionTrack({ value, reduceMotion }) {
         aria-valuemin={0}
         aria-valuemax={MISSION_GOAL}
         aria-valuenow={Math.min(value, MISSION_GOAL)}
-        aria-valuetext={`${formatDollars(value)} saved every year, ${share}% of the way to ${formatDollars(MISSION_GOAL)}`}
+        aria-valuetext={`${formatDollars(value)} saved over three years, ${share}% of the way to ${formatDollars(MISSION_GOAL)}`}
       >
         <div className="mission-track__rail" />
         <motion.div
@@ -212,7 +212,7 @@ export default function MissionHero() {
           </p>
           <LiveFigure value={confirmedAnnualSaving} reduceMotion={reduceMotion} />
           <p className="mission-hero__caption">
-            saved every year for the businesses we work with, so far.
+            saved over three years for the businesses we work with, so far.
           </p>
         </motion.div>
 
