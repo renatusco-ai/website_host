@@ -693,7 +693,10 @@ export const LOCKEROOM_CASE = {
       annual: 213780,
       items: [
         'Rebuilding the scheduling system',
+        'Team Builder replaced with a tool rebuilt around what the team actually needs',
         'Reformatting and retraining the team on a new operating system',
+        'Client journey automated, with every accountability touchpoint still high-touch',
+        'Built-in AI agents working through admin tasks in the background',
         'Data pipelines for faster, more accurate data visualisation',
         'Roles restructured around the new system',
       ],
