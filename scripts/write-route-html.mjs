@@ -33,3 +33,24 @@ for (const page of PAGES) {
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, html);
 }
+
+// Emit unlisted standalone route HTML with pre-JS noindex, nofollow and canonical stripped
+const UNLISTED_PAGES = [
+  {
+    path: '/app-store-intake',
+    title: 'iOS App Store Onboarding Intake | Renatus',
+    description: 'Standalone client onboarding questionnaire for Apple App Store submissions.',
+  },
+];
+
+for (const page of UNLISTED_PAGES) {
+  const html = fill(template, page)
+    .replace(
+      /(<meta name="robots" content=")[^"]*(")/,
+      '$1noindex, nofollow$2',
+    )
+    .replace(/\s*<link rel="canonical"[^>]*>\s*/g, '\n    ');
+  const file = join(dist, `${page.path.slice(1)}.html`);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, html);
+}

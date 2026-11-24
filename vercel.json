@@ -1,7 +1,17 @@
 {
   "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/app-store-intake",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    }
+  ],
   "redirects": [
     { "source": "/work", "destination": "/portfolio", "permanent": true }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
 }
