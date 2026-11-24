@@ -1859,11 +1859,20 @@ export default function AppStoreIntake() {
           )}
 
           {stepIndex < STEPS.length - 1 ? (
-            <button type="button" onClick={goNext} className="btn-primary text-sm cursor-pointer">
+            <button
+              key="next-step"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                goNext();
+              }}
+              className="btn-primary text-sm cursor-pointer"
+            >
               Next &rarr;
             </button>
           ) : (
             <button
+              key="submit-intake"
               type="submit"
               disabled={submitting || uploading}
               className="btn-primary text-sm cursor-pointer disabled:opacity-60"
