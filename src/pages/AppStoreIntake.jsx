@@ -301,6 +301,33 @@ const CONTROL_CLASS =
 const INPUT_CLASS =
   `${CONTROL_CLASS} w-full min-w-0 placeholder:text-[#5c6170] placeholder:opacity-100`;
 
+function SelectControl({ className = '', wrapperClassName = 'w-full min-w-0', children, ...props }) {
+  return (
+    <div className={`relative ${wrapperClassName}`}>
+      <select
+        {...props}
+        className={`${CONTROL_CLASS} appearance-none w-full min-w-0 pr-10 cursor-pointer ${className}`}
+      >
+        {children}
+      </select>
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 16 16"
+        fill="none"
+        className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 size-4 text-forest"
+      >
+        <path
+          d="M4 6l4 4 4-4"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
 const ACTION_CLASS =
   'inline-flex min-h-11 items-center justify-center rounded-full border px-4 py-2 text-sm/5 font-semibold transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:border-graphite disabled:bg-cloud disabled:text-[#4b5060]';
 const PRIMARY_ACTION_CLASS =
@@ -967,10 +994,10 @@ export default function AppStoreIntake() {
                       helper="Apple requires a contact phone number with international country code."
                     />
                     <div className="flex items-start gap-2">
-                      <select
+                      <SelectControl
                         aria-label="Country code"
                         aria-describedby={describedByFor('phoneNumber', 'phoneNumber-helper')}
-                        className={`${CONTROL_CLASS} max-w-[48%] shrink-0`}
+                        wrapperClassName="max-w-[48%] shrink-0"
                         value={answers.phoneCountryCode}
                         onChange={(e) => update('phoneCountryCode', e.target.value)}
                       >
@@ -979,7 +1006,7 @@ export default function AppStoreIntake() {
                             {c.label}
                           </option>
                         ))}
-                      </select>
+                      </SelectControl>
                       <input
                         id="phoneNumber"
                         aria-describedby={describedByFor('phoneNumber', 'phoneNumber-helper')}
@@ -1178,12 +1205,11 @@ export default function AppStoreIntake() {
                   </div>
                   <div>
                     <FieldLabel htmlFor="primaryCategory" label="Primary Category" required />
-                    <select
+                    <SelectControl
                       id="primaryCategory"
                       aria-describedby={describedByFor('primaryCategory')}
                       aria-required="true"
                       aria-invalid={isInvalid('primaryCategory')}
-                      className={INPUT_CLASS}
                       value={answers.primaryCategory}
                       onChange={(e) => update('primaryCategory', e.target.value)}
                     >
@@ -1192,7 +1218,7 @@ export default function AppStoreIntake() {
                           {cat}
                         </option>
                       ))}
-                    </select>
+                    </SelectControl>
                   </div>
                 </div>
 
@@ -1232,10 +1258,9 @@ export default function AppStoreIntake() {
                 <div className={`${FIELD_ROW_CLASS} sm:grid-cols-2`}>
                   <div>
                     <FieldLabel htmlFor="primaryLocale" label="Primary App Store Language / Locale" required />
-                    <select
+                    <SelectControl
                       id="primaryLocale"
                       aria-required="true"
-                      className={INPUT_CLASS}
                       value={answers.primaryLocale}
                       onChange={(e) => update('primaryLocale', e.target.value)}
                     >
@@ -1244,7 +1269,7 @@ export default function AppStoreIntake() {
                           {loc}
                         </option>
                       ))}
-                    </select>
+                    </SelectControl>
                   </div>
                   <div>
                     <FieldLabel
@@ -1564,9 +1589,8 @@ export default function AppStoreIntake() {
                   </div>
                   <div>
                     <FieldLabel htmlFor="brandFontLicense" label="Font License Status" required={false} />
-                    <select
+                    <SelectControl
                       id="brandFontLicense"
-                      className={INPUT_CLASS}
                       value={answers.brandFontLicense}
                       onChange={(e) => update('brandFontLicense', e.target.value)}
                     >
@@ -1574,7 +1598,7 @@ export default function AppStoreIntake() {
                       <option value="free_google">Free / Google Font</option>
                       <option value="paid_owned">Paid license owned</option>
                       <option value="unsure">Not sure</option>
-                    </select>
+                    </SelectControl>
                   </div>
                 </div>
 
