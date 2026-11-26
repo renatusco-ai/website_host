@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Renatus Step 2 intake wizard</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --forest:#126656; --deep:#103f37; --spring:#00e093; --mist:#e7f2ee;
+      --canvas:#f7f9f8; --border:#cbd7d2; --muted:#4b5a55; --white:#fff;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--canvas); color:var(--deep); font:15px/1.5 Geist,system-ui,sans-serif; }
+    header { background:var(--white); border-bottom:1px solid var(--border); }
+    .header-inner { max-width:1230px; min-height:64px; margin:auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    header img { height:24px; width:auto; }
+    .badge { color:var(--forest); border:1px solid #a4c9ba; background:var(--mist); border-radius:999px; padding:3px 10px; font-size:12px; font-weight:650; text-align:center; }
+    main { max-width:1230px; margin:auto; padding:26px 24px 48px; }
+    h1,h2,h3,p { margin:0; }
+    h1 { font-size:clamp(32px,4vw,45px); font-weight:500; line-height:1.08; letter-spacing:-.045em; }
+    .lead { margin:8px 0 18px; color:var(--muted); }
+    .instructions { margin-bottom:22px; padding:16px 19px 17px; background:var(--mist); border:1px solid #b6d2c7; border-top:3px solid var(--forest); border-radius:12px; }
+    .instructions-head { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:6px 20px; margin-bottom:12px; }
+    h2 { font-size:20px; letter-spacing:-.02em; }
+    .instructions-head nav { display:flex; flex-wrap:wrap; gap:4px 14px; font-size:13px; }
+    a { color:var(--forest); text-underline-offset:3px; overflow-wrap:anywhere; }
+    .steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin:0; padding:0; list-style:none; }
+    .steps li { min-width:0; padding:0 14px; border-left:1px solid #b6d2c7; }
+    .steps li:first-child { padding-left:0; border:0; }
+    .steps li:last-child { padding-right:0; }
+    .steps h3 { margin-bottom:4px; font-size:15px; }
+    .steps p { color:var(--muted); font-size:13px; }
+    .links { margin-top:8px; display:flex; flex-wrap:wrap; gap:3px 12px; font-size:12.5px; font-weight:600; }
+    .workbench { display:grid; grid-template-columns:226px minmax(0,1fr); gap:18px; align-items:start; }
+    .project { padding:16px; border-radius:12px; background:var(--deep); color:var(--white); }
+    .project { position:sticky; top:16px; }
+    .project summary { margin-bottom:10px; font-size:18px; font-weight:650; cursor:pointer; }
+    .project[open] summary { margin-bottom:12px; }
+    .project label + label { margin-top:9px; }
+    .project label { color:#d2eee4; }
+    .project input:not([type=checkbox]) { color:#fff; background:#194b41; border-color:#608379; }
+    .project input::placeholder { color:#c8ddd6; }
+    .project .hint { color:#d2eee4; margin-top:10px; }
+    .sheet { --wizard-gutter:18px; min-width:0; background:var(--white); border:1px solid var(--border); border-radius:12px; }
+    [hidden] { display:none !important; }
+    .progress { list-style:none; display:flex; flex-wrap:wrap; gap:4px; padding:9px calc(var(--wizard-gutter) - 9px); margin:0; border-bottom:1px solid var(--border); }
+    .progress li { flex:1 0 auto; }
+    .progress button { width:100%; min-height:38px; white-space:nowrap; text-align:start; border:1px solid transparent; border-radius:7px; background:transparent; color:var(--deep); padding:7px 8px; cursor:pointer; font-size:13px; font-weight:650; line-height:1.25; }
+    .progress button:hover { background:var(--canvas); }
+    .progress button[aria-current=step] { border-color:#a4c9ba; background:var(--mist); }
+    .stage { padding:16px var(--wizard-gutter) 18px; scroll-margin-top:18px; }
+    .stage-header { margin-bottom:13px; }
+    .stage-header h2 { margin-bottom:4px; }
+    .stage-heading { scroll-margin-top:16px; }
+    .stage-heading:focus,.review-heading:focus { outline:none; }
+    .stage-count { color:var(--forest); font-size:12px; font-weight:650; }
+    .stage-fields { margin-bottom:14px; }
+    .field-progress { margin:7px 0 12px; }
+    .field-progress select { max-width:220px; }
+    .question { padding:9px 10px; margin:6px 0; border:1px solid var(--border); border-radius:7px; }
+    .question button { justify-self:start; padding:0; }
+    .status-pills { display:flex; flex-wrap:wrap; gap:5px 8px; margin:5px 0; font-size:12px; color:var(--forest); }
+    .review-card { padding:12px; border:1px solid var(--border); background:var(--canvas); border-radius:8px; margin-top:14px; }
+    .review-card ul { margin:6px 0 10px; padding-left:20px; }
+    .review-card li + li { margin-top:6px; }
+    .review-card details { margin-top:7px; }
+    .review-card summary { cursor:pointer; font-size:13px; font-weight:650; }
+    .review-card button { padding:0; }
+    fieldset { min-width:0; margin:0 0 16px; padding:0; border:0; }
+    fieldset:last-child { margin-bottom:0; }
+    legend { margin-bottom:6px; padding:0; font-size:17px; font-weight:650; letter-spacing:-.02em; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px 12px; }
+    .wide { grid-column:1/-1; }
+    label { display:grid; align-content:start; gap:4px; font-size:13px; font-weight:600; }
+    input,textarea,select,button { font:inherit; }
+    input:not([type=checkbox]),textarea,select { width:100%; min-width:0; min-height:39px; padding:7px 9px; border:1px solid #98aaa2; border-radius:6px; background:var(--white); color:var(--deep); font-size:14px; }
+    textarea { min-height:61px; resize:vertical; }
+    :focus-visible { outline:2px solid var(--forest); outline-offset:2px; }
+    .project :focus-visible { outline-color:var(--spring); }
+    .checks { display:flex; flex-wrap:wrap; gap:4px 14px; }
+    .checks label { display:flex; min-height:26px; align-items:center; gap:6px; }
+    [type=checkbox] { accent-color:var(--forest); width:15px; height:15px; margin:0; flex:0 0 auto; }
+    .hint { color:var(--muted); font-size:12px; font-weight:400; }
+    .metadata-filters { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,220px); gap:10px; margin:12px 0; }
+    .metadata-group { margin-top:10px; border:1px solid var(--border); border-radius:8px; }
+    .metadata-group summary { padding:9px 12px; font-size:14px; font-weight:650; cursor:pointer; }
+    .metadata-item { border-top:1px solid var(--border); padding:11px 12px; }
+    .metadata-item h3 { font-size:15px; }
+    .metadata-tags { margin:3px 0 6px; color:var(--forest); font-size:12px; }
+    .metadata-item .grid { grid-template-columns:minmax(0,1fr) minmax(0,180px); margin-top:8px; }
+    .metadata-item code { overflow-wrap:anywhere; }
+    .metadata-jump { align-self:end; justify-self:start; border:0; background:transparent; color:var(--forest); font-size:13px; font-weight:650; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+    .stage-header .metadata-jump { padding:0; }
+    .footer { position:sticky; bottom:0; z-index:2; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px 15px; border-top:1px solid var(--border); padding:11px var(--wizard-gutter); background:#f8faf9; border-radius:0 0 12px 12px; }
+    .actions { display:flex; flex-wrap:wrap; gap:6px; }
+    .secondary { background:var(--white); color:var(--deep); border:1px solid #98aaa2; border-radius:999px; padding:7px 12px; min-height:39px; font-size:13px; font-weight:650; cursor:pointer; }
+    .secondary:disabled { opacity:.5; cursor:default; }
+    .project-switch { margin-top:8px; }
+    .project-switch .secondary { background:var(--deep); color:#fff; border-color:#8bad9f; }
+    .error { color:#9d261f; }
+    [aria-invalid=true] { border-color:#9d261f !important; }
+    .stage :is(input,select,textarea,button),.project :is(input,button) { scroll-margin-bottom:110px; }
+    .footer output { font-size:13px; font-weight:650; color:var(--forest); }
+    .save { background:var(--spring); color:var(--deep); border:1px solid var(--forest); border-radius:999px; padding:7px 15px; min-height:39px; font-size:14px; font-weight:700; cursor:pointer; }
+    @media (max-width:750px) {
+      .workbench,.steps { grid-template-columns:1fr; }
+      .project { position:static; }
+      .progress { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .steps li,.steps li:first-child,.steps li:last-child { padding:11px 0; border:0; border-top:1px solid #b6d2c7; }
+      .steps li:last-child { padding-bottom:0; }
+    }
+    @media (max-width:490px) { .grid,.metadata-item .grid,.metadata-filters { grid-template-columns:1fr; } .header-inner,main { padding-left:14px; padding-right:14px; } }
+  </style>
+</head>
+<body>
+  <header><div class="header-inner">
+    <img src="../public/brand/renatus-logo.svg" alt="Renatus">
+    <span class="badge">Local prototype · use sample data</span>
+  </div></header>
+  <main>
+    <h1>Renatus Step 2 intake</h1>
+    <p class="lead">Use the client’s Step 1 reference to track decisions and evidence through App Store preparation.</p>
+
+    <section class="instructions" aria-labelledby="instructions-title">
+      <div class="instructions-head">
+        <h2 id="instructions-title">What Renatus needs to do</h2>
+        <nav aria-label="Project references">
+          <a href="app-store-connect-metadata-reference.html#tab-flowchart" target="_blank" rel="noopener">Metadata reference</a>
+          <a href="prds/2-app-store-intake-split.md" target="_blank" rel="noopener">Intake PRD</a>
+          <a href="prds/3-renatus-step-2-intake-wizard.md" target="_blank" rel="noopener">Wizard PRD</a>
+        </nav>
+      </div>
+      <ol class="steps">
+        <li>
+          <h3>1. Kickoff and account setup</h3>
+          <p>Assign an owner. Confirm the publishing account, personal data use and health features. For new client organisation enrolment, check D‑U‑N‑S using the legal entity name.</p>
+          <nav class="links" aria-label="Apple account setup links">
+            <a href="https://developer.apple.com/enroll/duns-lookup/" target="_blank" rel="noopener">D‑U‑N‑S lookup (sign-in)</a>
+            <a href="https://developer.apple.com/help/account/membership/D-U-N-S/" target="_blank" rel="noopener">D‑U‑N‑S help</a>
+            <a href="https://developer.apple.com/programs/enroll/" target="_blank" rel="noopener">Developer enrolment</a>
+            <a href="https://developer.apple.com/help/app-store-connect/manage-your-team/add-and-edit-users" target="_blank" rel="noopener">Invite Renatus</a>
+          </nav>
+        </li>
+        <li>
+          <h3>2–3. Build verification and legal approval</h3>
+          <p>Verify what the release build and its SDKs collect, share, retain and delete. Draft the privacy policy and terms, get client approval and check the live links.</p>
+          <nav class="links" aria-label="Apple privacy and health links">
+            <a href="https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy" target="_blank" rel="noopener">App Privacy</a>
+            <a href="https://developer.apple.com/health-fitness/" target="_blank" rel="noopener">Health and fitness</a>
+            <a href="https://developer.apple.com/app-store/review/guidelines/" target="_blank" rel="noopener">App Review Guidelines</a>
+          </nav>
+        </li>
+        <li>
+          <h3>4–5. Listing and App Review</h3>
+          <p>Prepare listing copy and device screenshots. Complete age, privacy and applicable health disclosures. Test review access and clear release blockers.</p>
+          <nav class="links" aria-label="App Store submission links">
+            <a href="https://appstoreconnect.apple.com/" target="_blank" rel="noopener">App Store Connect</a>
+            <a href="https://developer.apple.com/help/app-store-connect/create-an-app-record/add-a-new-app" target="_blank" rel="noopener">Create app record</a>
+            <a href="https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications" target="_blank" rel="noopener">Screenshot specs</a>
+            <a href="https://developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating" target="_blank" rel="noopener">Age rating</a>
+            <a href="https://developer.apple.com/help/app-review/before-submitting-for-review/complete-review/" target="_blank" rel="noopener">App Review access and notes</a>
+            <a href="https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app" target="_blank" rel="noopener">Submission steps</a>
+          </nav>
+        </li>
+      </ol>
+    </section>
+
+    <form class="workbench" id="step-2">
+      <details class="project" id="project-summary" open>
+        <summary>Step 1 handoff</summary>
+        <label>Intake reference
+          <input id="project-ref" name="reference" placeholder="e.g. DEMO-001" aria-describedby="reference-hint reference-error">
+        </label>
+        <div class="project-switch">
+          <button type="button" class="secondary" id="open-intake">Open intake</button>
+        </div>
+        <p class="hint" id="reference-hint">Enter a Step 1 reference to open its draft in this tab.</p>
+        <p class="hint error" id="reference-error" role="alert" hidden></p>
+        <label>App name <input id="project-name" name="appName"></label>
+        <label>Client business <input id="project-brand" name="brandName"></label>
+        <label>Client contact <input id="project-contact" name="contactName"></label>
+      </details>
+
+      <div class="sheet">
+        <nav aria-label="Wizard stages"><ol class="progress" id="wizard-progress"></ol></nav>
+
+        <section class="stage" id="kickoff-panel" aria-labelledby="kickoff-heading">
+          <div class="stage-header">
+            <p class="stage-count">Step 1 of 5</p>
+            <h2 class="stage-heading" id="kickoff-heading" tabindex="-1">Kickoff and Apple account</h2>
+            <p class="hint">Assign the owner, capture the client’s plans and record the account setup. The Apple links above cover D‑U‑N‑S, enrolment and access.</p>
+          </div>
+          <fieldset>
+            <legend>Publishing setup</legend>
+            <div class="grid">
+              <label>Renatus owner <input name="owner" id="owner"></label>
+              <label>Publishing account
+                <select name="account" id="account">
+                  <option value="">Confirm at kickoff</option><option value="client_org">Client organisation</option>
+                  <option value="client_individual">Client individual account</option><option value="renatus">Renatus account</option>
+                </select>
+              </label>
+              <div class="wide" data-field-slot="publishing-account"></div>
+              <label class="wide">Launch scope
+                <input name="scope" id="scope" placeholder="Distribution, storefronts, devices, monetisation and content rights">
+              </label>
+            </div>
+          </fieldset>
+          <fieldset id="organisation" hidden disabled>
+            <legend>Client organisation enrolment</legend>
+            <div class="grid">
+              <label>Legal entity name <input name="legalEntity" id="legal-entity"></label>
+              <label>Enrolment status
+                <select name="enrolment" id="enrolment">
+                  <option value="">Confirm status</option><option>Active organisation</option><option>Enrolment in progress</option>
+                  <option>Needs organisation enrolment</option><option>Needs individual-to-organisation conversion</option>
+                </select>
+              </label>
+              <div class="wide" data-field-slot="org-enrollment-status"></div>
+              <label>D‑U‑N‑S status
+                <select name="dunsStatus" id="duns-status">
+                  <option value="">Confirm status</option><option>Lookup needed</option><option>Request submitted</option>
+                  <option>Confirmed</option><option>Not applicable</option>
+                </select>
+              </label>
+              <label>D‑U‑N‑S number, if available
+                <input name="dunsNumber" id="duns-number" inputmode="numeric" maxlength="9" aria-describedby="duns-hint">
+                <span class="hint" id="duns-hint">Nine digits for the legal entity.</span>
+              </label>
+              <label>Account Holder email <input name="accountHolder" id="account-holder" inputmode="email"></label>
+              <label>Apple Developer Team ID <input name="teamId" id="team-id"></label>
+              <div class="wide" data-field-slot="account-holder-team-duns"></div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Privacy and health discovery</legend>
+            <div class="grid">
+              <label class="wide">Personal information, purpose and recipients <textarea id="usage" name="usage"></textarea></label>
+              <div class="wide">
+                <fieldset>
+                  <legend>Health and fitness features</legend>
+                  <div class="checks" id="health-features">
+                    <label><input type="checkbox" name="generalFitness" id="fitness"> General fitness or workouts</label>
+                    <label><input type="checkbox" name="healthKit" id="health-kit"> Apple Health or Watch</label>
+                    <label><input type="checkbox" name="healthData" id="health-data"> Health or biometric data</label>
+                    <label><input type="checkbox" name="clinical" id="clinical"> Clinical or medical features</label>
+                    <label><input type="checkbox" name="noHealthFeatures" id="no-health-features"> None</label>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="wide" data-field-slot="health-fitness-medical"></div>
+              <label class="wide">Additional kickoff notes <input id="open" name="open"></label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Open questions</legend>
+            <div id="questions"></div>
+            <button type="button" class="secondary" id="add-question">Add question</button>
+          </fieldset>
+          <div class="stage-fields" data-fields="kickoff"></div>
+        </section>
+
+        <section class="stage" id="build-panel" aria-labelledby="build-heading" hidden>
+          <div class="stage-header">
+            <p class="stage-count">Step 2 of 5</p>
+            <h2 class="stage-heading" id="build-heading" tabindex="-1">Build verification</h2>
+            <p class="hint">Record what the release build actually does. Changing its identifier reopens build-dependent checks and preserves their notes.</p>
+          </div>
+          <fieldset>
+            <legend>Build verification</legend>
+            <div class="grid">
+              <label>Release build <input id="build" name="build"></label>
+              <label>Data findings
+                <select id="findings" name="findings"><option value="">Choose a status</option><option>Pending verification</option><option>Verified against release build</option></select>
+              </label>
+              <div class="wide" data-field-slot="build"></div>
+              <label class="wide">Verified data, sharing, retention and deletion <textarea id="verification" name="verification"></textarea></label>
+              <label class="wide">SDKs, account flows, permissions, tracking and health evidence <textarea id="build-evidence" name="buildEvidence"></textarea></label>
+            </div>
+          </fieldset>
+          <div class="stage-fields" data-fields="build"></div>
+        </section>
+
+        <section class="stage" id="legal-panel" aria-labelledby="legal-heading" hidden>
+          <div class="stage-header">
+            <p class="stage-count">Step 3 of 5</p>
+            <h2 class="stage-heading" id="legal-heading" tabindex="-1">Legal approval</h2>
+            <p class="hint">Record the client’s approval of each version and check the live links. Update the current version or flag a material change to reopen approval.</p>
+          </div>
+          <fieldset>
+            <legend>Privacy policy</legend>
+            <div class="grid">
+              <label class="wide">Policy draft or notes <input id="privacy" name="privacy"></label>
+              <label>Current policy version <input id="privacy-version" name="privacyVersion"></label>
+              <label>Client-approved policy version <input id="privacy-approved-version" name="privacyApprovedVersion"></label>
+              <label>Policy approval date <input type="date" id="privacy-approved-date" name="privacyApprovedDate"></label>
+              <label>Policy approval evidence <input id="privacy-approval-evidence" name="privacyApprovalEvidence"></label>
+              <div class="checks wide"><label><input type="checkbox" name="privacyReapproval" id="privacy-reapproval"> Policy needs revised client approval</label></div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Terms of service</legend>
+            <div class="grid">
+              <label class="wide">Terms draft or notes <input id="terms" name="terms"></label>
+              <label>Current terms version <input id="terms-version" name="termsVersion"></label>
+              <label>Client-approved terms version <input id="terms-approved-version" name="termsApprovedVersion"></label>
+              <label>Terms approval date <input type="date" id="terms-approved-date" name="termsApprovedDate"></label>
+              <label>Terms approval evidence <input id="terms-approval-evidence" name="termsApprovalEvidence"></label>
+              <label class="wide">Live terms URL <input id="terms-url" name="termsUrl" inputmode="url"></label>
+              <div class="checks wide"><label><input type="checkbox" name="termsReapproval" id="terms-reapproval"> Terms need revised client approval</label></div>
+              <label class="wide">Shared approval record or notes <input id="approval" name="approval"></label>
+            </div>
+          </fieldset>
+          <div class="stage-fields" data-fields="legal"></div>
+        </section>
+
+        <section class="stage" id="listing-panel" aria-labelledby="listing-heading" hidden>
+          <div class="stage-header">
+            <p class="stage-count">Step 4 of 5</p>
+            <h2 class="stage-heading" id="listing-heading" tabindex="-1">App Store listing</h2>
+            <p class="hint">Draft the app record and listing copy early. Check the final assets, ratings and disclosures against the release build.</p>
+          </div>
+          <fieldset>
+            <legend>App Store Connect</legend>
+            <div class="grid">
+              <label>App Store Connect record URL <input id="store-record" name="storeRecord" inputmode="url"></label>
+              <label>Support URL <input id="support" name="support" inputmode="url"></label>
+              <div class="wide" data-field-slot="support-url"></div>
+              <label class="wide">Listing copy and device screenshot references <input id="assets" name="listingAssets"></label>
+              <div class="checks wide">
+                <label><input id="listing" type="checkbox" name="listing"> Listing and screenshots ready</label>
+                <label><input id="age" type="checkbox" name="age"> Age rating completed</label>
+                <label><input id="disclosures" type="checkbox" name="disclosures"> App Privacy completed</label>
+              </div>
+              <label>Applicable health declarations
+                <select id="health-declarations" name="healthDeclarations">
+                  <option value="">Confirm scope</option><option>Pending</option><option>Completed</option><option>Not applicable</option>
+                </select>
+              </label>
+            </div>
+          </fieldset>
+          <div class="stage-fields" data-fields="listing"></div>
+        </section>
+
+        <section class="stage" id="review-panel" aria-labelledby="review-heading" hidden>
+          <div class="stage-header">
+            <p class="stage-count">Step 5 of 5</p>
+            <h2 class="stage-heading" id="review-heading" tabindex="-1">App Review and handoff</h2>
+            <p class="hint">Test the review flow on the release build and resolve applicable blockers before recording sign-off.</p>
+          </div>
+          <fieldset>
+            <legend>App Review and release handoff</legend>
+            <div class="grid">
+              <label>Reviewer access
+                <select name="signin" id="signin"><option value="">Choose an access option</option><option>Yes, demo login required</option><option>No, open access</option></select>
+              </label>
+              <div class="checks"><label><input id="review-tested" type="checkbox" name="reviewTested"> Reviewer access tested on release build</label></div>
+              <div class="wide" data-field-slot="demo-account"></div>
+              <label class="wide">Review verification evidence <input id="review-evidence" name="reviewEvidence" placeholder="Test run or evidence reference"></label>
+              <label class="wide">Review notes, key flows and access prerequisites
+                <textarea id="notes" name="notes" aria-describedby="reviews-hint"></textarea>
+                <span class="hint" id="reviews-hint">Enter demo credentials in App Store Connect’s App Review fields. Record only the access check here.</span>
+              </label>
+              <div class="wide" data-field-slot="review-notes"></div>
+              <label class="wide">Release blockers and owners <input id="blockers" name="blockers"></label>
+              <label>Blocker status
+                <select name="blockersState" id="blockers-state"><option value="">Confirm blocker status</option><option value="open">Blockers open</option><option value="cleared">All applicable blockers cleared</option></select>
+              </label>
+              <label>Submission owner signing off <input id="signoff-owner" name="signoffOwner"></label>
+            </div>
+          </fieldset>
+          <div class="stage-fields" data-fields="review"></div>
+          <section class="review-card" aria-labelledby="handoff-heading">
+            <h2 class="review-heading" tabindex="-1" id="handoff-heading">Handoff summary</h2>
+            <p id="handoff-state"></p>
+            <div id="handoff-issues"></div>
+            <button type="button" class="secondary" id="signoff">Mark handoff ready</button>
+          </section>
+        </section>
+
+        <section class="stage" id="metadata-panel" aria-labelledby="metadata-heading" hidden>
+          <div class="stage-header">
+            <h2 class="stage-heading" id="metadata-heading" tabindex="-1">App Store field checklist</h2>
+            <button type="button" class="metadata-jump" id="return-stage">Return to current stage</button>
+          </div>
+          <p class="hint" id="catalog-coverage"></p>
+          <p class="hint">Capture what you know now. Track build-dependent items as awaiting build and verify them against the release candidate.</p>
+          <div class="metadata-filters">
+            <label>Find a field <input id="metadata-search" type="search" placeholder="e.g. Bundle ID or screenshots"></label>
+            <label>When to check it
+              <select id="metadata-timing">
+                <option value="all">All fields</option>
+                <option value="plan">Plan before the build</option>
+                <option value="build">Verify on the release build</option>
+              </select>
+            </label>
+          </div>
+          <p class="hint" id="metadata-results" role="status"></p>
+          <div id="metadata-fields"></div>
+        </section>
+
+        <footer class="footer">
+          <output id="status" role="status"></output>
+          <div class="actions">
+            <button type="button" class="secondary" id="open-checklist">Full field checklist</button>
+            <button type="button" class="secondary" id="back">Back</button>
+            <button type="submit" class="secondary">Save draft</button>
+            <button type="button" class="save" id="continue">Continue</button>
+          </div>
+        </footer>
+      </div>
+    </form>
+  </main>
+  <script src="app-store-connect-fields.js"></script>
+  <script src="renatus-step-2-wizard.js"></script>
+</body>
+</html>

@@ -9,6 +9,8 @@ import {
   validateUploadUrlRequest,
   verifyTurnstileIfEnabled,
 } from './_lib.js';
+import { intakeObjectFolder } from '../../src/data/appStoreIntake.js';
+import { INTAKE_NAMES, intakeStorageNames, listIntakeAssets } from './_storage.js';
 
 export async function handleUploadUrl(req, res, env = process.env) {
   if (req.method === 'OPTIONS') {
@@ -52,37 +54,27 @@ export async function handleUploadUrl(req, res, env = process.env) {
     return;
   }
 
-  const bucket = env.SUPABASE_INTAKE_BUCKET || 'app-store-intake-assets';
-  const { sessionId, path, sizeBytes } = parsed.data;
-
-  // Reject new uploads once this session has already been submitted
-  const { data: committed, error: checkErr } = await supabase
-    .from('app_store_intakes')
-    .select('id')
-    .eq('session_id', sessionId)
-    .maybeSingle();
-
-  if (checkErr) {
-    console.error('[intake] upload-url session check error:', checkErr.message);
+  const names = intakeStorageNames(env);
+  const { sessionId, objectName, sizeBytes } = parsed.data;
+  const { data: active, error: touchError } = await supabase.rpc(INTAKE_NAMES.touchUpload, { p_session_id: sessionId });
+  if (touchError) {
+    console.error('[intake] upload-url session check error:', touchError.message);
     res.status(502).json({ error: 'Could not verify submission status.' });
     return;
   }
-  if (committed) {
+  if (!active) {
     res.status(409).json({ error: 'Cannot upload files after submission has been finalized.' });
     return;
   }
 
-  // Enforce 10-file and 100 MB cumulative session caps via Storage list()
-  const { data: existing, error: listErr } = await supabase.storage.from(bucket).list(sessionId, {
-    limit: 100,
-  });
-  if (listErr) {
-    console.error('[intake] storage list error:', listErr.message);
+  let files;
+  try {
+    files = [...(await listIntakeAssets(supabase, names, sessionId)).values()];
+  } catch (error) {
+    console.error('[intake] storage list error:', error.message);
     res.status(502).json({ error: 'Could not verify existing uploads.' });
     return;
   }
-
-  const files = (existing || []).filter((item) => item && item.name && !item.name.endsWith('/'));
   if (files.length >= MAX_FILES) {
     res.status(400).json({ error: `Maximum of ${MAX_FILES} files per submission reached.` });
     return;
@@ -94,6 +86,8 @@ export async function handleUploadUrl(req, res, env = process.env) {
     return;
   }
 
+  const bucket = names.writeLegacy ? names.legacyBucket : names.bucket;
+  const path = `${intakeObjectFolder(sessionId, names.writeLegacy)}/${objectName}`;
   const { data: signed, error: signErr } = await supabase.storage
     .from(bucket)
     .createSignedUploadUrl(path);

@@ -4,6 +4,7 @@ import {
   buildClientReceiptEmail,
   buildShaunEmail,
   checkJsonBodySize,
+  computeBrandFollowUps,
   computeReadinessGaps,
   escapeHtml,
   isValidHttpUrl,
@@ -14,8 +15,32 @@ import {
   validateIntakePayload,
   validateUploadUrlRequest,
 } from '../api/app-store-intake/_lib.js';
+import { handleSubmitIntake } from '../api/app-store-intake/index.js';
+import { handleUploadUrl } from '../api/app-store-intake/upload-url.js';
+import { handleDeleteUpload } from '../api/app-store-intake/upload.js';
+import { intakeStorageNames } from '../api/app-store-intake/_storage.js';
+import { copyIntakeSubmission } from '../scripts/migrate-intake-storage.mjs';
+import { restoreIntakeDraft } from '../src/data/appStoreIntake.js';
 
 const SESSION_ID = '11111111-2222-4333-8444-555555555555';
+
+function quickPayload(answers = {}, options = {}) {
+  return {
+    sessionId: SESSION_ID,
+    submissionVersion: 2,
+    ...options,
+    answers: {
+      legalName: 'Summit Fitness Pty Ltd',
+      brandNameMatchesLegalName: true,
+      contactName: 'Sam Fitness',
+      contactEmail: 'SAM@example.test',
+      contactPhone: '0412 345 678',
+      appName: 'Summit',
+      appSummary: 'Members follow guided workouts and browse the class timetable.',
+      ...answers,
+    },
+  };
+}
 
 function makeTmcPayload(overrides = {}, rootOverrides = {}) {
   return {
@@ -336,4 +361,366 @@ test('Validation edge cases: raw length 400s, invalid enums, stale conditional c
   const clientReceipt = buildClientReceiptEmail({ id: 'ref-123', createdAt: '2026-11-24T00:00:00Z', gaps });
   assert.ok(!clientReceipt.html.includes('phish.example.com'));
   assert.ok(!clientReceipt.text.includes('phish.example.com'));
+});
+
+test('quick payload validates only the client fields and uses the legacy contract for old callers', () => {
+  const quick = validateIntakePayload(quickPayload({
+    publishingAccount: 'own',
+    hasPrivacyPolicy: 'no',
+    userDataCollected: ['none'],
+  }));
+  assert.deepEqual(quick.data.answers, {
+    legalName: 'Summit Fitness Pty Ltd',
+    brandName: 'Summit Fitness Pty Ltd',
+    contactName: 'Sam Fitness',
+    contactEmail: 'sam@example.test',
+    contactPhone: '+61412345678',
+    websiteUrl: null,
+    brandKitUrl: null,
+    brandColors: '',
+    appName: 'Summit',
+    appSummary: 'Members follow guided workouts and browse the class timetable.',
+  });
+  assert.equal(quick.data.sendClientCopy, false);
+  assert.equal(validateIntakePayload(makeTmcPayload()).data.submissionVersion, 1);
+  assert.equal(validateIntakePayload(quickPayload({}, { submissionVersion: 3 })).status, 400);
+  assert.equal(validateIntakePayload(quickPayload({}, { website: 'filled' })).status, 400);
+  assert.equal(validateIntakePayload(quickPayload({}, { assets: [{ path: 'other/logo.png' }] })).status, 400);
+
+  const invalid = validateIntakePayload(quickPayload({
+    brandNameMatchesLegalName: false,
+    contactEmail: 'invalid',
+    contactPhone: '123',
+    websiteUrl: 'https:example.test',
+    brandKitUrl: 'javascript:alert(1)',
+    brandColors: 'x'.repeat(301),
+    appName: 'x',
+    appSummary: 'x'.repeat(2001),
+  }));
+  assert.deepEqual(Object.keys(invalid.fieldErrors), [
+    'brandName', 'contactEmail', 'contactPhone', 'websiteUrl', 'brandKitUrl', 'brandColors', 'appName', 'appSummary',
+  ]);
+  assert.equal(
+    validateIntakePayload(quickPayload({ websiteUrl: 'http://example.test', brandKitUrl: 'https://example.test/kit' }))
+      .data.answers.brandKitUrl,
+    'https://example.test/kit',
+  );
+});
+
+test('a legacy draft restores the session, assets, receipt choice and only the quick form fields', () => {
+  const legacy = makeTmcPayload({ phoneNumber: '0412 345 678', phoneCountryCode: '+61' });
+  const asset = { path: SESSION_ID + '/abcdef12-logo.png', name: 'logo.png', size: 1024, mimeType: 'image/png' };
+  const restored = restoreIntakeDraft(JSON.stringify({
+    ...legacy,
+    assets: [asset],
+    stepIndex: 5,
+    sendClientCopy: false,
+    website: 'honeypot',
+  }));
+  assert.equal(restored.sessionId, SESSION_ID);
+  assert.equal(restored.answers.phoneNumber, '0412 345 678');
+  assert.equal(restored.answers.appName, legacy.answers.appName);
+  assert.equal(restored.answers.brandColors, legacy.answers.brandColors);
+  assert.deepEqual(restored.assets, [asset]);
+  assert.equal(restored.sendClientCopy, false);
+  assert.equal(restored.answers.publishingAccount, undefined);
+  assert.equal(restored.answers.userDataCollected, undefined);
+  assert.equal(restored.stepIndex, undefined);
+  assert.equal(restored.website, undefined);
+  assert.equal(restoreIntakeDraft('invalid JSON'), null);
+});
+
+test('early follow-ups use supplied brand details; release checks use confirmed findings', () => {
+  const draft = validateIntakePayload(quickPayload()).data.answers;
+  const followUps = computeBrandFollowUps(draft, []);
+  assert.deepEqual(followUps.map((item) => item.code), ['BRAND_ASSETS_MISSING', 'BRAND_COLORS_MISSING']);
+  assert.ok(followUps.every((item) => item.severity === 'Action Needed'));
+  assert.deepEqual(computeBrandFollowUps({
+    ...draft,
+    brandKitUrl: 'https://example.test/kit',
+    brandColors: 'Forest green',
+  }, []), []);
+
+  const record = { id: 'reference', submissionVersion: 2, answers: draft, gaps: followUps };
+  const signedAssets = [{ name: '<logo>.png', signedUrl: 'https://example.test/download?token=test', size: 1024 }];
+  const teamEmail = buildShaunEmail(record, signedAssets);
+  assert.match(teamEmail.html, /Request the logo or brand kit/);
+  assert.match(teamEmail.html, /&lt;logo&gt;.png/);
+  assert.match(teamEmail.html, /https:\/\/example.test\/download/);
+  assert.doesNotMatch(teamEmail.html, /Readiness &amp; Gap Summary|Publishing Account/);
+  const receipt = buildClientReceiptEmail(record);
+  assert.match(receipt.text, /kickoff call.*personal information.*health or fitness/);
+  assert.doesNotMatch(receipt.text, /Summit|example\.test|Request the logo/);
+
+  const fitness = validateIntakePayload(makeTmcPayload({
+    hasPrivacyPolicy: 'yes',
+    privacyPolicyUrl: 'https://example.test/privacy',
+    termsUrl: 'https://example.test/terms',
+    publishingAccount: 'own',
+    enrollmentStatus: 'org_active',
+  })).data.answers;
+  const healthAtLaunch = {
+    ...fitness,
+    hasAccounts: 'yes',
+    healthInvolvement: ['health_biometric'],
+    userDataCollected: ['health_fitness'],
+    trackingAds: 'ad_tracking',
+  };
+  const fitnessGaps = computeReadinessGaps(fitness);
+  assert.ok(fitnessGaps.every((item) => item.severity !== 'Blocker' && item.code !== 'ACCOUNT_REQUIREMENTS'));
+  const healthGaps = computeReadinessGaps(healthAtLaunch);
+  assert.equal(healthGaps.find((item) => item.code === 'PROHIBITED_TRACKING_COMBINATION')?.severity, 'Blocker');
+  const verifiedHealthGaps = computeReadinessGaps({ ...healthAtLaunch, trackingAds: 'none' });
+  assert.ok(verifiedHealthGaps.every((item) => item.severity !== 'Blocker'));
+  assert.match(verifiedHealthGaps.find((item) => item.code === 'ACCOUNT_REQUIREMENTS').title, /demo login/i);
+});
+
+test('submit route verifies private files, persists a single row and survives notification failure', async (t) => {
+  const env = {
+    SUPABASE_URL: 'https://supabase.example.test',
+    SUPABASE_SERVICE_ROLE_KEY: 'test-service-key',
+    RATE_LIMIT_SALT: 'test-salt',
+  };
+  const stored = new Map();
+  const path = SESSION_ID + '/abcdef12-logo.png';
+  const targetPath = 'intake/' + SESSION_ID + '/fedcba21-brand.pdf';
+  const removedPath = SESSION_ID + '/abcdef22-removed.png';
+  const metadata = { size: 1024, mimetype: 'image/png' };
+  const signed = [];
+  const removed = new Set();
+  const files = {
+    'app-store-intake-assets': new Map([[path, metadata], [removedPath, metadata]]),
+    'intake-app-store-assets': new Map([
+      ['intake/' + removedPath, metadata],
+      [targetPath, { size: 2048, mimetype: 'application/pdf' }],
+    ]),
+  };
+  let failLegacyRemoval = true;
+
+  t.mock.method(globalThis, 'fetch', async (input, init) => {
+    const url = new URL(input);
+    assert.equal(url.origin, env.SUPABASE_URL);
+    assert.equal(new Headers(init.headers).get('authorization'), 'Bearer test-service-key');
+    if (url.pathname === '/rest/v1/rpc/intake_check_and_increment_rate_limit') return Response.json(true);
+    if (url.pathname === '/rest/v1/rpc/intake_touch_upload_session') {
+      return Response.json(!stored.has(JSON.parse(init.body).p_session_id));
+    }
+    if (url.pathname === '/rest/v1/rpc/intake_mark_asset_removed') {
+      const { p_session_id: sessionId, p_object_name: objectName } = JSON.parse(init.body);
+      if (stored.has(sessionId)) return Response.json(false);
+      assert.equal(sessionId, SESSION_ID);
+      removed.add(objectName);
+      return Response.json(true);
+    }
+    if (url.pathname === '/rest/v1/intake_asset_removals') {
+      return Response.json([...removed].map(object_name => ({ object_name })));
+    }
+    if (url.pathname === '/rest/v1/intake_app_store_submissions' && init.method === 'GET') {
+      const id = url.searchParams.get('session_id').slice(3);
+      return Response.json(stored.has(id) ? [stored.get(id)] : []);
+    }
+    if (url.pathname === '/rest/v1/intake_app_store_submissions' && init.method === 'POST') {
+      const row = JSON.parse(init.body);
+      assert.ok(!stored.has(row.session_id));
+      const id = stored.size === 0 ? 'submission-reference' : 'legacy-submission-reference';
+      const record = { ...row, id, created_at: '2026-11-25T00:00:00Z' };
+      stored.set(row.session_id, record);
+      return Response.json(record);
+    }
+    const [, , , , operation, bucket, ...pathParts] = url.pathname.split('/');
+    if (operation === 'list' && files[bucket]) {
+      const { prefix } = JSON.parse(init.body);
+      assert.equal(prefix, bucket === 'intake-app-store-assets' ? 'intake/' + SESSION_ID : SESSION_ID);
+      return Response.json([...files[bucket]].filter(([key]) => key.startsWith(prefix + '/'))
+        .map(([key, metadata]) => ({ name: key.split('/').at(-1), metadata })));
+    }
+    if (operation === 'sign' && files[bucket]) {
+      const file = pathParts.join('/');
+      assert.ok(files[bucket].has(file));
+      assert.equal(JSON.parse(init.body).expiresIn, 604800);
+      signed.push([bucket, file]);
+      return Response.json({ signedURL: '/object/sign/fixture?token=test' });
+    }
+    if (operation === 'upload' && bucket === 'sign') {
+      return Response.json({ url: '/object/upload/sign/' + pathParts.join('/') + '?token=test' });
+    }
+    if (init.method === 'DELETE' && files[operation]) {
+      if (operation === 'app-store-intake-assets' && failLegacyRemoval) {
+        failLegacyRemoval = false;
+        return Response.json({ message: 'Temporary Storage failure' }, { status: 500 });
+      }
+      for (const key of JSON.parse(init.body).prefixes) files[operation].delete(key);
+      return Response.json([]);
+    }
+    assert.fail('Unexpected service request: ' + url.pathname);
+  });
+
+  async function request(handler, body, method = 'POST', overrides = {}) {
+    const result = {};
+    const response = {
+      status(code) { result.status = code; return this; },
+      json(json) { result.json = json; },
+    };
+    await handler({ method, body, headers: {} }, response, { ...env, ...overrides });
+    return result;
+  }
+
+  assert.equal((await request(handleUploadUrl, {
+    sessionId: SESSION_ID, filename: 'logo.exe', sizeBytes: 1024,
+  })).status, 400);
+
+  const uploadRequest = { sessionId: SESSION_ID, filename: 'logo.png', mimeType: 'image/png', sizeBytes: 1024 };
+  const quotaPaths = Array.from({ length: 7 }, (_, n) => `${SESSION_ID}/abcdef01-limit-${n}.png`);
+  for (const key of quotaPaths.slice(0, -1)) files['app-store-intake-assets'].set(key, metadata);
+  const upload = await request(handleUploadUrl, uploadRequest);
+  assert.equal(upload.status, 200);
+  assert.match(upload.json.path, new RegExp(`^intake/${SESSION_ID}/[a-f0-9]{8}-logo\\.png$`));
+  assert.ok(upload.json.signedUrl.includes('/sign/intake-app-store-assets/'));
+  const rollback = await request(handleUploadUrl, uploadRequest, 'POST', { INTAKE_UPLOAD_WRITE_MODE: 'legacy' });
+  assert.equal(rollback.status, 200);
+  assert.match(rollback.json.path, new RegExp(`^${SESSION_ID}/[a-f0-9]{8}-logo\\.png$`));
+  assert.ok(rollback.json.signedUrl.includes('/sign/app-store-intake-assets/'));
+  files['app-store-intake-assets'].set(quotaPaths.at(-1), metadata);
+  assert.equal((await request(handleUploadUrl, uploadRequest)).status, 400);
+  for (const key of quotaPaths) files['app-store-intake-assets'].delete(key);
+
+  const deleteRequest = { sessionId: SESSION_ID, path: removedPath };
+  assert.equal((await request(handleDeleteUpload, deleteRequest, 'DELETE')).status, 502);
+  assert.equal(files['app-store-intake-assets'].has(removedPath), true);
+  assert.equal(files['intake-app-store-assets'].has('intake/' + removedPath), false);
+  assert.equal((await request(handleSubmitIntake, quickPayload({}, { assets: [{ path: removedPath }] }))).status, 400);
+  assert.equal((await request(handleDeleteUpload, deleteRequest, 'DELETE')).status, 200);
+  // An upload signed before removal can arrive late, but cannot be associated with the submission.
+  files['app-store-intake-assets'].set(removedPath, metadata);
+  assert.equal((await request(handleSubmitIntake, quickPayload({}, { assets: [{ path: removedPath }] }))).status, 400);
+
+  files['app-store-intake-assets'].set(targetPath.slice('intake/'.length), files['intake-app-store-assets'].get(targetPath));
+  const body = quickPayload({}, { assets: [
+    { path, name: 'logo.png', size: 1 },
+    { path: targetPath, name: 'brand.pdf' },
+    { path: targetPath.slice('intake/'.length), name: 'brand.pdf' },
+  ] });
+  assert.equal((await request(handleSubmitIntake, {
+    ...body, assets: [{ path: SESSION_ID + '/missing.png' }],
+  })).status, 400);
+  assert.equal(stored.size, 0);
+
+  const saved = await request(handleSubmitIntake, body, 'POST', { INTAKE_UPLOAD_WRITE_MODE: 'legacy' });
+  assert.deepEqual(saved, {
+    status: 200, json: { ok: true, id: 'submission-reference', emailDelivered: false },
+  });
+  const record = stored.get(SESSION_ID);
+  assert.equal(record.submission_version, 2);
+  assert.equal(record.website_url, null);
+  assert.equal(record.publishing_account, null);
+  assert.deepEqual(record.gaps.map(({ code }) => code), ['BRAND_COLORS_MISSING']);
+  assert.deepEqual(record.assets, [
+    { path, name: 'logo.png', size: 1024, mimeType: 'image/png' },
+    { path: targetPath, name: 'brand.pdf', size: 2048, mimeType: 'application/pdf' },
+  ]);
+  assert.deepEqual(await request(handleSubmitIntake, body), {
+    status: 200, json: { ok: true, id: 'submission-reference', duplicate: true },
+  });
+  assert.equal(stored.size, 1);
+  assert.deepEqual(signed, [['app-store-intake-assets', path], ['intake-app-store-assets', targetPath]]);
+  assert.equal((await request(handleDeleteUpload, { sessionId: SESSION_ID, path }, 'DELETE')).status, 409);
+  assert.equal((await request(handleUploadUrl, uploadRequest)).status, 409);
+
+  const legacyId = '11111111-2222-4333-8444-555555555556';
+  const legacy = makeTmcPayload({}, { sessionId: legacyId, sendClientCopy: false });
+  assert.equal((await request(handleSubmitIntake, legacy)).status, 200);
+  const legacyRecord = stored.get(legacyId);
+  assert.equal(legacyRecord.submission_version, 1);
+  assert.equal(legacyRecord.publishing_account, 'renatus');
+  const migratedRetry = await request(handleSubmitIntake, quickPayload({}, { sessionId: legacyId }));
+  assert.equal(migratedRetry.json.id, legacyRecord.id);
+  assert.equal(migratedRetry.json.gaps, undefined);
+});
+
+test('a restored draft accepts both path formats and collapses copies without crossing sessions', () => {
+  const name = 'abcdef12-logo.png';
+  const legacy = { path: `${SESSION_ID}/${name}`, name: 'logo.png' };
+  const current = { ...legacy, path: `intake/${legacy.path}` };
+  const otherSession = '11111111-2222-4333-8444-555555555556';
+  const invalid = [
+    { path: `intake/${otherSession}/${name}` },
+    { path: `intake/${SESSION_ID}/nested/${name}` },
+    { path: `intake/${SESSION_ID}/../${name}` },
+  ];
+  assert.deepEqual(restoreIntakeDraft(JSON.stringify({
+    sessionId: SESSION_ID, assets: [legacy, ...invalid, current],
+  })).assets, [current]);
+  for (const asset of invalid) {
+    assert.equal(validateIntakePayload(quickPayload({}, { assets: [asset] })).status, 400);
+  }
+});
+
+test('the Storage copy job resumes after interruption and rejects wrong content before rewriting references', async () => {
+  const names = intakeStorageNames({ SUPABASE_INTAKE_BUCKET: 'custom-source' });
+  assert.equal(names.legacyBucket, 'custom-source');
+  assert.equal(intakeStorageNames({
+    SUPABASE_INTAKE_BUCKET: 'custom-source', SUPABASE_INTAKE_LEGACY_BUCKET: 'explicit-source',
+  }).legacyBucket, 'explicit-source');
+  const legacyPath = `${SESSION_ID}/abcdef12-logo.png`;
+  const targetPath = `intake/${legacyPath}`;
+  const file = new Blob(['source'], { type: 'image/png' });
+  const assets = [{ path: legacyPath, name: 'logo.png', size: file.size, mimeType: file.type }];
+  const row = { id: 'saved-intake', session_id: SESSION_ID, assets };
+  const source = new Map([[legacyPath, file]]);
+  const destination = new Map();
+  let copies = 0;
+  let writes = 0;
+  let expectedAssets = assets;
+  const supabase = {
+    storage: {
+      from(bucket) {
+        const files = bucket === names.legacyBucket ? source : destination;
+        return {
+          async exists(path) { return { data: files.has(path) }; },
+          async download(path) { return { data: files.get(path) }; },
+          async copy(path, target, { destinationBucket }) {
+            assert.equal(bucket, names.legacyBucket);
+            assert.equal(destinationBucket, names.bucket);
+            destination.set(target, files.get(path));
+            copies++;
+            return {};
+          },
+        };
+      },
+    },
+    from(table) {
+      assert.equal(table, 'intake_app_store_submissions');
+      return {
+        update({ assets }) {
+          writes++;
+          const filters = {};
+          return {
+            eq(column, value) { filters[column] = value; return this; },
+            select() { return this; },
+            async maybeSingle() {
+              assert.equal(filters.id, row.id);
+              if (filters.assets !== JSON.stringify(expectedAssets)) return { data: null };
+              expectedAssets = assets;
+              return { data: { id: row.id } };
+            },
+          };
+        },
+      };
+    },
+  };
+
+  destination.set(targetPath, new Blob(['forged'], { type: file.type }));
+  await assert.rejects(copyIntakeSubmission(supabase, names, row), /do not match/);
+  assert.equal(writes, 0);
+  destination.delete(targetPath);
+  expectedAssets = [];
+  await assert.rejects(copyIntakeSubmission(supabase, names, row), /changed during the copy/);
+  assert.equal(copies, 1);
+  assert.equal(source.has(legacyPath), true);
+  assert.equal(destination.has(targetPath), true);
+  expectedAssets = assets;
+  assert.equal(await copyIntakeSubmission(supabase, names, row), true);
+  assert.equal(copies, 1);
+  assert.deepEqual(expectedAssets, [{ ...assets[0], path: targetPath }]);
+  assert.equal(await copyIntakeSubmission(supabase, names, { ...row, assets: expectedAssets }), false);
 });

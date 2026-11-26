@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App Store Connect — Client Intake &amp; Renatus Submission Guide (iOS)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-subtle: #f1f5f9;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent: #0071e3;
+      --accent-soft: #eff6ff;
+      --accent-border: #bfdbfe;
+      --req-bg: #fef2f2;
+      --req-text: #b91c1c;
+      --req-border: #fecaca;
+      --cond-bg: #fffbeb;
+      --cond-text: #b45309;
+      --cond-border: #fde68a;
+      --opt-bg: #f1f5f9;
+      --opt-text: #475569;
+      --opt-border: #cbd5e1;
+      --intake-bg: #ecfdf5;
+      --intake-text: #047857;
+      --intake-border: #a7f3d0;
+      --asc-bg: #f5f3ff;
+      --asc-text: #6d28d9;
+      --asc-border: #ddd6fe;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      margin: 0;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    /* Header */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 24px 24px;
+    }
+
+    .topbar-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .subtitle {
+      margin: 0 0 20px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      max-width: 820px;
+    }
+
+    /* Summary Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .stat-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .progress-wrap {
+      margin-top: 8px;
+      height: 6px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.2s ease;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(248, 250, 252, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+    }
+
+    .controls-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      justify-content: flex-start;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1 1 250px;
+      max-width: 380px;
+    }
+
+    .search-box input {
+      width: 100%;
+      font-family: inherit;
+      font-size: 13.5px;
+      padding: 8px 12px 8px 34px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border-strong);
+      margin: 0 2px;
+    }
+
+    .pill-btn {
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .pill-btn:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+
+    .pill-btn.active {
+      background: var(--text);
+      color: #ffffff;
+      border-color: var(--text);
+    }
+
+    .btn-subtle {
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 6px 11px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .btn-subtle:hover {
+      background: var(--surface-subtle);
+      color: var(--text);
+    }
+
+    /* Main Layout */
+    .layout {
+      max-width: 1268px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 245px minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 72px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      padding: 4px 8px 8px;
+    }
+
+    .nav-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 12.75px;
+      font-weight: 500;
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-link:hover {
+      background: var(--surface-subtle);
+      color: var(--text);
+    }
+
+    .nav-count {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--surface-subtle);
+      padding: 1px 6px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    /* Content Sections */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-width: 0;
+    }
+
+    .section-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      scroll-margin-top: 76px;
+    }
+
+    .section-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #ffffff 0%, #fafcff 100%);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .section-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .section-header h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+
+    .section-path {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .section-desc {
+      margin: 6px 0 0 34px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      width: 100%;
+    }
+
+    /* Field Table */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    thead th {
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: var(--surface-subtle);
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s ease;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    tbody tr.is-checked {
+      background: #f6fef9;
+    }
+
+    tbody tr.is-checked .field-name {
+      color: var(--intake-text);
+    }
+
+    td {
+      padding: 13px 14px;
+      vertical-align: top;
+      font-size: 13.5px;
+    }
+
+    .col-check {
+      width: 38px;
+      padding-right: 4px;
+    }
+
+    .col-check input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .col-field {
+      width: 24%;
+      min-width: 180px;
+    }
+
+    .col-req {
+      width: 126px;
+      white-space: nowrap;
+    }
+
+    .col-limit {
+      width: 22%;
+      min-width: 165px;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+    }
+
+    .field-name {
+      font-weight: 600;
+      color: var(--text);
+      display: block;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 5px;
+    }
+
+    .field-meta {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--surface-subtle);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    .source-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+    }
+
+    .source-intake {
+      background: var(--intake-bg);
+      color: var(--intake-text);
+      border-color: var(--intake-border);
+    }
+
+    .source-asc {
+      background: var(--asc-bg);
+      color: var(--asc-text);
+      border-color: var(--asc-border);
+    }
+
+    .source-internal {
+      background: #ecfeff;
+      color: #0e7490;
+      border-color: #a5f3fc;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .badge-required {
+      background: var(--req-bg);
+      color: var(--req-text);
+      border-color: var(--req-border);
+    }
+
+    .badge-conditional {
+      background: var(--cond-bg);
+      color: var(--cond-text);
+      border-color: var(--cond-border);
+    }
+
+    .badge-optional {
+      background: var(--opt-bg);
+      color: var(--opt-text);
+      border-color: var(--opt-border);
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+
+    .note-text {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+      background: var(--surface);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-lg);
+      color: var(--text-secondary);
+    }
+
+    /* Callout Footer */
+    .callout {
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #1e3a8a;
+    }
+
+    .callout strong {
+      font-weight: 600;
+    }
+
+    footer {
+      max-width: 1220px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .sidebar {
+        position: static;
+        padding: 10px;
+      }
+
+      .nav-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .nav-link {
+        background: var(--surface-subtle);
+        padding: 5px 10px;
+        font-size: 12.5px;
+      }
+
+      .section-desc {
+        margin-left: 0;
+      }
+
+      .divider {
+        display: none;
+      }
+    }
+
+    /* Main Tabs */
+    .main-tabs {
+      display: flex;
+      gap: 6px;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .main-tab-btn {
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.15s ease;
+    }
+
+    .main-tab-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .main-tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 113, 227, 0.25);
+    }
+
+    .tab-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 19px;
+      height: 19px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--surface-subtle);
+      color: var(--text-secondary);
+    }
+
+    .main-tab-btn.active .tab-num {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Schema & Flowchart Containers */
+    .panel-container {
+      max-width: 1268px;
+      margin: 24px auto 48px;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .schema-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 18px;
+    }
+
+    .schema-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .schema-card-header {
+      padding: 14px 18px;
+      background: var(--surface-subtle);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .schema-card-header h3 {
+      margin: 0;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .schema-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    .schema-table th {
+      text-align: left;
+      padding: 8px 14px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: #fafbfd;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .schema-table td {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .schema-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .col-key {
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .key-pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    .key-pk {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent-border);
+    }
+
+    .key-fk {
+      background: var(--asc-bg);
+      color: var(--asc-text);
+      border: 1px solid var(--asc-border);
+    }
+
+    .sql-card {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid #1e293b;
+    }
+
+    .sql-card-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #1e293b;
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .sql-copy-btn {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 5px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #f8fafc;
+      cursor: pointer;
+    }
+
+    .sql-copy-btn:hover {
+      background: #334155;
+    }
+
+    .sql-card pre {
+      margin: 0;
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.55;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    /* Flow Chart */
+    .flow-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+
+    .flow-card h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .flow-card .flow-sub {
+      margin: 0 0 18px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+
+    .flow-svg {
+      width: 100%;
+      min-width: 820px;
+      height: auto;
+      display: block;
+    }
+
+    .mermaid-wrap {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    .mermaid-wrap .mermaid {
+      width: 100%;
+      text-align: center;
+    }
+
+    .mermaid-wrap svg {
+      max-width: 100%;
+      height: auto;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+
+    /* Collapsible Sections & Review Controls */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section-card {
+      margin: 0 !important;
+    }
+
+    .section-header {
+      cursor: pointer;
+      user-select: none;
+      padding: 16px 20px !important;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 12px;
+    }
+
+    .section-desc {
+      flex-basis: 100%;
+      margin: 4px 0 0 0 !important;
+    }
+
+    .section-header:hover {
+      background: #f8fafc;
+    }
+
+    .section-header-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .section-count-pill {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .section-chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+      transition: transform 0.18s ease;
+      flex-shrink: 0;
+    }
+
+    .section-card.is-collapsed .section-chevron {
+      transform: rotate(-90deg);
+    }
+
+    .section-card.is-collapsed .table-wrap {
+      display: none;
+    }
+
+    .col-review {
+      white-space: nowrap;
+      width: 1%;
+    }
+
+    .review-group {
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    .review-btn {
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 5px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+
+    .review-btn:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+
+    .review-btn.active[data-review-val="ok"] {
+      background: var(--intake-bg);
+      color: var(--intake-text);
+      border-color: var(--intake-border);
+    }
+
+    .review-btn.active[data-review-val="change"] {
+      background: var(--cond-bg);
+      color: var(--cond-text);
+      border-color: var(--cond-border);
+    }
+
+    .review-btn.active[data-review-val="remove"] {
+      background: var(--req-bg);
+      color: var(--req-text);
+      border-color: var(--req-border);
+    }
+
+    .btn-slack {
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 11px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .btn-slack:hover {
+      filter: brightness(0.95);
+    }
+
+    /* Grouped Single-Line Sidebar */
+    .nav-group-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 10px 8px 4px;
+      list-style: none;
+    }
+
+    .nav-group-label:first-child {
+      padding-top: 2px;
+    }
+
+    .sidebar .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 13px;
+      padding: 6px 9px;
+      border-radius: 6px;
+    }
+
+    .sidebar .nav-link span:first-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar .nav-link.is-open {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .sidebar .nav-link.is-open .nav-count {
+      background: #ffffff;
+      color: var(--accent);
+    }
+
+    .flow-branches {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .branch-box {
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .branch-box.branch-clear {
+      background: var(--intake-bg);
+      border-color: var(--intake-border);
+      color: #065f46;
+    }
+
+    .branch-box.branch-advise {
+      background: var(--cond-bg);
+      border-color: var(--cond-border);
+      color: #92400e;
+    }
+
+    .branch-box.branch-block {
+      background: var(--req-bg);
+      border-color: var(--req-border);
+      color: #991b1b;
+    }
+
+    .branch-box h4 {
+      margin: 0 0 6px;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+
+    .branch-box p {
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+
+    @media print {
+      .controls-bar, .sidebar, .col-check, .btn-subtle, .main-tabs {
+        display: none !important;
+      }
+      .layout {
+        display: block;
+        padding: 0;
+      }
+      .section-card {
+        break-inside: avoid;
+        box-shadow: none;
+        margin-bottom: 16px;
+      }
+      body {
+        background: #ffffff;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1>App Store Intake &amp; Submission Guide</h1>
+      <p class="subtitle">
+        The short client form starts the project. Renatus confirms the App Store details at kickoff and during the build, then prepares the submission.
+      </p>
+
+      <nav class="main-tabs" role="tablist" aria-label="Reference views">
+        <button type="button" class="main-tab-btn active" role="tab" id="tab-intake" data-tab="intake" aria-selected="true" aria-controls="panel-intake">
+          <span class="tab-num">1</span> Intake form
+        </button>
+        <button type="button" class="main-tab-btn" role="tab" id="tab-schema" data-tab="schema" aria-selected="false" aria-controls="panel-schema">
+          <span class="tab-num">2</span> Database schema
+        </button>
+        <button type="button" class="main-tab-btn" role="tab" id="tab-flowchart" data-tab="flowchart" aria-selected="false" aria-controls="panel-flowchart">
+          <span class="tab-num">3</span> Flow chart
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="tab-panel active" id="panel-intake" role="tabpanel" aria-labelledby="tab-intake">
+  <div class="controls-bar">
+    <div class="controls-inner">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input id="search-input" type="search" placeholder="Search fields, stages, or rules…" aria-label="Search fields" />
+      </div>
+      <div class="filter-group" role="group" aria-label="View controls">
+        <label class="btn-subtle" style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+          <input type="checkbox" id="show-engineering" />
+          Show fields Renatus handles
+        </label>
+        <button type="button" class="btn-subtle" id="toggle-sections">Collapse All</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar" aria-label="Section navigation">
+      <div class="sidebar-title">Sections</div>
+      <ul class="nav-list" id="sidebar-nav"></ul>
+    </aside>
+
+    <main class="content" id="sections-root">
+      <div class="empty-state" id="empty-state">
+        <strong>No matching fields found.</strong> Try a different search term or include fields Renatus handles.
+      </div>
+    </main>
+  </div>
+  </div>
+
+  <!-- TAB 2: DATABASE SCHEMA -->
+  <div class="tab-panel" id="panel-schema" role="tabpanel" aria-labelledby="tab-schema">
+    <div class="panel-container">
+      <div class="callout">
+        <strong>How submissions are saved.</strong> The server validates the quick form, checks uploaded files against the private Storage bucket and saves one row per <code>session_id</code>. Retries return the original reference. Renatus uses that reference for kickoff and build findings, legal approvals, and release readiness in the project workspace. The public form API uses the server-only Supabase <code>service_role</code>.
+      </div>
+
+      <section class="flow-card">
+        <h2>Database structure and intake naming</h2>
+        <p class="flow-sub">The naming migration renames the submissions table and updates the intake functions while preserving submission references and rate-limit counters. The intake API reads both Storage formats and defaults to the prefixed bucket for new uploads. See the <a href="intake-storage-rollout.md">rollout runbook</a>.</p>
+        <div class="mermaid-wrap">
+          <div class="mermaid" data-mermaid-tab="schema">
+erDiagram
+  INTAKE_APP_STORE_SUBMISSIONS o|--o{ INTAKE_ASSET_OBJECTS : "session_id matches intake object folder"
+  INTAKE_ASSET_OBJECTS }o--|| INTAKE_ASSET_BUCKET : "stored in private bucket"
+  INTAKE_UPLOAD_ACTIVITY o|--o{ INTAKE_ASSET_OBJECTS : "protects active sessions from cleanup"
+  INTAKE_ASSET_REMOVALS o|--o{ INTAKE_ASSET_OBJECTS : "blocks a removed key and its copy"
+
+  INTAKE_APP_STORE_SUBMISSIONS {
+    uuid id PK
+    uuid session_id UK
+    timestamptz created_at
+    text status
+    smallint submission_version
+    text brand_name
+    text legal_name
+    text contact_name
+    text contact_email
+    text contact_phone
+    text website_url
+    text app_name
+    text publishing_account
+    jsonb answers
+    jsonb assets
+    jsonb gaps
+    text client_ip_hash
+  }
+
+  INTAKE_RATE_LIMITS {
+    text key_hash PK
+    text action PK
+    timestamptz window_start PK
+    int hits
+  }
+
+  INTAKE_UPLOAD_ACTIVITY {
+    uuid session_id PK
+    timestamptz touched_at
+  }
+
+  INTAKE_ASSET_REMOVALS {
+    uuid session_id PK
+    text object_name PK
+  }
+
+  INTAKE_ASSET_BUCKET {
+    text id PK "intake-app-store-assets"
+    boolean public "false (private)"
+    bigint file_size_limit "26214400 (25 MB)"
+    text_array allowed_mime_types "14 whitelisted MIME types"
+  }
+
+  INTAKE_ASSET_OBJECTS {
+    uuid id PK
+    text bucket_id FK "intake-app-store-assets"
+    text name "intake/session_id/hex8-filename"
+    timestamptz created_at
+  }
+          </div>
+        </div>
+      </section>
+
+      <div class="schema-grid">
+        <section class="schema-card">
+          <div class="schema-card-header">
+            <h3>public.intake_app_store_submissions</h3>
+            <span class="badge badge-required">Core Table</span>
+          </div>
+          <table class="schema-table">
+            <thead>
+              <tr><th>Column</th><th>Type</th><th>Source and purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="col-key">id <span class="key-pill key-pk">PK</span></td><td><code>uuid</code></td><td>Default <code>gen_random_uuid()</code></td></tr>
+              <tr><td class="col-key">session_id <span class="key-pill key-fk">UK</span></td><td><code>uuid</code></td><td>Client UUIDv4 used for retries and the folder segment after <code>intake/</code></td></tr>
+              <tr><td class="col-key">created_at</td><td><code>timestamptz</code></td><td>Default <code>now()</code> · Indexed desc (<code>intake_app_store_submissions_created_at_idx</code>)</td></tr>
+              <tr><td class="col-key">status</td><td><code>text</code></td><td><code>new</code> (default) · <code>reviewed</code> · <code>in_progress</code> · <code>submitted</code> · <code>approved</code></td></tr>
+              <tr><td class="col-key">submission_version</td><td><code>smallint</code></td><td><code>1</code> for seven-step intake records (default), <code>2</code> for quick form records. <code>intake_legacy_required_fields</code> preserves the version 1 website and publishing-account requirements.</td></tr>
+              <tr><td class="col-key">brand_name</td><td><code>text</code></td><td>Trading or brand name (max 200 characters). May match the legal business name.</td></tr>
+              <tr><td class="col-key">legal_name</td><td><code>text</code></td><td>Legal business name (max 200 characters)</td></tr>
+              <tr><td class="col-key">contact_name</td><td><code>text</code></td><td>Primary intake contact name (max 200 characters)</td></tr>
+              <tr><td class="col-key">contact_email</td><td><code>text</code></td><td>Lowercased intake contact email (also used for the optional receipt)</td></tr>
+              <tr><td class="col-key">contact_phone</td><td><code>text</code></td><td>Intake phone normalized to E.164 (<code>/^\+[1-9]\d{6,14}$/</code>, e.g. <code>+61412345678</code>)</td></tr>
+              <tr><td class="col-key">website_url</td><td><code>text</code></td><td>HTTP(S) business website. Optional in version 2 and stored as <code>null</code> when omitted.</td></tr>
+              <tr><td class="col-key">app_name</td><td><code>text</code></td><td>Preferred app name (2–30 characters)</td></tr>
+              <tr><td class="col-key">publishing_account</td><td><code>text</code></td><td>Version 1 uses <code>renatus</code>, <code>own</code> or <code>unsure</code>. New version 2 submissions store <code>null</code> and leave the decision for kickoff.</td></tr>
+              <tr><td class="col-key">answers</td><td><code>jsonb</code></td><td>Normalized client answers for the row’s <code>submission_version</code>. See the version 2 mapping below.</td></tr>
+              <tr><td class="col-key">assets</td><td><code>jsonb</code></td><td>Server-verified brand files <code>[{ path, name, size, mimeType }]</code> (default <code>[]</code>)</td></tr>
+              <tr><td class="col-key">gaps</td><td><code>jsonb</code></td><td>Version 2 stores only brand follow-ups <code>[{ severity, code, title, detail }]</code>. Version 1 retains its Readiness &amp; Gap Summary and optional client copy fields.</td></tr>
+              <tr><td class="col-key">client_ip_hash</td><td><code>text</code></td><td>Salted SHA-256 hash of client IP (<code>RATE_LIMIT_SALT</code>)</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="schema-card">
+          <div class="schema-card-header">
+            <h3>public.intake_rate_limits</h3>
+            <span class="badge badge-conditional">Rate Limiting</span>
+          </div>
+          <table class="schema-table">
+            <thead>
+              <tr><th>Column</th><th>Type</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="col-key">key_hash <span class="key-pill key-pk">PK</span></td><td><code>text</code></td><td>Salted SHA-256 of client IP or contact email</td></tr>
+              <tr><td class="col-key">action <span class="key-pill key-pk">PK</span></td><td><code>text</code></td><td><code>upload_url</code> (20/15m) · <code>delete_upload</code> (30/15m) · <code>submit_intake</code> (5/hr) · <code>client_receipt</code> (3/hr)</td></tr>
+              <tr><td class="col-key">window_start <span class="key-pill key-pk">PK</span></td><td><code>timestamptz</code></td><td>Bucketed window start; rows &gt;24h auto-pruned</td></tr>
+              <tr><td class="col-key">hits</td><td><code>int</code></td><td>Atomic hit counter incremented by <code>intake_check_and_increment_rate_limit()</code></td></tr>
+            </tbody>
+          </table>
+
+          <div class="schema-card-header" style="border-top: 1px solid var(--border);">
+            <h3>Intake Storage bucket and objects</h3>
+            <span class="badge badge-optional">Brand Assets</span>
+          </div>
+          <table class="schema-table">
+            <thead>
+              <tr><th>Property</th><th>Value</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="col-key">id / name</td><td><code>intake-app-store-assets</code></td><td>Private entry in <code>storage.buckets</code> (<code>public = false</code>, zero anon/auth policies)</td></tr>
+              <tr><td class="col-key">file_size_limit</td><td><code>26214400</code></td><td>25 MB per file (API enforces max 10 files &amp; 100 MB total)</td></tr>
+              <tr><td class="col-key">allowed_mime_types</td><td><code>text[]</code> (14 types)</td><td>PNG, SVG, JPG/JPEG, WEBP, PDF, ZIP, EPS/PS, TTF, OTF, WOFF2, octet-stream</td></tr>
+              <tr><td class="col-key">Object path</td><td><code>intake/{session_id}/{hex8}-{name}</code></td><td>The object name in <code>storage.objects</code>. Existing drafts and saved submissions can also resolve <code>{session_id}/{hex8}-{name}</code> in the earlier bucket. Direct uploads use signed URLs and email links retain their seven-day expiry.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="schema-card-header" style="border-top: 1px solid var(--border);">
+            <h3>Hardened RPC Functions</h3>
+            <span class="badge badge-optional">service_role only</span>
+          </div>
+          <table class="schema-table">
+            <thead>
+              <tr><th>Function</th><th>Returns</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="col-key">intake_check_and_increment_rate_limit</td><td><code>boolean</code></td><td>Atomic upsert + 24h prune; returns <code>hits &lt;= p_max_hits</code></td></tr>
+              <tr><td class="col-key">intake_list_orphan_assets</td><td><code>table(bucket_id text, name text)</code></td><td>Reports unsubmitted objects in both buckets after 48 hours of session inactivity. Cleanup uses the Storage API.</td></tr>
+              <tr><td class="col-key">intake_touch_upload_session</td><td><code>boolean</code></td><td>Records upload activity and rejects a request for a finalized session.</td></tr>
+              <tr><td class="col-key">intake_mark_asset_removed</td><td><code>boolean</code></td><td>Records the file’s removal before deleting both copies. The submission trigger prevents a concurrent request or a late upload from restoring the file to the submission.</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+
+      <section class="schema-card" style="margin-bottom: 20px;">
+        <div class="schema-card-header">
+          <h3>Quick form and stored fields</h3>
+        </div>
+        <div class="table-wrap">
+          <table class="schema-table">
+            <thead><tr><th>Form group</th><th>Keys in <code>answers</code></th><th>Validation and storage</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Business and contact</td>
+                <td><code>legalName</code>, <code>brandName</code>, <code>contactName</code>, <code>contactEmail</code>, <code>contactPhone</code>, <code>websiteUrl</code></td>
+                <td>Names are required and limited to 200 characters. The same-name option uses <code>legalName</code> for <code>brandName</code>. Email is lowercased. Phone is normalized to E.164. All six keys also have top-level columns. Website is optional.</td>
+              </tr>
+              <tr>
+                <td>Brand</td>
+                <td><code>brandKitUrl</code>, <code>brandColors</code></td>
+                <td>Optional HTTP(S) link and up to 300 characters of colour details. Direct uploads are verified separately and stored in top-level <code>assets</code>. Missing logo or colour details create follow-ups for Renatus.</td>
+              </tr>
+              <tr>
+                <td>App idea</td>
+                <td><code>appName</code>, <code>appSummary</code></td>
+                <td>Both are required. App name is 2–30 characters and also saved in <code>app_name</code>. The summary allows up to 2,000 characters.</td>
+              </tr>
+              <tr>
+                <td>Submission options</td>
+                <td>—</td>
+                <td>The request sends <code>submissionVersion: 2</code>. The <code>sendClientCopy</code> flag requests a receipt and is checked by default on the form. The honeypot, separate country code and same-name checkbox are excluded from the stored answers.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <p class="flow-sub">In a fresh environment, apply the <a href="../supabase/migrations/20261126021631_app_store_intakes.sql">initial intake migration</a> and <a href="../supabase/migrations/20261126021633_quick_app_store_intake.sql">quick form migration</a> before the <a href="../supabase/migrations/20261126021635_intake_storage_names.sql">intake naming migration</a>. Provision the target bucket and manage its files through the Storage API. The forward migration reads Supabase’s object metadata to discover orphan candidates.</p>
+      <section class="sql-card">
+        <div class="sql-card-bar">
+          <span>Migration 20261126021635 · intake database and Storage naming</span>
+          <button type="button" class="sql-copy-btn" data-copy-source="schema-sql">Copy SQL</button>
+        </div>
+        <pre id="schema-sql">begin;
+
+alter table public.app_store_intakes rename to intake_app_store_submissions;
+alter table public.intake_app_store_submissions
+  rename constraint app_store_intakes_pkey to intake_app_store_submissions_pkey;
+alter table public.intake_app_store_submissions
+  rename constraint app_store_intakes_session_id_key to intake_app_store_submissions_session_id_key;
+alter table public.intake_app_store_submissions
+  rename constraint app_store_intakes_status_check to intake_app_store_submissions_status_check;
+alter table public.intake_app_store_submissions
+  rename constraint app_store_intakes_submission_version_check to intake_app_store_submissions_submission_version_check;
+alter table public.intake_app_store_submissions
+  rename constraint app_store_intakes_legacy_required_fields to intake_legacy_required_fields;
+alter index public.idx_app_store_intakes_created_at rename to intake_app_store_submissions_created_at_idx;
+
+-- PostgreSQL 18 also stores named NOT NULL constraints in pg_constraint.
+do $$
+declare
+  previous_name text;
+begin
+  for previous_name in
+    select conname from pg_catalog.pg_constraint
+    where conrelid = &#x27;public.intake_app_store_submissions&#x27;::regclass and contype = &#x27;n&#x27;
+      and starts_with(conname, &#x27;app_store_intakes_&#x27;)
+  loop
+    execute format(&#x27;alter table public.intake_app_store_submissions rename constraint %I to %I&#x27;,
+      previous_name, replace(previous_name, &#x27;app_store_intakes_&#x27;, &#x27;intake_app_store_submissions_&#x27;));
+  end loop;
+end;
+$$;
+
+-- Compatibility for an API instance serving a request while the migration deploys.
+-- Both names address the same physical table and the same uniqueness constraints.
+create view public.app_store_intakes with (security_invoker = true) as
+  select * from public.intake_app_store_submissions;
+revoke all on public.app_store_intakes from public, anon, authenticated;
+grant select, insert on public.app_store_intakes to service_role;
+grant select, insert, update on public.intake_app_store_submissions to service_role;
+
+alter function public.check_and_increment_rate_limit(text, text, int, int)
+  rename to intake_check_and_increment_rate_limit;
+create function public.check_and_increment_rate_limit(
+  p_key_hash text, p_action text, p_window_seconds int, p_max_hits int
+) returns boolean
+language sql
+set search_path = &#x27;&#x27;
+as $$
+  select public.intake_check_and_increment_rate_limit(p_key_hash, p_action, p_window_seconds, p_max_hits);
+$$;
+revoke all on function public.check_and_increment_rate_limit(text, text, int, int)
+  from public, anon, authenticated;
+grant execute on function public.check_and_increment_rate_limit(text, text, int, int) to service_role;
+
+create table public.intake_upload_activity (
+  session_id uuid primary key,
+  touched_at timestamptz not null default now()
+);
+create table public.intake_asset_removals (
+  session_id uuid not null,
+  object_name text not null check (object_name ~ &#x27;^[a-zA-Z0-9._-]+$&#x27; and strpos(object_name, &#x27;..&#x27;) = 0),
+  primary key (session_id, object_name)
+);
+alter table public.intake_upload_activity enable row level security;
+alter table public.intake_asset_removals enable row level security;
+revoke all on public.intake_upload_activity, public.intake_asset_removals from public, anon, authenticated;
+grant select on public.intake_asset_removals to service_role;
+
+create function public.intake_touch_upload_session(p_session_id uuid)
+returns boolean language plpgsql security definer set search_path = &#x27;&#x27;
+as $$
+begin
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(p_session_id::text, 0));
+  if exists (select 1 from public.intake_app_store_submissions where session_id = p_session_id) then
+    return false;
+  end if;
+  insert into public.intake_upload_activity (session_id) values (p_session_id)
+    on conflict (session_id) do update set touched_at = now();
+  return true;
+end;
+$$;
+
+create function public.intake_mark_asset_removed(p_session_id uuid, p_object_name text)
+returns boolean language plpgsql security definer set search_path = &#x27;&#x27;
+as $$
+begin
+  -- Serialize the deletion intent with submission, then delete both Storage aliases via the API.
+  if not public.intake_touch_upload_session(p_session_id) then
+    return false;
+  end if;
+  insert into public.intake_asset_removals (session_id, object_name)
+    values (p_session_id, p_object_name)
+    on conflict do nothing;
+  return true;
+end;
+$$;
+
+create function public.intake_guard_submission_assets()
+returns trigger language plpgsql security definer set search_path = &#x27;&#x27;
+as $$
+begin
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(new.session_id::text, 0));
+  if exists (
+    select 1 from public.intake_asset_removals removal
+    join pg_catalog.jsonb_array_elements(new.assets) as asset
+      on removal.object_name = pg_catalog.regexp_replace(asset-&gt;&gt;&#x27;path&#x27;, &#x27;^.*/&#x27;, &#x27;&#x27;)
+    where removal.session_id = new.session_id
+  ) then
+    raise check_violation using message = &#x27;An intake asset was removed.&#x27;, constraint = &#x27;intake_removed_asset&#x27;;
+  end if;
+  return new;
+end;
+$$;
+create trigger intake_guard_submission_assets
+  before insert on public.intake_app_store_submissions
+  for each row execute function public.intake_guard_submission_assets();
+
+create function public.intake_list_orphan_assets(
+  p_max_age_hours int default 48,
+  p_legacy_bucket text default &#x27;app-store-intake-assets&#x27;
+) returns table(bucket_id text, name text)
+language sql security definer set search_path = &#x27;&#x27;
+as $$
+  with intake_objects as materialized (
+    select o.bucket_id, o.name, o.created_at,
+      lower(case when split_part(o.name, &#x27;/&#x27;, 1) = &#x27;intake&#x27;
+        then split_part(o.name, &#x27;/&#x27;, 2)
+        else split_part(o.name, &#x27;/&#x27;, 1)
+      end) as session
+    from storage.objects o
+    where
+      (o.bucket_id = &#x27;intake-app-store-assets&#x27; and o.name ~ &#x27;^intake/[[:xdigit:]]{8}-[[:xdigit:]]{4}-4[[:xdigit:]]{3}-[89abAB][[:xdigit:]]{3}-[[:xdigit:]]{12}/[^/]+$&#x27;)
+      or (o.bucket_id = p_legacy_bucket and o.name ~ &#x27;^[[:xdigit:]]{8}-[[:xdigit:]]{4}-4[[:xdigit:]]{3}-[89abAB][[:xdigit:]]{3}-[[:xdigit:]]{12}/[^/]+$&#x27;)
+  ),
+  inactive as (
+    select session from intake_objects group by session
+    having max(created_at) &lt; now() - make_interval(hours =&gt; p_max_age_hours)
+  )
+  select o.bucket_id, o.name
+  from intake_objects o
+  join inactive i using (session)
+  where not exists (
+    select 1 from public.intake_app_store_submissions s where s.session_id = o.session::uuid
+  )
+  and not exists (
+    select 1 from public.intake_upload_activity a
+    where a.session_id = o.session::uuid and a.touched_at &gt;= now() - make_interval(hours =&gt; p_max_age_hours)
+  );
+$$;
+
+-- Preserve the old scheduled-job interface during the transition.
+create or replace function public.list_orphan_intake_assets(p_max_age_hours int default 48)
+returns table(name text)
+language sql security definer set search_path = &#x27;&#x27;
+as $$
+  select o.name from public.intake_list_orphan_assets(p_max_age_hours) o
+  where o.bucket_id = &#x27;app-store-intake-assets&#x27;;
+$$;
+revoke all on function public.intake_touch_upload_session(uuid),
+  public.intake_mark_asset_removed(uuid, text), public.intake_guard_submission_assets(),
+  public.intake_list_orphan_assets(int, text) from public, anon, authenticated;
+grant execute on function public.intake_touch_upload_session(uuid),
+  public.intake_mark_asset_removed(uuid, text), public.intake_list_orphan_assets(int, text) to service_role;
+
+notify pgrst, &#x27;reload schema&#x27;;
+
+commit;</pre>
+      </section>
+    </div>
+  </div>
+
+  <!-- TAB 3: FLOW CHART -->
+  <div class="tab-panel" id="panel-flowchart" role="tabpanel" aria-labelledby="tab-flowchart">
+    <div class="panel-container">
+      <section class="flow-card">
+        <h2>From client intake to App Review</h2>
+        <p class="flow-sub">Use the submission reference to track the Renatus handoff in the project workspace. <a href="renatus-step-2-intake.html">Open the Renatus Step 2 wizard</a> or go to its <a href="renatus-step-2-intake.html#metadata-panel">full field checklist</a>.</p>
+        <div class="mermaid-wrap">
+          <div class="mermaid" data-mermaid-tab="flowchart">
+flowchart TD
+  A["Client submits business, brand and app details"] --> B["Validate and save one intake row; return reference"]
+  B --> C["Renatus owner logs the reference and kickoff decisions"]
+  C --> D["Verify data use and features against the build"]
+  D --> E["Draft privacy policy and terms"]
+  E --> F["Record client approval and verify live links"]
+  D --> G["Prepare listing, screenshots and Apple declarations"]
+  D --> H["Prepare App Review notes and test demo access if required"]
+  F --> I["Check evidence and clear launch blockers"]
+  G --> I
+  H --> I
+  I --> J["Hand off for App Store submission"]
+  I -->|"Build changes affect previously checked work"| D
+
+  classDef client fill:#eff6ff,stroke:#bfdbfe,color:#0f172a
+  classDef team fill:#ecfdf5,stroke:#a7f3d0,color:#065f46
+  class A,B client
+  class C,D,E,F,G,H,I,J team
+          </div>
+        </div>
+      </section>
+
+      <section class="schema-card">
+        <div class="schema-card-header"><h3>Renatus handoff checklist</h3></div>
+        <div class="table-wrap">
+          <table class="schema-table">
+            <thead><tr><th>Stage</th><th>Actions</th><th>Evidence in the project workspace</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Handoff and kickoff</td>
+                <td>Assign a Renatus owner. Discuss what personal information the app needs, why it needs it and who receives it. Ask about general fitness, Apple Health or Watch, biometric or health information, and clinical advice. Check publishing account, storefronts, device support, monetisation and content rights where relevant.</td>
+                <td>Intake reference, owner, decisions and open questions with owners and due stages.</td>
+              </tr>
+              <tr>
+                <td>Build verification</td>
+                <td>Check collection, use, sharing, retention and deletion across app, backend and SDKs. Verify account flows, permissions, tracking and health features where applicable. Use the fields Renatus handles in Tab 1 to evaluate readiness against confirmed findings and resolve applicable blockers.</td>
+                <td>Build identifier, data inventory and feature evidence. Record outstanding blockers and what clears each one.</td>
+              </tr>
+              <tr>
+                <td>Legal approval</td>
+                <td>Draft the privacy policy and terms based on verified behaviour. Obtain client approval for both versions, arrange publication and verify the live links in the app and App Store Connect where applicable.</td>
+                <td>Version, approval date and live URL for each document.</td>
+              </tr>
+              <tr>
+                <td>App Store Connect</td>
+                <td>Prepare the listing, category, support URL and screenshots for the supported devices. Complete the age rating questionnaire, App Privacy disclosures and applicable health declarations against the release build.</td>
+                <td>Listing and screenshot references, declared answers and release build identifier.</td>
+              </tr>
+              <tr>
+                <td>App Review</td>
+                <td>Write sign-in steps, key feature walkthroughs and access prerequisites. If sign-in is required, create a dedicated demo account with test data, verify it against the release build and enter the credentials in the designated App Review fields. For open access, test the review steps without credentials.</td>
+                <td>Reviewer notes and verification date for the review flows. Record the access outcome without copying credentials into the project record.</td>
+              </tr>
+              <tr>
+                <td>Release handoff</td>
+                <td>Confirm approvals, listing and review materials. Resolve applicable blockers and reopen work affected by build changes. Seek renewed client approval when the approved legal text changes materially.</td>
+                <td>Submission owner’s sign-off on the release build and links to the final evidence.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sql-card" style="margin-top: 20px;">
+        <div class="sql-card-bar">
+          <span>Project workspace template</span>
+          <button type="button" class="sql-copy-btn" data-copy-source="handoff-template">Copy checklist</button>
+        </div>
+        <pre id="handoff-template">App Store preparation
+Intake reference:
+Renatus owner:
+Release build:
+
+Kickoff
+- Intended use of personal information:
+- Fitness, health or clinical features:
+- Publishing, distribution, devices, monetisation and rights:
+- Open questions, owners and due stages:
+
+Build verification
+- Verified data collection, use, sharing, retention and deletion:
+- Evidence for app, backend, SDKs, permissions and health features:
+- Applicable blockers, owners and resolution evidence:
+
+Legal approval
+- Privacy policy version, client approval date and live URL:
+- Terms version, client approval date and live URL:
+
+App Store Connect
+- Listing, support URL and device screenshots:
+- Age rating, App Privacy and applicable health declaration evidence:
+
+App Review
+- Notes and access prerequisites:
+- Demo access or open-access walkthrough verified on:
+
+Release handoff
+- Final approval, applicable blockers resolved and sign-off date:</pre>
+      </section>
+    </div>
+  </div>
+
+  <script src="app-store-connect-fields.js"></script>
+  <script>
+    const SECTIONS = APP_STORE_CONNECT_SECTIONS;
+
+    const STORAGE_KEY = 'asc_ios_metadata_checklist_v2';
+    const REVIEW_KEY = 'asc_ios_metadata_review_v1';
+    let checkedMap = {};
+    let reviewMap = {};
+    try {
+      checkedMap = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {};
+      reviewMap = JSON.parse(localStorage.getItem(REVIEW_KEY) || '{}') || {};
+    } catch {
+      checkedMap = {};
+      reviewMap = {};
+    }
+
+    let activeSource = 'intake';
+    let searchQuery = '';
+    const collapsedSections = new Set(SECTIONS.filter(section => section.fields[0]?.source === 'renatus').map(section => section.id));
+
+    const root = document.getElementById('sections-root');
+    const sidebarNav = document.getElementById('sidebar-nav');
+    const emptyState = document.getElementById('empty-state');
+    const searchInput = document.getElementById('search-input');
+    const toggleSectionsBtn = document.getElementById('toggle-sections');
+
+    function saveChecks() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedMap));
+      } catch {
+        // Ignore storage errors in restricted environments
+      }
+    }
+
+    function saveReviews() {
+      try {
+        localStorage.setItem(REVIEW_KEY, JSON.stringify(reviewMap));
+      } catch {
+        // Ignore storage errors in restricted environments
+      }
+    }
+
+    function badgeMarkup(req) {
+      if (req === 'required') return '<span class="badge badge-required">Required</span>';
+      if (req === 'conditional') return '<span class="badge badge-conditional">Conditional</span>';
+      return '<span class="badge badge-optional">Optional</span>';
+    }
+
+    function sourceMarkup(source, label) {
+      if (source === 'intake') {
+        return `<span class="source-tag source-intake">${label}</span>`;
+      }
+      return `<span class="source-tag source-internal">Renatus</span><span class="source-tag source-asc">${label}</span>`;
+    }
+
+    function updateStats() {
+      // Summary stats cards removed.
+    }
+
+    const _textDecoder = document.createElement('div');
+    function toPlainText(html) {
+      _textDecoder.innerHTML = html || '';
+      return _textDecoder.textContent || '';
+    }
+
+    function render() {
+      root.querySelectorAll('.section-card, .callout').forEach(el => el.remove());
+      sidebarNav.innerHTML = '';
+
+      const q = searchQuery.trim().toLowerCase();
+      const visibleSections = [];
+
+      const SIDEBAR_META = [
+        { group: 'Client form', shortTitle: 'Business and contact' },
+        { group: 'Client form', shortTitle: 'Brand' },
+        { group: 'Client form', shortTitle: 'App idea' },
+        { group: 'Renatus', shortTitle: 'Business & Account' },
+        { group: 'Renatus', shortTitle: 'New App Record' },
+        { group: 'Renatus', shortTitle: 'App Info & Age' },
+        { group: 'Renatus', shortTitle: 'Brand & Visuals' },
+        { group: 'Renatus', shortTitle: 'Store Listing' },
+        { group: 'Renatus', shortTitle: 'Review & Login' },
+        { group: 'Renatus', shortTitle: 'Privacy & AI' },
+        { group: 'Renatus', shortTitle: 'Pricing & Markets' },
+        { group: 'Renatus', shortTitle: 'Export & Build' },
+      ];
+
+      let lastGroup = '';
+
+      SECTIONS.forEach((section, idx) => {
+        const filtered = section.fields.filter(f => {
+          const matchesSource = activeSource === 'all' || f.source === activeSource;
+          if (!matchesSource) return false;
+          if (!q) return true;
+          const haystack = toPlainText(
+            `${section.title} ${section.path} ${f.name} ${f.sourceLabel} ${f.limit} ${f.meta || ''} ${f.notes}`
+          ).toLowerCase();
+          return haystack.includes(q);
+        });
+
+        if (filtered.length === 0) return;
+        visibleSections.push(section.id);
+
+        const isCollapsed = !q && collapsedSections.has(section.id);
+        const meta = SIDEBAR_META[idx] || { group: 'Other', shortTitle: section.title };
+
+        if (meta.group !== lastGroup) {
+          const groupLi = document.createElement('li');
+          groupLi.className = 'nav-group-label';
+          groupLi.textContent = meta.group;
+          sidebarNav.appendChild(groupLi);
+          lastGroup = meta.group;
+        }
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a class="nav-link${!isCollapsed ? ' is-open' : ''}" href="#${section.id}" title="${section.title}">
+            <span>${idx + 1}. ${meta.shortTitle}</span>
+            <span class="nav-count">${filtered.length}</span>
+          </a>
+        `;
+        sidebarNav.appendChild(li);
+
+        const reqCount = filtered.filter(f => f.req === 'required').length;
+
+        const card = document.createElement('section');
+        card.className = `section-card${isCollapsed ? ' is-collapsed' : ''}`;
+        card.id = section.id;
+
+        const rowsHtml = filtered.map(f => {
+          const isChecked = Boolean(checkedMap[f.id]);
+          const rev = reviewMap[f.id] || '';
+          return `
+            <tr class="${isChecked ? 'is-checked' : ''}" data-field-id="${f.id}">
+              <td class="col-check">
+                <input type="checkbox" ${isChecked ? 'checked' : ''} aria-label="Mark ${f.name} ready" data-check-id="${f.id}" />
+              </td>
+              <td class="col-field">
+                <span class="field-name">${f.name}</span>
+                <div class="tag-row">
+                  ${sourceMarkup(f.source, f.sourceLabel)}
+                  ${f.meta ? `<span class="field-meta">${f.meta}</span>` : ''}
+                </div>
+              </td>
+              <td class="col-req">${badgeMarkup(f.req)}</td>
+              <td class="col-limit">${f.limit}</td>
+              <td><p class="note-text">${f.notes}</p></td>
+              <td class="col-review">
+                <div class="review-group" role="group" aria-label="Review status for ${f.name}">
+                  <button type="button" class="review-btn${rev === 'ok' ? ' active' : ''}" data-review-id="${f.id}" data-review-val="ok">OK</button>
+                  <button type="button" class="review-btn${rev === 'change' ? ' active' : ''}" data-review-id="${f.id}" data-review-val="change">Change</button>
+                  <button type="button" class="review-btn${rev === 'remove' ? ' active' : ''}" data-review-id="${f.id}" data-review-val="remove">Remove</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="section-header" data-toggle-section="${section.id}" role="button" tabindex="0" aria-expanded="${!isCollapsed}">
+            <div class="section-title-group">
+              <span class="section-num">${idx + 1}</span>
+              <h2>${section.title}</h2>
+            </div>
+            <div class="section-header-right">
+              <span class="section-count-pill">${filtered.length} fields · ${reqCount} required</span>
+              <span class="section-path">${section.path}</span>
+              <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <p class="section-desc">${section.description}</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-check" aria-label="Done"></th>
+                  <th>Field &amp; Source</th>
+                  <th>Status</th>
+                  <th>Format / Limits</th>
+                  <th>Submission Guidance &amp; Compliance Rules</th>
+                  <th>Review</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+          </div>
+        `;
+        root.appendChild(card);
+      });
+
+      if (toggleSectionsBtn) {
+        toggleSectionsBtn.disabled = Boolean(q) || visibleSections.length === 0;
+        const anyCollapsed = visibleSections.some(id => collapsedSections.has(id));
+        toggleSectionsBtn.textContent = anyCollapsed ? 'Expand All' : 'Collapse All';
+      }
+
+      if (visibleSections.length === 0) {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="nav-link" style="color: var(--text-muted); cursor: default;">No matching sections</span>';
+        sidebarNav.appendChild(li);
+      }
+
+      emptyState.style.display = visibleSections.length === 0 ? 'block' : 'none';
+      updateStats();
+    }
+
+    root.addEventListener('click', (e) => {
+      const reviewBtn = e.target.closest('.review-btn');
+      if (reviewBtn) {
+        const id = reviewBtn.getAttribute('data-review-id');
+        const val = reviewBtn.getAttribute('data-review-val');
+        reviewMap[id] = reviewMap[id] === val ? '' : val;
+        saveReviews();
+        const group = reviewBtn.closest('.review-group');
+        group.querySelectorAll('.review-btn').forEach(b => {
+          b.classList.toggle('active', b.getAttribute('data-review-val') === reviewMap[id]);
+        });
+        return;
+      }
+
+      const header = e.target.closest('.section-header[data-toggle-section]');
+      if (header) {
+        const secId = header.getAttribute('data-toggle-section');
+        if (collapsedSections.has(secId)) {
+          collapsedSections.delete(secId);
+        } else {
+          collapsedSections.add(secId);
+        }
+        render();
+      }
+    });
+
+    sidebarNav.addEventListener('click', (e) => {
+      const link = e.target.closest('a.nav-link');
+      if (!link) return;
+      const secId = (link.getAttribute('href') || '').replace('#', '');
+      if (collapsedSections.has(secId)) {
+        collapsedSections.delete(secId);
+        render();
+      }
+    });
+
+    if (toggleSectionsBtn) {
+      toggleSectionsBtn.addEventListener('click', () => {
+        const sectionIds = Array.from(root.querySelectorAll('.section-card'), card => card.id);
+        const expand = sectionIds.some(id => collapsedSections.has(id));
+        for (const id of sectionIds) {
+          if (expand) collapsedSections.delete(id);
+          else collapsedSections.add(id);
+        }
+        render();
+      });
+    }
+
+    root.addEventListener('change', (e) => {
+      const id = e.target.getAttribute('data-check-id');
+      if (!id) return;
+      checkedMap[id] = e.target.checked;
+      saveChecks();
+      const row = e.target.closest('tr');
+      if (row) row.classList.toggle('is-checked', e.target.checked);
+      updateStats();
+    });
+
+    const showEngineeringToggle = document.getElementById('show-engineering');
+    if (showEngineeringToggle) {
+      showEngineeringToggle.addEventListener('change', (e) => {
+        activeSource = e.target.checked ? 'all' : 'intake';
+        render();
+      });
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      render();
+    });
+
+    // Mermaid renderer (initialized lazily per tab so hidden tabs size SVGs cleanly)
+    if (window.mermaid) {
+      window.mermaid.initialize({
+        startOnLoad: false,
+        theme: 'base',
+        securityLevel: 'loose',
+        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+        themeVariables: {
+          primaryColor: '#eff6ff',
+          primaryTextColor: '#0f172a',
+          primaryBorderColor: '#bfdbfe',
+          lineColor: '#64748b',
+          secondaryColor: '#f8fafc',
+          tertiaryColor: '#ffffff',
+        },
+      });
+    }
+
+    const renderedMermaidTabs = new Set();
+
+    function renderMermaidForTab(tabKey) {
+      if (!window.mermaid || renderedMermaidTabs.has(tabKey)) return;
+      const nodes = Array.from(document.querySelectorAll(`.mermaid[data-mermaid-tab="${tabKey}"]`));
+      if (nodes.length === 0) return;
+      renderedMermaidTabs.add(tabKey);
+      window.mermaid.run({ nodes }).catch(() => {
+        renderedMermaidTabs.delete(tabKey);
+      });
+    }
+
+    // Top-level 3-tab switching (Intake form / Database schema / Flow chart)
+    const tabButtons = document.querySelectorAll('.main-tab-btn');
+    const tabPanels = {
+      intake: document.getElementById('panel-intake'),
+      schema: document.getElementById('panel-schema'),
+      flowchart: document.getElementById('panel-flowchart'),
+    };
+
+    function activateTab(tabKey) {
+      if (!tabPanels[tabKey]) return;
+      tabButtons.forEach((btn) => {
+        const isActive = btn.getAttribute('data-tab') === tabKey;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', String(isActive));
+      });
+      Object.entries(tabPanels).forEach(([key, panel]) => {
+        panel.classList.toggle('active', key === tabKey);
+      });
+      requestAnimationFrame(() => renderMermaidForTab(tabKey));
+    }
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-tab');
+        activateTab(key);
+        history.replaceState(null, '', `#tab-${key}`);
+      });
+    });
+
+    const initialHash = location.hash.replace('#tab-', '');
+    if (tabPanels[initialHash]) activateTab(initialHash);
+
+    document.querySelectorAll('[data-copy-source]').forEach(button => {
+      const label = button.textContent;
+      button.addEventListener('click', async () => {
+        const source = document.getElementById(button.dataset.copySource);
+        try {
+          await navigator.clipboard.writeText(source.textContent);
+          button.textContent = 'Copied!';
+        } catch {
+          const range = document.createRange();
+          range.selectNodeContents(source);
+          window.getSelection()?.removeAllRanges();
+          window.getSelection()?.addRange(range);
+          button.textContent = 'Select & Copy';
+        }
+        setTimeout(() => { button.textContent = label; }, 1600);
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,16 +1,31 @@
 import {
+  ALLOWED_EXTENSIONS,
+  ALLOWED_MIME_TYPES,
+  MAX_FILE_SIZE_BYTES,
   MAX_TOTAL_SIZE_BYTES,
   SIGNED_DOWNLOAD_TTL_SECONDS,
   checkJsonBodySize,
   checkRateLimit,
+  computeBrandFollowUps,
   computeReadinessGaps,
   createSupabaseAdmin,
   extractClientIp,
+  getExtension,
   hashKey,
   sendIntakeEmails,
   validateIntakePayload,
   verifyTurnstileIfEnabled,
 } from './_lib.js';
+import { LEGACY_INTAKE_VERSION, resolveIntakeObjectPath } from '../../src/data/appStoreIntake.js';
+import { INTAKE_NAMES, intakeStorageNames, listIntakeAssets } from './_storage.js';
+
+function duplicateResponse(record, legacyRequest) {
+  const response = { ok: true, id: record.id, duplicate: true };
+  if (legacyRequest && record.submission_version === LEGACY_INTAKE_VERSION) {
+    response.gaps = record.gaps || [];
+  }
+  return response;
+}
 
 export async function handleSubmitIntake(req, res, env = process.env) {
   if (req.method === 'OPTIONS') {
@@ -30,7 +45,9 @@ export async function handleSubmitIntake(req, res, env = process.env) {
 
   const parsed = validateIntakePayload(req.body ?? {});
   if (parsed.error) {
-    res.status(parsed.status).json({ error: parsed.error });
+    const response = { error: parsed.error };
+    if (parsed.fieldErrors) response.fieldErrors = parsed.fieldErrors;
+    res.status(parsed.status).json(response);
     return;
   }
 
@@ -55,12 +72,13 @@ export async function handleSubmitIntake(req, res, env = process.env) {
     return;
   }
 
-  const { sessionId, answers, claimedAssets, sendClientCopy } = parsed.data;
+  const { sessionId, submissionVersion, answers, claimedAssets, sendClientCopy } = parsed.data;
+  const legacyRequest = submissionVersion === LEGACY_INTAKE_VERSION;
 
   // Idempotency check: return existing submission without re-sending emails
   const { data: existing, error: existingErr } = await supabase
-    .from('app_store_intakes')
-    .select('id, gaps')
+    .from(INTAKE_NAMES.submissions)
+    .select('id, submission_version, gaps')
     .eq('session_id', sessionId)
     .maybeSingle();
 
@@ -70,7 +88,7 @@ export async function handleSubmitIntake(req, res, env = process.env) {
     return;
   }
   if (existing) {
-    res.status(200).json({ ok: true, id: existing.id, gaps: existing.gaps || [], duplicate: true });
+    res.status(200).json(duplicateResponse(existing, legacyRequest));
     return;
   }
 
@@ -82,23 +100,22 @@ export async function handleSubmitIntake(req, res, env = process.env) {
   }
 
   // Server-side verification of uploaded assets + cumulative 100 MB cap in Supabase Storage
-  const bucket = env.SUPABASE_INTAKE_BUCKET || 'app-store-intake-assets';
   const verifiedAssets = [];
   if (claimedAssets.length > 0) {
-    const { data: listed, error: listErr } = await supabase.storage.from(bucket).list(sessionId, {
-      limit: 100,
-    });
-    if (listErr) {
-      console.error('[intake] storage verify error:', listErr.message);
+    let byName;
+    try {
+      byName = await listIntakeAssets(supabase, intakeStorageNames(env), sessionId);
+    } catch (error) {
+      console.error('[intake] storage verify error:', error.message);
       res.status(502).json({ error: 'Could not verify uploaded files.' });
       return;
     }
 
-    const byPath = new Map((listed || []).map((item) => [`${sessionId}/${item.name}`, item]));
     let totalBytes = 0;
 
     for (const claimed of claimedAssets) {
-      const obj = byPath.get(claimed.path);
+      const { name } = resolveIntakeObjectPath(sessionId, claimed.path);
+      const obj = byName.get(name);
       if (!obj) {
         res
           .status(400)
@@ -106,26 +123,39 @@ export async function handleSubmitIntake(req, res, env = process.env) {
         return;
       }
       const size = Number(obj.metadata?.size || 0);
+      const mimeType = String(obj.metadata?.mimetype || 'application/octet-stream').toLowerCase();
+      if (!ALLOWED_EXTENSIONS.has(getExtension(obj.name)) || !ALLOWED_MIME_TYPES.has(mimeType)) {
+        res.status(400).json({ error: 'An uploaded file has an unsupported type.' });
+        return;
+      }
+      if (!Number.isFinite(size) || size <= 0 || size > MAX_FILE_SIZE_BYTES) {
+        res.status(400).json({ error: 'Uploaded files must be between 1 byte and 25 MB.' });
+        return;
+      }
       totalBytes += size;
       if (totalBytes > MAX_TOTAL_SIZE_BYTES) {
         res.status(400).json({ error: 'Total uploaded files exceed the 100 MB submission limit.' });
         return;
       }
       verifiedAssets.push({
-        path: claimed.path,
+        path: obj.path,
+        bucket: obj.bucket,
         name: String(claimed.name || obj.name).slice(0, 120),
         size,
-        mimeType: String(obj.metadata?.mimetype || 'application/octet-stream'),
+        mimeType,
       });
     }
   }
 
-  const gaps = computeReadinessGaps(answers, verifiedAssets);
+  const gaps = legacyRequest
+    ? computeReadinessGaps(answers, verifiedAssets)
+    : computeBrandFollowUps(answers, verifiedAssets);
 
   const { data: inserted, error: insertErr } = await supabase
-    .from('app_store_intakes')
+    .from(INTAKE_NAMES.submissions)
     .insert({
       session_id: sessionId,
+      submission_version: submissionVersion,
       brand_name: answers.brandName,
       legal_name: answers.legalName,
       contact_name: answers.contactName,
@@ -133,9 +163,9 @@ export async function handleSubmitIntake(req, res, env = process.env) {
       contact_phone: answers.contactPhone,
       website_url: answers.websiteUrl,
       app_name: answers.appName,
-      publishing_account: answers.publishingAccount,
+      publishing_account: answers.publishingAccount ?? null,
       answers,
-      assets: verifiedAssets,
+      assets: verifiedAssets.map(({ bucket, ...asset }) => asset),
       gaps,
       client_ip_hash: ipHash,
     })
@@ -145,14 +175,19 @@ export async function handleSubmitIntake(req, res, env = process.env) {
   // Race-safe idempotency: catch concurrent unique violation (23505)
   if (insertErr?.code === '23505') {
     const { data: raced } = await supabase
-      .from('app_store_intakes')
-      .select('id, gaps')
+      .from(INTAKE_NAMES.submissions)
+      .select('id, submission_version, gaps')
       .eq('session_id', sessionId)
       .maybeSingle();
     if (raced) {
-      res.status(200).json({ ok: true, id: raced.id, gaps: raced.gaps || [], duplicate: true });
+      res.status(200).json(duplicateResponse(raced, legacyRequest));
       return;
     }
+  }
+
+  if (insertErr?.code === '23514' && insertErr.message === 'An intake asset was removed.') {
+    res.status(409).json({ error: 'An uploaded file was removed. Review the files in your draft and try again.' });
+    return;
   }
 
   if (insertErr || !inserted) {
@@ -167,7 +202,7 @@ export async function handleSubmitIntake(req, res, env = process.env) {
     const signedAssets = [];
     for (const asset of verifiedAssets) {
       const { data: signed } = await supabase.storage
-        .from(bucket)
+        .from(asset.bucket)
         .createSignedUrl(asset.path, SIGNED_DOWNLOAD_TTL_SECONDS, { download: true });
       if (signed?.signedUrl) {
         signedAssets.push({ ...asset, signedUrl: signed.signedUrl });
@@ -178,6 +213,7 @@ export async function handleSubmitIntake(req, res, env = process.env) {
       {
         id: inserted.id,
         createdAt: inserted.created_at,
+        submissionVersion,
         answers,
         gaps,
         sendClientCopy,
@@ -192,12 +228,9 @@ export async function handleSubmitIntake(req, res, env = process.env) {
     emailDelivered = false;
   }
 
-  res.status(200).json({
-    ok: true,
-    id: inserted.id,
-    gaps,
-    emailDelivered,
-  });
+  const response = { ok: true, id: inserted.id, emailDelivered };
+  if (legacyRequest) response.gaps = gaps;
+  res.status(200).json(response);
 }
 
 export default async function handler(req, res) {

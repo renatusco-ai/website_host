@@ -3,6 +3,7 @@ import { setTimeout } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import { fakerEN_AU as faker } from '@faker-js/faker';
 import { test as base, expect } from '@playwright/test';
+import { installDemoCursor } from './demo-cursor.js';
 
 const viewport = { width: 1440, height: 900 };
 const recordingsDir = new URL('../../demo-recordings/', import.meta.url);
@@ -69,11 +70,12 @@ export const test = base.extend({
           ...(recording && { recordVideo: { dir: testInfo.outputPath('video'), size: viewport } }),
         });
         context.setDefaultTimeout(actionTimeout);
+        if (recording) await context.addInitScript(installDemoCursor);
         const staffOrigin = new URL(staffURL).origin;
         await context.route(url => ![baseURL, staffOrigin].includes(url.origin), route => route.abort());
         await context.route('**/api/**', route => route.abort());
         if (handoff) {
-          await context.route(`${staffOrigin}/website_host/public/brand/renatus-logo.svg`,
+          await context.route(`${staffOrigin}/public/brand/renatus-logo.svg`,
             route => route.fulfill({ path: staffLogo, contentType: 'image/svg+xml' }));
           await context.addInitScript(({ staffOrigin, handoff }) => {
             if (location.origin !== staffOrigin || sessionStorage.getItem('intake-e2e-handoff')) return;
@@ -82,7 +84,11 @@ export const test = base.extend({
           }, { staffOrigin, handoff });
         }
         page = await context.newPage();
-        return { page, pause: ms => recording ? setTimeout(ms) : Promise.resolve() };
+        return {
+          page,
+          clickOptions: recording ? { delay: 200 } : {},
+          pause: ms => recording ? setTimeout(ms) : Promise.resolve(),
+        };
       });
     } finally {
       const video = page?.video();

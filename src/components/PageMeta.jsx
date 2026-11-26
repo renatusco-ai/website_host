@@ -5,7 +5,7 @@ import { PAGE_BY_PATH, pageUrl } from '../data/seo';
 const UNLISTED_META = {
   '/app-store-intake': {
     title: 'iOS App Store Onboarding Intake | Renatus',
-    description: 'Standalone client onboarding questionnaire for Apple App Store submissions.',
+    description: 'Share your business details, branding and app idea with Renatus before kickoff.',
   },
 };
 

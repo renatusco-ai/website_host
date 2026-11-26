@@ -26,6 +26,9 @@ Thumbs.db
 # Vite
 *.local
 
+# Supabase CLI project and cache files
+supabase/.temp/
+
 # Playwright
 test-results/
 demo-recordings/

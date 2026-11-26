@@ -16,7 +16,7 @@ export default defineConfig({
       env: { SUPABASE_URL: '', SUPABASE_SERVICE_ROLE_KEY: '', RESEND_API_KEY: '' },
     },
     {
-      command: 'python3 -m http.server 4174 --bind 127.0.0.1 --directory ../docs',
+      command: 'python3 -m http.server 4174 --bind 127.0.0.1 --directory docs',
       url: staffURL,
     },
   ],

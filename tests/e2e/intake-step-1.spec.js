@@ -2,7 +2,7 @@ import { test, expect } from './intake-fixture.js';
 
 test('client submits app details and receives an intake reference', async ({ baseURL, intake, openDemo }) => {
   const { client, logo, reference } = intake;
-  const { page, pause } = await openDemo('intake-step-1');
+  const { page, clickOptions, pause } = await openDemo('intake-step-1');
   const signedUrl = new URL(`/__intake-storage/${logo.name}?token=demo-upload`, baseURL).href;
   const uploadRequests = [];
   const signedUploads = [];
@@ -42,7 +42,7 @@ test('client submits app details and receives an intake reference', async ({ bas
 
   const [chooser] = await Promise.all([
     page.waitForEvent('filechooser'),
-    page.getByRole('button', { name: 'Choose files' }).click(),
+    page.getByRole('button', { name: 'Choose files' }).click(clickOptions),
   ]);
   await chooser.setFiles(logo);
   await expect(page.getByRole('list', { name: 'Uploaded files' }).getByText(logo.name)).toBeVisible();
@@ -54,7 +54,7 @@ test('client submits app details and receives an intake reference', async ({ bas
   await page.getByLabel('Short description').fill(client.appSummary);
   await page.getByLabel('Email me a confirmation').uncheck();
   await pause(1500);
-  await page.getByRole('button', { name: 'Send app details' }).click();
+  await page.getByRole('button', { name: 'Send app details' }).click(clickOptions);
   await expect(page.getByRole('heading', { name: 'We’ve received your app details' })).toBeVisible();
   await expect(page.getByText(reference, { exact: true })).toBeVisible();
   await expect(page.getByText(/On the kickoff call.*personal information.*health or fitness/)).toBeVisible();

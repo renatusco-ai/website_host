@@ -1,26 +1,29 @@
 import crypto from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
+import { INTAKE_NAMES } from './_storage.js';
+import {
+  ALLOWED_EXTENSIONS,
+  E164_RE,
+  EMAIL_RE,
+  LEGACY_INTAKE_VERSION,
+  MAX_FILES,
+  MAX_FILE_SIZE_BYTES,
+  QUICK_INTAKE_VERSION,
+  UUID_V4_RE,
+  getExtension,
+  isValidHttpUrl,
+  resolveIntakeObjectPath,
+  normalizePhone,
+  validateQuickIntakeAnswers,
+} from '../../src/data/appStoreIntake.js';
 
-export const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024; // 25 MB
-export const MAX_TOTAL_SIZE_BYTES = 100 * 1024 * 1024; // 100 MB
-export const MAX_FILES = 10;
+export {
+  ALLOWED_EXTENSIONS, E164_RE, EMAIL_RE, MAX_FILES, MAX_FILE_SIZE_BYTES, MAX_TOTAL_SIZE_BYTES,
+  UUID_V4_RE, getExtension, isValidHttpUrl, isValidSingleSegmentPath, normalizePhone,
+} from '../../src/data/appStoreIntake.js';
 export const MAX_JSON_BODY_BYTES = 100 * 1024; // 100 KB
 export const SIGNED_DOWNLOAD_TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days
-
-export const ALLOWED_EXTENSIONS = new Set([
-  '.png',
-  '.svg',
-  '.jpg',
-  '.jpeg',
-  '.webp',
-  '.pdf',
-  '.zip',
-  '.eps',
-  '.ttf',
-  '.otf',
-  '.woff2',
-]);
 
 export const ALLOWED_MIME_TYPES = new Set([
   'image/png',
@@ -38,11 +41,6 @@ export const ALLOWED_MIME_TYPES = new Set([
   'font/woff2',
   'application/octet-stream',
 ]);
-
-export const UUID_V4_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-export const E164_RE = /^\+[1-9]\d{6,14}$/;
-export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const ALLOWED_ENUMS = {
   publishingAccount: new Set(['renatus', 'own', 'unsure']),
@@ -149,43 +147,6 @@ export function sanitizeFilename(name) {
   return base || 'file';
 }
 
-export function getExtension(filename) {
-  const idx = filename.lastIndexOf('.');
-  if (idx <= 0) return '';
-  return filename.slice(idx).toLowerCase();
-}
-
-export function isValidSingleSegmentPath(sessionId, objectPath) {
-  if (!UUID_V4_RE.test(String(sessionId || ''))) return false;
-  if (typeof objectPath !== 'string') return false;
-  if (objectPath.includes('..')) return false;
-  const escaped = sessionId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re = new RegExp(`^${escaped}/[a-zA-Z0-9._-]+$`);
-  return re.test(objectPath);
-}
-
-export function normalizePhone(raw, defaultCountryCode = '+61') {
-  const cleaned = String(raw || '')
-    .trim()
-    .replace(/[\s\-().]/g, '');
-  if (!cleaned) return '';
-  if (cleaned.startsWith('+')) return cleaned;
-  if (cleaned.startsWith('00')) return `+${cleaned.slice(2)}`;
-  const digits = cleaned.replace(/^0+/, '');
-  return digits ? `${defaultCountryCode || '+61'}${digits}` : '';
-}
-
-export function isValidHttpUrl(raw) {
-  const str = String(raw || '').trim();
-  if (!str) return false;
-  try {
-    const parsed = new URL(str);
-    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
-  } catch {
-    return false;
-  }
-}
-
 export function sanitizeSubject(raw, maxLen = 120) {
   return String(raw || '')
     .replace(/[\r\n]+/g, ' ')
@@ -213,7 +174,7 @@ export function createSupabaseAdmin(env = process.env) {
 
 export async function checkRateLimit(supabase, keyHash, action, windowSeconds, maxHits) {
   if (!supabase) return true;
-  const { data, error } = await supabase.rpc('check_and_increment_rate_limit', {
+  const { data, error } = await supabase.rpc(INTAKE_NAMES.rateLimit, {
     p_key_hash: keyHash,
     p_action: action,
     p_window_seconds: windowSeconds,
@@ -258,8 +219,8 @@ export function validateUploadUrlRequest(body) {
   }
 
   const uniquePrefix = crypto.randomBytes(4).toString('hex');
-  const path = `${sessionId}/${uniquePrefix}-${filename}`;
-  return { data: { sessionId, filename, mimeType, sizeBytes, path } };
+  const objectName = `${uniquePrefix}-${filename}`;
+  return { data: { sessionId, filename, mimeType, sizeBytes, objectName } };
 }
 
 function trimmed(val) {
@@ -276,6 +237,20 @@ function normalizeArray(val) {
   return Array.from(new Set(val.map((v) => String(v || '').trim()).filter(Boolean)));
 }
 
+function validateClaimedAssets(raw, sessionId) {
+  const assets = Array.isArray(raw) ? raw : [];
+  const byName = new Map();
+  for (const asset of assets) {
+    const key = resolveIntakeObjectPath(sessionId, asset?.path);
+    if (!key) return { error: 'Invalid uploaded asset path.', status: 400 };
+    if (!byName.has(key.name)) byName.set(key.name, asset);
+  }
+  if (byName.size > MAX_FILES) {
+    return { error: `Maximum of ${MAX_FILES} files per submission allowed.`, status: 400 };
+  }
+  return { claimedAssets: [...byName.values()] };
+}
+
 export function validateIntakePayload(body) {
   if (!body || typeof body !== 'object') {
     return { error: 'Invalid request payload.', status: 400 };
@@ -290,6 +265,27 @@ export function validateIntakePayload(body) {
   }
 
   const a = body.answers && typeof body.answers === 'object' ? body.answers : {};
+  const submissionVersion = body.submissionVersion ?? LEGACY_INTAKE_VERSION;
+  if (submissionVersion === QUICK_INTAKE_VERSION) {
+    const { answers, errors } = validateQuickIntakeAnswers(a);
+    const [firstError] = Object.values(errors);
+    if (firstError) return { error: firstError, fieldErrors: errors, status: 400 };
+
+    const assets = validateClaimedAssets(body.assets, sessionId);
+    if (assets.error) return assets;
+    return {
+      data: {
+        sessionId,
+        submissionVersion,
+        answers,
+        claimedAssets: assets.claimedAssets,
+        sendClientCopy: body.sendClientCopy === true,
+      },
+    };
+  }
+  if (submissionVersion !== LEGACY_INTAKE_VERSION) {
+    return { error: 'Unsupported intake version. Refresh the form and try again.', status: 400 };
+  }
 
   // Step 1
   const legalName = trimmed(a.legalName);
@@ -487,28 +483,15 @@ export function validateIntakePayload(body) {
   }
   const sendClientCopy = Boolean(body.sendClientCopy);
 
-  // Deduplicate & validate claimed asset paths
-  const rawAssets = Array.isArray(body.assets) ? body.assets : [];
-  if (rawAssets.length > MAX_FILES) {
-    return { error: `Maximum of ${MAX_FILES} files per submission allowed.`, status: 400 };
-  }
-  const seenPaths = new Set();
-  const claimedAssets = [];
-  for (const asset of rawAssets) {
-    if (!isValidSingleSegmentPath(sessionId, asset?.path)) {
-      return { error: 'Invalid uploaded asset path.', status: 400 };
-    }
-    if (!seenPaths.has(asset.path)) {
-      seenPaths.add(asset.path);
-      claimedAssets.push(asset);
-    }
-  }
+  const assets = validateClaimedAssets(body.assets, sessionId);
+  if (assets.error) return assets;
 
   return {
     data: {
       sessionId,
+      submissionVersion,
       sendClientCopy,
-      claimedAssets,
+      claimedAssets: assets.claimedAssets,
       answers: {
         legalName,
         brandName,
@@ -999,9 +982,33 @@ export function computeReadinessGaps(a, verifiedAssets = []) {
   return gaps;
 }
 
+export function computeBrandFollowUps(answers, verifiedAssets) {
+  const followUps = [];
+  if (!answers.brandKitUrl && verifiedAssets.length === 0) {
+    followUps.push({
+      severity: 'Action Needed',
+      code: 'BRAND_ASSETS_MISSING',
+      title: 'Request the logo or brand kit',
+      detail: 'Ask for a logo file or shareable brand kit link before preparing app visuals.',
+    });
+  }
+  if (!answers.brandColors) {
+    followUps.push({
+      severity: 'Action Needed',
+      code: 'BRAND_COLORS_MISSING',
+      title: 'Confirm brand colours',
+      detail: 'Check the supplied brand materials or confirm colours with the client.',
+    });
+  }
+  return followUps;
+}
+
 export function buildShaunEmail(record, signedAssets = []) {
   const { id, answers: a, gaps } = record;
   const subject = `App Store Intake: ${sanitizeSubject(a.brandName, 60)} (${sanitizeSubject(a.appName, 30)})`;
+  const quickIntake = record.submissionVersion === QUICK_INTAKE_VERSION;
+  const summaryTitle = quickIntake ? 'Kickoff follow-ups' : 'Readiness & Gap Summary';
+  const nextSteps = 'Assign a Renatus owner and link this intake reference in the project workspace. Discuss personal information and health or fitness features at kickoff, then confirm both during the build.';
 
   const gapRowsHtml = gaps
     .map(
@@ -1025,7 +1032,17 @@ export function buildShaunEmail(record, signedAssets = []) {
         .join('')}</ul>`
     : '<p>No files uploaded directly.</p>';
 
-  const sections = [
+  const sections = quickIntake ? [
+    ['Record ID', id],
+    ['Legal Business Name', a.legalName],
+    ['Trading / Brand Name', a.brandName],
+    ['Primary Contact', `${a.contactName} (${a.contactEmail} / ${a.contactPhone})`],
+    ['Website', a.websiteUrl || '—'],
+    ['Brand Kit Link', a.brandKitUrl || '—'],
+    ['Brand Colours', a.brandColors || '—'],
+    ['Preferred App Name', a.appName],
+    ['App Description', a.appSummary],
+  ] : [
     ['Record ID', id],
     ['Legal Business Name', a.legalName],
     ['Brand Name', a.brandName],
@@ -1088,8 +1105,9 @@ export function buildShaunEmail(record, signedAssets = []) {
   const html = `
     <div style="font-family:system-ui,-apple-system,sans-serif;color:#126656;max-width:720px;">
       <h2>iOS App Store Intake — ${escapeHtml(a.brandName)} (${escapeHtml(a.appName)})</h2>
-      <h3>Readiness &amp; Gap Summary</h3>
-      <table style="border-collapse:collapse;width:100%;margin-bottom:20px;">${gapRowsHtml}</table>
+      <h3>${escapeHtml(summaryTitle)}</h3>
+      ${quickIntake ? `<p>${nextSteps}</p>` : ''}
+      ${gapRowsHtml ? `<table style="border-collapse:collapse;width:100%;margin-bottom:20px;">${gapRowsHtml}</table>` : ''}
       <h3>Uploaded Brand Assets (7-day download links)</h3>
       ${assetLinksHtml}
       <h3>Full Submission</h3>
@@ -1101,7 +1119,8 @@ export function buildShaunEmail(record, signedAssets = []) {
     `iOS App Store Intake — ${a.brandName} (${a.appName})`,
     `Record ID: ${id}`,
     '',
-    '=== READINESS & GAP SUMMARY ===',
+    summaryTitle,
+    ...(quickIntake ? [nextSteps] : []),
     ...gaps.map((g) => `[${g.severity}] ${g.title}: ${g.detail}`),
     '',
     '=== UPLOADED ASSETS (7-DAY DOWNLOAD LINKS) ===',
@@ -1120,8 +1139,14 @@ export function buildClientReceiptEmail(record) {
   // Static, spam-hardened receipt: NO attacker-controlled free text, NO arbitrary URLs, NO signed Storage links.
   const { id, createdAt, gaps } = record;
   const subject = 'We received your iOS App Store onboarding intake | Renatus';
+  const quickIntake = record.submissionVersion === QUICK_INTAKE_VERSION;
+  const nextSteps = quickIntake
+    ? 'On the kickoff call, we’ll discuss how your app will use personal information and any health or fitness features you have in mind.'
+    : 'Our team will review your submission and follow up with next steps shortly.';
+  const receiptGaps = quickIntake ? [] : gaps;
+  const summaryTitle = quickIntake ? 'What happens next' : 'Readiness Summary & Next Steps';
 
-  const itemsHtml = gaps
+  const itemsHtml = receiptGaps
     .map(
       (g) =>
         `<li><strong>${escapeHtml(g.severity)}:</strong> ${escapeHtml(g.clientTitle || 'Next step')} — ${escapeHtml(
@@ -1135,9 +1160,9 @@ export function buildClientReceiptEmail(record) {
       <h2>Thanks — we have received your iOS App Store onboarding intake.</h2>
       <p><strong>Reference ID:</strong> ${escapeHtml(id)}<br/>
       <strong>Submitted:</strong> ${escapeHtml(createdAt || new Date().toISOString())}</p>
-      <h3>Readiness Summary &amp; Next Steps</h3>
-      <ul>${itemsHtml}</ul>
-      <p>Our team will review your submission and follow up with next steps shortly.</p>
+      <h3>${escapeHtml(summaryTitle)}</h3>
+      ${itemsHtml ? `<ul>${itemsHtml}</ul>` : ''}
+      <p>${nextSteps}</p>
     </div>
   `.trim();
 
@@ -1146,10 +1171,10 @@ export function buildClientReceiptEmail(record) {
     `Reference ID: ${id}`,
     `Submitted: ${createdAt || new Date().toISOString()}`,
     '',
-    'Readiness Summary & Next Steps:',
-    ...gaps.map((g) => `- [${g.severity}] ${g.clientTitle || 'Next step'}: ${g.clientSummary || ''}`),
+    summaryTitle,
+    ...receiptGaps.map((g) => `- [${g.severity}] ${g.clientTitle || 'Next step'}: ${g.clientSummary || ''}`),
     '',
-    'Our team will review your submission and follow up with next steps shortly.',
+    nextSteps,
   ].join('\n');
 
   return { subject, html, text };
