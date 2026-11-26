@@ -20,6 +20,8 @@
     "resend": "^6.28.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/vite": "^4.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "sharp": "^0.35.1",

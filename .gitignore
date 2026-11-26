@@ -25,3 +25,7 @@ Thumbs.db
 
 # Vite
 *.local
+
+# Playwright
+test-results/
+demo-recordings/
