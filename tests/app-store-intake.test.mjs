@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import vm from 'node:vm';
 import {
   buildClientReceiptEmail,
   buildShaunEmail,
@@ -18,6 +20,18 @@ import {
 import { handleSubmitIntake } from '../api/app-store-intake/index.js';
 import { handleUploadUrl } from '../api/app-store-intake/upload-url.js';
 import { handleDeleteUpload } from '../api/app-store-intake/upload.js';
+import { handleStaffIntake } from '../api/app-store-intake/staff/index.js';
+import { handleStaffSession } from '../api/app-store-intake/staff/session.js';
+import {
+  ALL_ALLOWED_STAFF_VALUE_KEYS,
+  STAFF_BOOLEAN_KEYS,
+  STAFF_CONTROLS_VERSION,
+  validateStaffDraft,
+} from '../api/app-store-intake/_staffSchema.js';
+import {
+  isAuthorizedForIntake,
+  isRenatusStaff,
+} from '../api/app-store-intake/_staffAuth.js';
 import { intakeStorageNames } from '../api/app-store-intake/_storage.js';
 import { copyIntakeSubmission } from '../scripts/migrate-intake-storage.mjs';
 import { restoreIntakeDraft } from '../src/data/appStoreIntake.js';
@@ -372,16 +386,34 @@ test('quick payload validates only the client fields and uses the legacy contrac
   assert.deepEqual(quick.data.answers, {
     legalName: 'Summit Fitness Pty Ltd',
     brandName: 'Summit Fitness Pty Ltd',
+    brandNameMatchesLegalName: true,
     contactName: 'Sam Fitness',
     contactEmail: 'sam@example.test',
+    phoneCountryCode: '+61',
     contactPhone: '+61412345678',
     websiteUrl: null,
     brandKitUrl: null,
     brandColors: '',
     appName: 'Summit',
     appSummary: 'Members follow guided workouts and browse the class timetable.',
+    sendClientCopy: false,
   });
   assert.equal(quick.data.sendClientCopy, false);
+  const fullQuick = validateIntakePayload(quickPayload({
+    brandNameMatchesLegalName: false,
+    brandName: 'Summit Studio',
+    phoneCountryCode: '+64',
+    contactPhone: '021 123 4567',
+    websiteUrl: 'https://summit.example.test',
+    brandKitUrl: 'https://summit.example.test/brand',
+    brandColors: '#126656, #00E093',
+  }, { sendClientCopy: true }));
+  assert.equal(fullQuick.data.answers.brandNameMatchesLegalName, false);
+  assert.equal(fullQuick.data.answers.brandName, 'Summit Studio');
+  assert.equal(fullQuick.data.answers.phoneCountryCode, '+64');
+  assert.equal(fullQuick.data.answers.contactPhone, '+64211234567');
+  assert.equal(fullQuick.data.answers.sendClientCopy, true);
+  assert.equal(validateIntakePayload(quickPayload({ phoneCountryCode: 'invalid' })).status, 400);
   assert.equal(validateIntakePayload(makeTmcPayload()).data.submissionVersion, 1);
   assert.equal(validateIntakePayload(quickPayload({}, { submissionVersion: 3 })).status, 400);
   assert.equal(validateIntakePayload(quickPayload({}, { website: 'filled' })).status, 400);
@@ -723,4 +755,580 @@ test('the Storage copy job resumes after interruption and rejects wrong content 
   assert.equal(copies, 1);
   assert.deepEqual(expectedAssets, [{ ...assets[0], path: targetPath }]);
   assert.equal(await copyIntakeSubmission(supabase, names, { ...row, assets: expectedAssets }), false);
+});
+
+test('staff draft migration adds additive columns, constraints, and atomic RPC on intake_app_store_submissions alone', () => {
+  const migrationsDir = new URL('../supabase/migrations/', import.meta.url);
+  const files = readdirSync(migrationsDir).filter((name) => name.endsWith('.sql')).sort();
+  assert.ok(files.length >= 4);
+  const staffMigration = files.at(-1);
+  assert.match(staffMigration, /^\d{14}_intake_staff_draft\.sql$/);
+  assert.ok(staffMigration > '20261126021635_intake_storage_names.sql');
+
+  const sql = readFileSync(new URL(staffMigration, migrationsDir), 'utf8');
+  assert.match(sql, /alter table public\.intake_app_store_submissions/i);
+  assert.match(sql, /add column if not exists staff_draft jsonb/i);
+  assert.match(sql, /add column if not exists staff_revision bigint not null default 0/i);
+  assert.match(sql, /add column if not exists staff_saved_at timestamptz/i);
+  assert.match(sql, /add column if not exists staff_saved_by uuid/i);
+  assert.match(sql, /enable row level security/i);
+  assert.match(sql, /revoke all on table public\.intake_app_store_submissions from public, anon, authenticated/i);
+  assert.match(sql, /create or replace function public\.intake_save_staff_draft/i);
+  assert.match(sql, /where s\.id = p_id\s+and s\.staff_revision = p_expected_revision/i);
+  assert.match(sql, /revoke all on function public\.intake_save_staff_draft\([^)]+\)\s+from public, anon, authenticated/i);
+  assert.match(sql, /grant execute on function public\.intake_save_staff_draft\([^)]+\)\s+to service_role/i);
+  assert.doesNotMatch(sql, /create table/i);
+});
+
+test('staff draft schema validates allowed keys, booleans, dates, decimals, records, questions, and rejects unknown fields', () => {
+  const partialKickoff = validateStaffDraft({
+    controlsVersion: STAFF_CONTROLS_VERSION,
+    stage: 'kickoff',
+    values: {
+      appName: 'Summit',
+      brandName: 'Summit Fitness',
+      contactName: 'Sam Fitness',
+      owner: 'Alex Renatus',
+      dunsNumber: '000123456',
+      generalFitness: true,
+      healthKit: false,
+      'metadata-detail-monetization-price-schedule-price': '4.99',
+      'metadata-detail-monetization-price-schedule-effective': '2026-12-01',
+      'metadata-detail-monetization-price-schedule-end': '',
+      'metadata-previous-build-tests': 'Earlier free-text build note.',
+    },
+    records: {
+      'iap-subscriptions': {
+        durable: [
+          {
+            reference: 'Mobility Pack',
+            id: 'test.example.pack',
+            price: '4.99',
+            name: 'Mobility Pack',
+            description: 'Extended routines',
+            screenshot: 'STORE-120/pack.png',
+          },
+        ],
+      },
+      'release-blockers': {
+        other: [{ blocker: 'Waiting on client approval', owner: 'Alex' }],
+      },
+    },
+    questions: [{ text: 'Confirm support email?', owner: 'Alex', due: 'listing' }],
+  });
+  assert.ok(!partialKickoff.error, partialKickoff.error);
+  assert.equal(partialKickoff.data.values.dunsNumber, '000123456');
+  assert.equal(partialKickoff.data.values.generalFitness, true);
+  assert.equal(partialKickoff.data.values.healthKit, false);
+  assert.equal(partialKickoff.data.questions.length, 1);
+
+  // Reject string checkbox values, unknown keys, invalid dates/decimals/selects/stages
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'kickoff', values: { generalFitness: 'on' },
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'kickoff', values: { reference: SESSION_ID },
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'kickoff', values: { 'metadata-status-whats-new': 'not-applicable' },
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 2, stage: 'kickoff', values: {},
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'unknown', values: {},
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'legal', values: { privacyApprovedDate: '2026-02-30' },
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'kickoff', values: { 'metadata-detail-monetization-price-schedule-price': '-5' },
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'kickoff', values: { account: 'invalid_option' },
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'review', values: {}, extraKey: true,
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'review', values: {}, questions: [{ text: 'Q', owner: 'A', due: 'bad' }],
+  }).status, 400);
+  assert.equal(validateStaffDraft({
+    controlsVersion: 1, stage: 'listing', values: {}, records: { 'iap-subscriptions': { unknown: [] } },
+  }).status, 400);
+
+  // Verify schema parity with workspace Step 2 wizard controls when docs/app-store-intake/ is available
+  const htmlPath = new URL('../../docs/app-store-intake/renatus-step-2-intake.html', import.meta.url);
+  if (existsSync(htmlPath)) {
+    const html = readFileSync(htmlPath, 'utf8');
+    const fieldsSrc = readFileSync(new URL('../../docs/app-store-intake/app-store-connect-fields.js', import.meta.url), 'utf8');
+    const controlsSrc = readFileSync(new URL('../../docs/app-store-intake/renatus-step-2-controls.js', import.meta.url), 'utf8');
+    const wizardSrc = readFileSync(new URL('../../docs/app-store-intake/renatus-step-2-wizard.js', import.meta.url), 'utf8');
+
+    const ctx = {};
+    vm.runInNewContext(fieldsSrc + '\nthis.APP_STORE_CONNECT_SECTIONS = APP_STORE_CONNECT_SECTIONS;', ctx);
+    vm.runInNewContext(controlsSrc + '\nthis.supplementalStages = supplementalStages; this.structuredControls = structuredControls;', ctx);
+    const choiceGroupsMatch = wizardSrc.match(/const choiceGroups = (\{[\s\S]*?\n\});/);
+    const autoAppMatch = wizardSrc.match(/const automaticApplicability = new Map\(\[([\s\S]*?)\]\);/);
+    const autoAppIds = new Set([...autoAppMatch[1].matchAll(/\['([^']+)',/g)].map((m) => m[1]));
+    const ctx2 = {};
+    vm.runInNewContext('this.choiceGroups = ' + choiceGroupsMatch[1] + ';', ctx2);
+
+    const domKeys = new Set();
+    const domBooleans = new Set();
+    const step2Html = html.slice(html.indexOf('id="step-2"'));
+    for (const m of step2Html.matchAll(/<(input|select|textarea)\b[^>]*>/g)) {
+      const tag = m[0];
+      const nameM = tag.match(/\bname="([^"]+)"/);
+      if (!nameM || nameM[1] === 'reference') continue;
+      domKeys.add(nameM[1]);
+      if (/\btype="checkbox"/.test(tag)) domBooleans.add(nameM[1]);
+    }
+    const allFields = ctx.APP_STORE_CONNECT_SECTIONS.flatMap((s) => s.fields).filter((f) => f.source !== 'intake');
+    const collect = (field, supplemental = false) => {
+      const id = field.id;
+      const spec = ctx.structuredControls[id];
+      const mirror = spec?.mirror;
+      const group = mirror ? (ctx.structuredControls[mirror] || ctx2.choiceGroups[mirror]) : (spec || ctx2.choiceGroups[id]);
+      const hasSlot = step2Html.includes((supplemental ? 'data-intake-slot' : 'data-field-slot') + `="${id}"`);
+      if (hasSlot && !group) return;
+      if (field.req === 'conditional' && !autoAppIds.has(id) && id !== 'social-login-siwa') {
+        domKeys.add(`metadata-na-${id}`);
+        domBooleans.add(`metadata-na-${id}`);
+      }
+      if (group) {
+        if (!mirror) {
+          for (const key of Object.keys(group.options)) {
+            if (id === 'review-notes' && key === 'login') continue;
+            const name = id === 'health-fitness-medical' ? key : `metadata-choice-${id}-${key}`;
+            domKeys.add(name);
+            domBooleans.add(name);
+          }
+          if (group.other) {
+            domKeys.add(`metadata-other-${id}`);
+            domBooleans.add(`metadata-other-${id}`);
+            domKeys.add(`metadata-value-${id}`);
+          }
+          if (group.evidence) domKeys.add(`metadata-evidence-${id}`);
+          if (group.details) {
+            for (const d of group.details) domKeys.add(d.name || `metadata-detail-${id}-${d.key}`);
+          }
+          if (group.dataDetails) {
+            const types = { ...ctx2.choiceGroups['user-data-nutrition-labels'].options, other: 'Other' };
+            delete types.none;
+            for (const key of Object.keys(types)) {
+              domKeys.add(`metadata-detail-${id}-${key}-purpose`);
+              domKeys.add(`metadata-detail-${id}-${key}-recipients`);
+            }
+          }
+          if (group.evidencePerOption) {
+            for (const key of Object.keys(group.options)) domKeys.add(`metadata-detail-${id}-${key}-evidence`);
+          }
+        }
+        if (spec && (!mirror || id === 'platforms') && id !== 'listing-assets') {
+          domKeys.add(`metadata-previous-${id}`);
+        }
+      } else {
+        domKeys.add(`metadata-value-${id}`);
+      }
+    };
+    for (const id of Object.keys(ctx.supplementalStages)) collect({ id }, true);
+    for (const f of allFields) collect(f, false);
+
+    assert.deepEqual([...domKeys].sort(), [...ALL_ALLOWED_STAFF_VALUE_KEYS].sort());
+    assert.deepEqual([...domBooleans].sort(), [...STAFF_BOOLEAN_KEYS].sort());
+  }
+});
+
+test('staff authorization fails closed, ignores user_metadata spoofing, and enforces row scope', () => {
+  const rowA = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+  const rowB = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+
+  assert.equal(isRenatusStaff({ id: 'u1', email: 'client@example.test', email_confirmed_at: '2026-01-01T00:00:00Z' }, {}), false);
+  // Spoofed user_metadata must NEVER authorize staff access
+  assert.equal(isRenatusStaff({
+    id: 'u2',
+    email: 'attacker@example.test',
+    user_metadata: { role: 'renatus_staff', renatus_staff: true },
+    app_metadata: {},
+  }, {}), false);
+
+  // Server-controlled app_metadata grants staff access
+  assert.equal(isRenatusStaff({ id: 'u3', app_metadata: { role: 'renatus_staff' } }, {}), true);
+  assert.equal(isRenatusStaff({ id: 'u4', app_metadata: { renatus_staff: true } }, {}), true);
+  assert.equal(isRenatusStaff({ id: 'u5', app_metadata: { roles: ['staff'] } }, {}), true);
+
+  // Banned user is denied even with app_metadata
+  assert.equal(isRenatusStaff({
+    id: 'u6',
+    app_metadata: { role: 'renatus_staff' },
+    banned_until: '2099-01-01T00:00:00Z',
+  }, {}), false);
+
+  // Domain/email allowlists require confirmed email
+  const domainEnv = { INTAKE_STAFF_EMAIL_DOMAINS: 'renatusco.com' };
+  assert.equal(isRenatusStaff({ id: 'u7', email: 'shaun@renatusco.com', email_confirmed_at: null }, domainEnv), false);
+  assert.equal(isRenatusStaff({ id: 'u7', email: 'shaun@renatusco.com', email_confirmed_at: '2026-01-01T00:00:00Z' }, domainEnv), true);
+
+  // Scoped staff allowed_intake_ids enforces row-level authorization
+  const scopedStaff = { id: 'u8', app_metadata: { role: 'staff', allowed_intake_ids: [rowA] } };
+  assert.equal(isAuthorizedForIntake(scopedStaff, rowA, {}), true);
+  assert.equal(isAuthorizedForIntake(scopedStaff, rowB, {}), false);
+});
+
+test('staff endpoints enforce auth, preserve Step 1 answers, separate references, and prevent stale concurrent overwrites', async (t) => {
+  const env = {
+    SUPABASE_URL: 'https://supabase.example.test',
+    SUPABASE_SERVICE_ROLE_KEY: 'test-service-key',
+    SUPABASE_ANON_KEY: 'test-anon-key',
+    RATE_LIMIT_SALT: 'test-salt',
+  };
+
+  const rowAId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+  const rowBId = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+  const staffUserA = {
+    id: '11111111-1111-4111-8111-111111111111',
+    email: 'alex@renatusco.com',
+    email_confirmed_at: '2026-01-01T00:00:00Z',
+    app_metadata: { role: 'renatus_staff' },
+  };
+  const staffUserB = {
+    id: '22222222-2222-4222-8222-222222222222',
+    email: 'sam@renatusco.com',
+    email_confirmed_at: '2026-01-01T00:00:00Z',
+    app_metadata: { role: 'renatus_staff' },
+  };
+  const scopedUser = {
+    id: '33333333-3333-4333-8333-333333333333',
+    email: 'contractor@renatusco.com',
+    email_confirmed_at: '2026-01-01T00:00:00Z',
+    app_metadata: { role: 'staff', allowed_intake_ids: [rowAId] },
+  };
+  const nonStaffUser = {
+    id: '44444444-4444-4444-8444-444444444444',
+    email: 'client@example.test',
+    email_confirmed_at: '2026-01-01T00:00:00Z',
+    user_metadata: { role: 'renatus_staff' },
+    app_metadata: {},
+  };
+
+  const tokenToUser = new Map([
+    ['token-staff-a', staffUserA],
+    ['token-staff-b', staffUserB],
+    ['token-scoped', scopedUser],
+    ['token-client', nonStaffUser],
+  ]);
+
+  const rows = new Map([
+    [rowAId, {
+      id: rowAId,
+      session_id: SESSION_ID,
+      created_at: '2026-11-26T00:00:00Z',
+      status: 'new',
+      submission_version: 2,
+      legal_name: 'Summit Fitness Pty Ltd',
+      brand_name: 'Summit Fitness',
+      contact_name: 'Sam Client',
+      contact_email: 'sam@summit.example.test',
+      contact_phone: '+61412345678',
+      website_url: 'https://summit.example.test',
+      app_name: 'Summit',
+      publishing_account: null,
+      answers: {
+        legalName: 'Summit Fitness Pty Ltd',
+        brandName: 'Summit Fitness',
+        brandNameMatchesLegalName: false,
+        contactName: 'Sam Client',
+        contactEmail: 'sam@summit.example.test',
+        phoneCountryCode: '+61',
+        contactPhone: '+61412345678',
+        websiteUrl: 'https://summit.example.test',
+        brandKitUrl: 'https://summit.example.test/brand',
+        brandColors: '#126656',
+        appName: 'Summit',
+        appSummary: 'Guided workouts.',
+        sendClientCopy: true,
+      },
+      assets: [{ path: `intake/${SESSION_ID}/abcdef12-logo.png`, name: 'logo.png', size: 1024, mimeType: 'image/png' }],
+      gaps: [],
+      client_ip_hash: 'secret-ip-hash',
+      staff_draft: null,
+      staff_revision: 0,
+      staff_saved_at: null,
+      staff_saved_by: null,
+    }],
+    [rowBId, {
+      id: rowBId,
+      session_id: '22222222-2222-4222-8222-222222222222',
+      created_at: '2026-11-26T01:00:00Z',
+      status: 'new',
+      submission_version: 2,
+      legal_name: 'Harbour Studio Pty Ltd',
+      brand_name: 'Harbour Studio',
+      contact_name: 'Pat Client',
+      contact_email: 'pat@harbour.example.test',
+      contact_phone: '+61491570001',
+      website_url: null,
+      app_name: 'Harbour',
+      publishing_account: null,
+      answers: { legalName: 'Harbour Studio Pty Ltd', appName: 'Harbour' },
+      assets: [],
+      gaps: [],
+      client_ip_hash: 'secret-ip-hash-2',
+      staff_draft: null,
+      staff_revision: 0,
+      staff_saved_at: null,
+      staff_saved_by: null,
+    }],
+  ]);
+
+  let saveCounter = 0;
+
+  t.mock.method(globalThis, 'fetch', async (input, init) => {
+    const url = new URL(input);
+    const headers = new Headers(init?.headers || {});
+    if (url.pathname === '/auth/v1/user') {
+      const auth = headers.get('authorization') || '';
+      const token = auth.replace(/^Bearer\s+/i, '');
+      const user = tokenToUser.get(token);
+      if (!user) return Response.json({ message: 'Invalid JWT' }, { status: 401 });
+      return Response.json(user);
+    }
+    if (url.pathname === '/auth/v1/token' && url.searchParams.get('grant_type') === 'password') {
+      const { email, password } = JSON.parse(init.body);
+      if (email === 'alex@renatusco.com' && password === 'correct-pass') {
+        return Response.json({
+          access_token: 'token-staff-a',
+          token_type: 'bearer',
+          expires_in: 3600,
+          expires_at: 1900000000,
+          refresh_token: 'refresh-a',
+          user: staffUserA,
+        });
+      }
+      if (email === 'client@example.test' && password === 'client-pass') {
+        return Response.json({
+          access_token: 'token-client',
+          token_type: 'bearer',
+          expires_in: 3600,
+          expires_at: 1900000000,
+          refresh_token: 'refresh-client',
+          user: nonStaffUser,
+        });
+      }
+      return Response.json({ error: 'invalid_grant', error_description: 'Invalid login credentials' }, { status: 400 });
+    }
+    if (url.pathname === '/rest/v1/rpc/intake_check_and_increment_rate_limit') {
+      return Response.json(true);
+    }
+    if (url.pathname === '/rest/v1/intake_app_store_submissions' && init.method === 'GET') {
+      const id = url.searchParams.get('id')?.slice(3);
+      const row = rows.get(id);
+      if (!row) return Response.json([]);
+      const selectCols = (url.searchParams.get('select') || '').split(',').map((c) => c.trim()).filter(Boolean);
+      const projected = selectCols.length
+        ? Object.fromEntries(selectCols.map((c) => [c, row[c]]))
+        : row;
+      return Response.json([projected]);
+    }
+    if (url.pathname === '/rest/v1/rpc/intake_save_staff_draft' && init.method === 'POST') {
+      const { p_id, p_expected_revision, p_staff_draft, p_staff_saved_by } = JSON.parse(init.body);
+      const row = rows.get(p_id);
+      if (!row) {
+        return Response.json([{ outcome: 'not_found', id: null, staff_draft: null, staff_revision: null, staff_saved_at: null, staff_saved_by: null }]);
+      }
+      if (row.staff_revision !== p_expected_revision) {
+        return Response.json([{
+          outcome: 'conflict',
+          id: row.id,
+          staff_draft: row.staff_draft,
+          staff_revision: row.staff_revision,
+          staff_saved_at: row.staff_saved_at,
+          staff_saved_by: row.staff_saved_by,
+        }]);
+      }
+      saveCounter += 1;
+      row.staff_draft = p_staff_draft;
+      row.staff_revision += 1;
+      row.staff_saved_at = `2026-11-26T09:00:0${saveCounter}Z`;
+      row.staff_saved_by = p_staff_saved_by;
+      return Response.json([{
+        outcome: 'updated',
+        id: row.id,
+        staff_draft: row.staff_draft,
+        staff_revision: row.staff_revision,
+        staff_saved_at: row.staff_saved_at,
+        staff_saved_by: row.staff_saved_by,
+      }]);
+    }
+    assert.fail('Unexpected Supabase call: ' + url.pathname);
+  });
+
+  async function call(handler, { method = 'GET', url = '/', body, headers = {} } = {}) {
+    const result = { headers: {} };
+    const res = {
+      setHeader(name, value) { result.headers[name.toLowerCase()] = value; return this; },
+      status(code) { result.status = code; return this; },
+      json(json) { result.json = json; },
+      end() {},
+    };
+    await handler({ method, url, body, headers }, res, env);
+    return result;
+  }
+
+  // Session sign-in / check / sign-out
+  const badLogin = await call(handleStaffSession, {
+    method: 'POST', body: { email: 'alex@renatusco.com', password: 'wrong' },
+  });
+  assert.equal(badLogin.status, 401);
+
+  const nonStaffLogin = await call(handleStaffSession, {
+    method: 'POST', body: { email: 'client@example.test', password: 'client-pass' },
+  });
+  assert.equal(nonStaffLogin.status, 403);
+  assert.match(nonStaffLogin.headers['set-cookie'], /Max-Age=0/);
+
+  const goodLogin = await call(handleStaffSession, {
+    method: 'POST', body: { email: 'alex@renatusco.com', password: 'correct-pass' },
+  });
+  assert.equal(goodLogin.status, 200);
+  assert.equal(goodLogin.json.accessToken, 'token-staff-a');
+  assert.match(goodLogin.headers['set-cookie'], /renatus_staff_session=token-staff-a; HttpOnly; SameSite=Lax/);
+
+  const sessionCheck = await call(handleStaffSession, {
+    method: 'GET', headers: { cookie: 'renatus_staff_session=token-staff-a' },
+  });
+  assert.equal(sessionCheck.status, 200);
+  assert.equal(sessionCheck.json.authenticated, true);
+  assert.equal(sessionCheck.json.user.email, 'alex@renatusco.com');
+
+  const signOut = await call(handleStaffSession, { method: 'DELETE' });
+  assert.equal(signOut.status, 200);
+  assert.match(signOut.headers['set-cookie'], /Max-Age=0/);
+
+  // Unauthenticated and unauthorized reads and saves
+  assert.equal((await call(handleStaffIntake, { method: 'GET', url: `/?reference=${rowAId}` })).status, 401);
+  assert.equal((await call(handleStaffIntake, {
+    method: 'PUT',
+    body: { reference: rowAId, expectedRevision: 0, staffDraft: { controlsVersion: 1, stage: 'kickoff', values: {} } },
+  })).status, 401);
+  assert.equal((await call(handleStaffIntake, {
+    method: 'GET', url: `/?reference=${rowAId}`, headers: { authorization: 'Bearer token-client' },
+  })).status, 403);
+  assert.equal((await call(handleStaffIntake, {
+    method: 'PUT',
+    headers: { authorization: 'Bearer token-client' },
+    body: { reference: rowAId, expectedRevision: 0, staffDraft: { controlsVersion: 1, stage: 'kickoff', values: {} } },
+  })).status, 403);
+
+  // Scoped staff authorized for rowA, forbidden for rowB
+  assert.equal((await call(handleStaffIntake, {
+    method: 'GET', url: `/?reference=${rowAId}`, headers: { authorization: 'Bearer token-scoped' },
+  })).status, 200);
+  assert.equal((await call(handleStaffIntake, {
+    method: 'GET', url: `/?reference=${rowBId}`, headers: { authorization: 'Bearer token-scoped' },
+  })).status, 403);
+  assert.equal((await call(handleStaffIntake, {
+    method: 'PUT',
+    headers: { authorization: 'Bearer token-scoped' },
+    body: { reference: rowBId, expectedRevision: 0, staffDraft: { controlsVersion: 1, stage: 'kickoff', values: {} } },
+  })).status, 403);
+
+  // Invalid and missing reference
+  assert.equal((await call(handleStaffIntake, {
+    method: 'GET', url: '/?reference=not-a-uuid', headers: { authorization: 'Bearer token-staff-a' },
+  })).status, 400);
+  assert.equal((await call(handleStaffIntake, {
+    method: 'GET',
+    url: '/?reference=cccccccc-cccc-4ccc-8ccc-cccccccccccc',
+    headers: { authorization: 'Bearer token-staff-a' },
+  })).status, 404);
+
+  // Existing row without staff_draft opens cleanly without exposing client_ip_hash
+  const originalClientAnswers = structuredClone(rows.get(rowAId).answers);
+  const loadedA = await call(handleStaffIntake, {
+    method: 'GET', url: `/?reference=${rowAId}`, headers: { authorization: 'Bearer token-staff-a' },
+  });
+  assert.equal(loadedA.status, 200);
+  assert.equal(loadedA.headers['cache-control'], 'no-store');
+  assert.equal(loadedA.json.intake.staffDraft, null);
+  assert.equal(loadedA.json.intake.staffRevision, 0);
+  assert.equal(loadedA.json.intake.handoff.appName, 'Summit');
+  assert.equal(loadedA.json.intake.client_ip_hash, undefined);
+
+  // Concurrent edit test: Staff A and Staff B both start at revision 0
+  const saveA = await call(handleStaffIntake, {
+    method: 'PUT',
+    headers: { authorization: 'Bearer token-staff-a' },
+    body: {
+      reference: rowAId,
+      expectedRevision: 0,
+      staffDraft: {
+        controlsVersion: 1,
+        stage: 'build',
+        values: { owner: 'Alex', build: '1.0 (12)', generalFitness: true, healthKit: false },
+        records: {},
+        questions: [],
+      },
+    },
+  });
+  assert.equal(saveA.status, 200);
+  assert.equal(saveA.json.staffRevision, 1);
+  assert.equal(saveA.json.staffSavedBy, staffUserA.id);
+
+  // Staff B submits a stale save with expectedRevision 0 -> 409 conflict without overwriting Staff A's work
+  const staleSaveB = await call(handleStaffIntake, {
+    method: 'PUT',
+    headers: { authorization: 'Bearer token-staff-b' },
+    body: {
+      reference: rowAId,
+      expectedRevision: 0,
+      staffDraft: {
+        controlsVersion: 1,
+        stage: 'kickoff',
+        values: { owner: 'Sam (stale overwrite)' },
+        records: {},
+        questions: [],
+      },
+    },
+  });
+  assert.equal(staleSaveB.status, 409);
+  assert.equal(staleSaveB.json.code, 'REVISION_CONFLICT');
+  assert.equal(staleSaveB.json.currentRevision, 1);
+  assert.equal(staleSaveB.json.staffDraft.values.owner, 'Alex');
+  assert.equal(rows.get(rowAId).staff_draft.values.owner, 'Alex');
+  assert.equal(rows.get(rowAId).staff_revision, 1);
+
+  // Step 1 client answers remain completely intact after staff save
+  assert.deepEqual(rows.get(rowAId).answers, originalClientAnswers);
+
+  // Independent draft on rowB does not affect rowA
+  const saveB = await call(handleStaffIntake, {
+    method: 'PUT',
+    headers: { authorization: 'Bearer token-staff-b' },
+    body: {
+      reference: rowBId,
+      expectedRevision: 0,
+      staffDraft: {
+        controlsVersion: 1,
+        stage: 'legal',
+        values: { owner: 'Sam', privacyVersion: '2.0' },
+        records: {},
+        questions: [],
+      },
+    },
+  });
+  assert.equal(saveB.status, 200);
+  assert.equal(saveB.json.staffRevision, 1);
+
+  const reloadA = await call(handleStaffIntake, {
+    method: 'GET', url: `/?reference=${rowAId}`, headers: { authorization: 'Bearer token-staff-a' },
+  });
+  const reloadB = await call(handleStaffIntake, {
+    method: 'GET', url: `/?reference=${rowBId}`, headers: { authorization: 'Bearer token-staff-b' },
+  });
+  assert.equal(reloadA.json.intake.staffDraft.stage, 'build');
+  assert.equal(reloadA.json.intake.staffDraft.values.owner, 'Alex');
+  assert.equal(reloadB.json.intake.staffDraft.stage, 'legal');
+  assert.equal(reloadB.json.intake.staffDraft.values.owner, 'Sam');
 });

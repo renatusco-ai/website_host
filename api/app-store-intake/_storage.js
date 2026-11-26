@@ -7,6 +7,7 @@ export const INTAKE_NAMES = Object.freeze({
   touchUpload: 'intake_touch_upload_session',
   markRemoved: 'intake_mark_asset_removed',
   orphans: 'intake_list_orphan_assets',
+  saveStaffDraft: 'intake_save_staff_draft',
   bucket: 'intake-app-store-assets',
   oldBucket: 'app-store-intake-assets',
 });

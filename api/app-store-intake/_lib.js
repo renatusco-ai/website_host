@@ -23,6 +23,8 @@ export {
   UUID_V4_RE, getExtension, isValidHttpUrl, isValidSingleSegmentPath, normalizePhone,
 } from '../../src/data/appStoreIntake.js';
 export const MAX_JSON_BODY_BYTES = 100 * 1024; // 100 KB
+export const MAX_STAFF_DRAFT_BODY_BYTES = 256 * 1024; // 256 KB
+export const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export const SIGNED_DOWNLOAD_TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days
 
 export const ALLOWED_MIME_TYPES = new Set([
@@ -75,14 +77,14 @@ export function isUnsureValue(val) {
   return UNSURE_VALUES.has(str) || str.toLowerCase().startsWith('not sure');
 }
 
-export function checkJsonBodySize(req) {
+export function checkJsonBodySize(req, maxBytes = MAX_JSON_BODY_BYTES) {
   const headerLen = Number(req?.headers?.['content-length']);
-  if (Number.isFinite(headerLen) && headerLen > MAX_JSON_BODY_BYTES) {
+  if (Number.isFinite(headerLen) && headerLen > maxBytes) {
     return { error: 'Request payload too large.', status: 413 };
   }
   const serialized =
     typeof req?.body === 'string' ? req.body : JSON.stringify(req?.body ?? {});
-  if (Buffer.byteLength(serialized, 'utf8') > MAX_JSON_BODY_BYTES) {
+  if (Buffer.byteLength(serialized, 'utf8') > maxBytes) {
     return { error: 'Request payload too large.', status: 413 };
   }
   return null;
@@ -273,13 +275,14 @@ export function validateIntakePayload(body) {
 
     const assets = validateClaimedAssets(body.assets, sessionId);
     if (assets.error) return assets;
+    const sendClientCopy = body.sendClientCopy === true;
     return {
       data: {
         sessionId,
         submissionVersion,
-        answers,
+        answers: { ...answers, sendClientCopy },
         claimedAssets: assets.claimedAssets,
-        sendClientCopy: body.sendClientCopy === true,
+        sendClientCopy,
       },
     };
   }

@@ -130,15 +130,22 @@ function text(value) {
   return typeof value === 'string' ? value.trim() : '';
 }
 
+export const PHONE_COUNTRY_CODE_RE = /^\+[1-9]\d{0,3}$/;
+
 export function validateQuickIntakeAnswers(input) {
   const a = input ?? {};
   const legalName = text(a.legalName);
+  const brandNameMatchesLegalName = a.brandNameMatchesLegalName === true;
+  const rawCountryCode = text(a.phoneCountryCode);
+  const phoneCountryCode = rawCountryCode || '+61';
   const answers = {
     legalName,
-    brandName: a.brandNameMatchesLegalName === true ? legalName : text(a.brandName),
+    brandName: brandNameMatchesLegalName ? legalName : text(a.brandName),
+    brandNameMatchesLegalName,
     contactName: text(a.contactName),
     contactEmail: text(a.contactEmail).toLowerCase(),
-    contactPhone: normalizePhone(text(a.contactPhone), text(a.phoneCountryCode)),
+    phoneCountryCode,
+    contactPhone: normalizePhone(text(a.contactPhone), phoneCountryCode),
     websiteUrl: text(a.websiteUrl) || null,
     brandKitUrl: text(a.brandKitUrl) || null,
     brandColors: text(a.brandColors),
@@ -152,7 +159,7 @@ export function validateQuickIntakeAnswers(input) {
     ['brandName', 'trading or brand name'],
     ['contactName', 'contact name'],
   ]) {
-    if (field === 'brandName' && a.brandNameMatchesLegalName === true) continue;
+    if (field === 'brandName' && brandNameMatchesLegalName) continue;
     if (!answers[field]) {
       errors[field] = 'Enter your ' + label + '.';
     } else if (answers[field].length > 200) {
@@ -160,7 +167,9 @@ export function validateQuickIntakeAnswers(input) {
     }
   }
   if (!EMAIL_RE.test(answers.contactEmail)) errors.contactEmail = 'Enter a valid contact email address.';
-  if (!E164_RE.test(answers.contactPhone)) errors.contactPhone = 'Enter a valid phone number, including its country code.';
+  if (!PHONE_COUNTRY_CODE_RE.test(phoneCountryCode) || !E164_RE.test(answers.contactPhone)) {
+    errors.contactPhone = 'Enter a valid phone number, including its country code.';
+  }
   if (answers.websiteUrl && (!/^https?:\/\//i.test(answers.websiteUrl) || !isValidHttpUrl(answers.websiteUrl))) {
     errors.websiteUrl = 'Enter a website URL starting with https:// or http://.';
   }

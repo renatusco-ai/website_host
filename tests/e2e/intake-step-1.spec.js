@@ -75,3 +75,63 @@ test('client submits app details and receives an intake reference', async ({ bas
   } }]);
   await pause(2500);
 });
+
+test('Step 1 persists brand-match, phone country code, send-copy preference, and handles idempotent retry', async ({ page, intake }) => {
+  const { client, reference } = intake;
+  let storedRow = null;
+  let submitCalls = 0;
+
+  await page.route('/api/app-store-intake', async route => {
+    submitCalls += 1;
+    const payload = route.request().postDataJSON();
+    if (storedRow && storedRow.session_id === payload.sessionId) {
+      await route.fulfill({ json: { ok: true, id: storedRow.id, duplicate: true } });
+      return;
+    }
+    storedRow = {
+      id: reference,
+      session_id: payload.sessionId,
+      answers: {
+        ...payload.answers,
+        brandName: payload.answers.brandNameMatchesLegalName ? payload.answers.legalName : payload.answers.brandName,
+        sendClientCopy: payload.sendClientCopy === true,
+      },
+    };
+    await route.fulfill({ json: { ok: true, id: reference, emailDelivered: true } });
+  });
+
+  await page.goto('/app-store-intake');
+  await page.getByLabel('Legal business name', { exact: true }).fill(client.legalName);
+  await page.getByLabel('Same as the legal business name').check();
+  await expect(page.getByLabel('Trading or brand name')).toBeDisabled();
+  await page.getByLabel('Primary contact name').fill(client.contactName);
+  await page.getByLabel('Contact email').fill(client.contactEmail);
+  await page.getByLabel('Phone country code').selectOption('+64');
+  await page.getByLabel('Contact phone', { exact: true }).fill('021 555 0100');
+  await page.getByLabel('Business website').fill(client.websiteUrl);
+  await page.getByLabel('Brand kit link').fill(client.brandKitUrl);
+  await page.getByLabel('Brand colours').fill(client.brandColors);
+  await page.getByLabel('Preferred app name').fill(client.appName);
+  await page.getByLabel('Short description').fill(client.appSummary);
+  await expect(page.getByLabel('Email me a confirmation')).toBeChecked();
+
+  await page.getByRole('button', { name: 'Send app details' }).click();
+  await expect(page.getByRole('heading', { name: 'We’ve received your app details' })).toBeVisible();
+  await expect(page.getByText(reference, { exact: true })).toBeVisible();
+  expect(storedRow.answers.brandNameMatchesLegalName).toBe(true);
+  expect(storedRow.answers.brandName).toBe(client.legalName);
+  expect(storedRow.answers.phoneCountryCode).toBe('+64');
+  expect(storedRow.answers.sendClientCopy).toBe(true);
+  expect(submitCalls).toBe(1);
+
+  // Repeat the same session submission via API and confirm it resolves to the same reference
+  const retry = await page.evaluate(async (sessionId) => {
+    const res = await fetch('/api/app-store-intake', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId }),
+    });
+    return res.json();
+  }, storedRow.session_id);
+  expect(retry).toEqual({ ok: true, id: reference, duplicate: true });
+});

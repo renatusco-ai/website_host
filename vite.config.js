@@ -2,13 +2,19 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { parseEnquiry, sendEnquiry } from './api/send-enquiry.js';
-import { MAX_JSON_BODY_BYTES } from './api/app-store-intake/_lib.js';
+import { MAX_JSON_BODY_BYTES, MAX_STAFF_DRAFT_BODY_BYTES } from './api/app-store-intake/_lib.js';
 import { handleUploadUrl } from './api/app-store-intake/upload-url.js';
 import { handleDeleteUpload } from './api/app-store-intake/upload.js';
 import { handleSubmitIntake } from './api/app-store-intake/index.js';
+import { handleStaffSession } from './api/app-store-intake/staff/session.js';
+import { handleStaffIntake } from './api/app-store-intake/staff/index.js';
 
 function createVercelResAdapter(res) {
   return {
+    setHeader(name, value) {
+      res.setHeader(name, value);
+      return this;
+    },
     status(code) {
       res.statusCode = code;
       return this;
@@ -21,6 +27,23 @@ function createVercelResAdapter(res) {
       res.end(data);
     },
   };
+}
+
+function applyLoopbackCors(req, res) {
+  const origin = req.headers?.origin;
+  if (typeof origin !== 'string') return;
+  try {
+    const parsed = new URL(origin);
+    if (parsed.hostname === '127.0.0.1' || parsed.hostname === 'localhost') {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      res.setHeader('Vary', 'Origin');
+    }
+  } catch {
+    // Ignore malformed origin headers.
+  }
 }
 
 function readJsonBody(req, maxBytes = MAX_JSON_BODY_BYTES) {
@@ -63,6 +86,34 @@ function localApiPlugin(env) {
     name: 'local-api',
     configureServer(server) {
       // Register specific intake routes BEFORE /api/app-store-intake to prevent Connect prefix swallowing
+      server.middlewares.use('/api/app-store-intake/staff/session', async (req, res, next) => {
+        if (req.url && req.url !== '/' && !req.url.startsWith('/?')) return next();
+        applyLoopbackCors(req, res);
+        const adapter = createVercelResAdapter(res);
+        if (req.method === 'OPTIONS') return handleStaffSession(req, adapter, env);
+        try {
+          if (req.method === 'POST') req.body = await readJsonBody(req);
+          await handleStaffSession(req, adapter, env);
+        } catch (err) {
+          adapter.status(err.status || 400).json({ error: err.message || 'Invalid request' });
+        }
+      });
+
+      server.middlewares.use('/api/app-store-intake/staff', async (req, res, next) => {
+        if (req.url && req.url !== '/' && !req.url.startsWith('/?')) return next();
+        applyLoopbackCors(req, res);
+        const adapter = createVercelResAdapter(res);
+        if (req.method === 'OPTIONS') return handleStaffIntake(req, adapter, env);
+        try {
+          if (req.method === 'PUT' || req.method === 'POST' || req.method === 'PATCH') {
+            req.body = await readJsonBody(req, MAX_STAFF_DRAFT_BODY_BYTES);
+          }
+          await handleStaffIntake(req, adapter, env);
+        } catch (err) {
+          adapter.status(err.status || 400).json({ error: err.message || 'Invalid request' });
+        }
+      });
+
       server.middlewares.use('/api/app-store-intake/upload-url', async (req, res, next) => {
         if (req.url && req.url !== '/' && !req.url.startsWith('/?')) return next();
         const adapter = createVercelResAdapter(res);
