@@ -3,9 +3,12 @@ import { defineConfig } from '@playwright/test';
 
 const clientOrigin = 'http://127.0.0.1:4173';
 const staffOrigin = 'http://127.0.0.1:4174';
-const staffURL = `${staffOrigin}/renatus-step-2-intake.html`;
-const staffDocsAvailable = ['renatus-step-2-intake.html', 'renatus-step-2-wizard.js', 'app-store-connect-fields.js']
-  .every(file => existsSync(new URL(`../docs/${file}`, import.meta.url)));
+const staffDocsFolder = 'app-store-intake';
+const staffURL = `${staffOrigin}/${staffDocsFolder}/renatus-step-2-intake.html`;
+const staffDocsAvailable = [
+  'renatus-step-2-intake.html', 'renatus-step-2-wizard.js', 'renatus-step-2-controls.js', 'app-store-connect-fields.js',
+]
+  .every(file => existsSync(new URL(`../docs/${staffDocsFolder}/${file}`, import.meta.url)));
 
 export default defineConfig({
   testDir: './tests/e2e',

@@ -2,27 +2,22 @@ export function staffIntakeSample(client, staff) {
   const site = client.websiteUrl;
   const app = client.appName;
   const domain = new URL(site).hostname;
-  const storefronts = 'Australia and New Zealand';
   const approvalDate = '2026-11-25';
   const stages = {
     kickoff: {
       owner: staff.owner,
       account: 'client_org',
-      scope: `Public iPhone and iPad release in ${storefronts}. Free access. Client owns the content.`,
+      scope: 'Confirm the translated listing copy with the client before launch.',
       legalEntity: client.legalName,
       enrolment: 'Active organisation',
       dunsStatus: 'Confirmed',
       dunsNumber: '000000000',
       accountHolder: `apple-owner@${domain}`,
       teamId: 'DEMO123456',
-      usage: 'Use name and email for accounts and bookings. Optional Apple Health workouts stay on the device.',
       open: 'Client confirmed launch scope and device support at kickoff.',
     },
     build: {
       build: staff.releaseBuild,
-      findings: 'Verified against release build',
-      verification: 'Contact details go to the booking provider. Delete the account in Settings. Workout data stays on-device.',
-      buildEvidence: 'QA-104 checked email sign-in, account deletion, HealthKit permissions and tracking settings.',
     },
     legal: {
       privacy: `${site}/privacy · policy checked against QA-104`,
@@ -43,7 +38,6 @@ export function staffIntakeSample(client, staff) {
     listing: {
       storeRecord: 'https://appstoreconnect.example.test/apps/1000000001',
       support: staff.supportUrl,
-      listingAssets: 'STORE-120 · approved copy and iPhone/iPad screenshot sets',
       listing: true,
       age: true,
       disclosures: true,
@@ -51,11 +45,7 @@ export function staffIntakeSample(client, staff) {
     },
     review: {
       signin: 'Yes, demo login required',
-      reviewTested: true,
       reviewEvidence: 'QA-108 · reviewer login and sample booking tested on the release build',
-      notes: staff.reviewNotes,
-      blockers: 'REL-108 · Support link and reviewer access tested. All blockers cleared.',
-      blockersState: 'cleared',
       signoffOwner: staff.owner,
     },
   };
@@ -63,18 +53,10 @@ export function staffIntakeSample(client, staff) {
   const metadata = {
     'registration-country': 'Australia',
     'business-reg-number': 'Sample ABN 00 000 000 000',
-    'target-devices': 'iPhone and iPad',
-    'content-rights': 'Client owns the videos, app copy and brand assets. See RIGHTS-101.',
-    'distribution-method': 'Public App Store release after TestFlight QA.',
-    'monetization-price-schedule': 'Free ($0.00). No payments, digital unlocks or ads.',
-    'user-accounts-deletion': 'Email sign-in is required for booking. Delete account under Settings > Account.',
-    'in-app-tracking-att': 'No ads, cross-app tracking or advertising identifier.',
-    'privacy-manifest': 'QA-104 verified PrivacyInfo.xcprivacy in the app and bundled SDKs.',
     'export-compliance': 'Uses standard HTTPS/TLS only. See build evidence QA-104.',
     'privacy-policy-url': `${site}/privacy`,
     'eula-terms': `Apple Standard EULA. Client terms published at ${site}/terms.`,
     'privacy-choices-url': `${site}/privacy-choices`,
-    platforms: 'iOS and iPadOS',
     'store-app-name': app,
     'primary-language': 'English (Australia)',
     'bundle-id': `test.example.${app.toLowerCase()}.intake`,
@@ -99,7 +81,6 @@ export function staffIntakeSample(client, staff) {
     'version-number': '1.0.0',
     copyright: `© 2026 ${client.legalName}`,
     'release-option-launch-window': 'Manual release after App Review. Target week of 30 November.',
-    'pre-order': 'Pre-orders are out of scope for the first release.',
     'review-contact-name': staff.owner,
     'review-contact-phone': `+61${client.contactPhone.replaceAll(' ', '').slice(1)}`,
     'review-contact-email': `review@${domain}`,
@@ -111,7 +92,9 @@ export function staffIntakeSample(client, staff) {
     'health-fitness-medical': {
       checked: ['generalFitness', 'healthKit', 'healthData'], other: 'At-home mobility assessments.',
     },
-    availability: { checked: ['metadata-choice-availability-au', 'metadata-choice-availability-nz'] },
+    availability: {
+      checked: ['metadata-choice-availability-au', 'metadata-choice-availability-nz', 'metadata-choice-availability-eu', 'metadata-choice-availability-cn'],
+    },
     'social-ugc-ai-features': { checked: ['metadata-choice-social-ugc-ai-features-none'] },
     'user-data-nutrition-labels': {
       checked: ['metadata-choice-user-data-nutrition-labels-contact'], other: 'Account identifiers.',
@@ -122,14 +105,101 @@ export function staffIntakeSample(client, staff) {
     },
   };
 
-  const notApplicable = new Set([
-    'paid-apps-tax-banking', 'social-login-siwa', 'eu-dsa', 'china-compliance',
-    'whats-new', 'routing-coverage', 'iap-subscriptions',
-  ]);
+  const structured = {
+    'target-devices': { checked: ['iphone', 'ipad'] },
+    platforms: { shared: true },
+    'data-purposes': {
+      checked: ['signin', 'bookings'],
+      other: 'Monitor booking availability.',
+      details: {
+        'contact-purpose': 'Send booking confirmations and sign-in instructions.',
+        'contact-recipients': 'Booking provider and the Renatus support team.',
+        'other-purpose': 'Associate signed-in accounts with bookings.',
+        'other-recipients': 'Renatus account service.',
+      },
+    },
+    'content-rights': {
+      checked: ['client', 'licensed'],
+      details: { reference: 'RIGHTS-101 · licence for the client’s video soundtrack' },
+    },
+    'distribution-method': { checked: ['pilot'], details: { channel: 'public' } },
+    'monetization-price-schedule': {
+      checked: ['digital'],
+      details: { price: '0', currency: 'AUD', effective: '2026-12-01', end: '2027-12-01' },
+    },
+    'paid-apps-tax-banking': {
+      checked: ['agreement', 'tax', 'banking'],
+      details: { status: 'active', evidence: 'FIN-32', name: staff.owner, email: `finance@${domain}` },
+    },
+    'data-verification': {
+      checked: ['inventory', 'sharing', 'retention', 'deletion'],
+      details: {
+        findings: 'Contact details go to the booking provider. Account deletion is available in Settings.',
+        retention: 'Deleted accounts are removed from operational storage within 30 days.',
+        proof: 'QA-104 · account and data test report',
+      },
+    },
+    'build-tests': {
+      checked: ['sdk', 'signin', 'deletion', 'permissions', 'tracking', 'health'],
+      details: {
+        'sdk-evidence': 'QA-104 · app dependency review',
+        'signin-evidence': 'QA-105 · sign-in test',
+        'deletion-evidence': 'QA-106 · Settings > Delete account',
+        'permissions-evidence': 'QA-107 · HealthKit permission test',
+        'tracking-evidence': 'QA-109 · analytics event inspection',
+        'health-evidence': 'QA-110 · workout history and data access',
+      },
+    },
+    'user-accounts-deletion': {
+      checked: ['account', 'signin', 'guest', 'inApp'],
+      details: { steps: 'Open Settings, select Account, then Delete account.', evidence: 'QA-106 · release build test' },
+    },
+    'social-login-siwa': { checked: ['password', 'apple'], other: 'Passkey sign-in' },
+    'in-app-tracking-att': {
+      checked: ['analytics'], details: { sdks: 'Example Analytics SDK', behaviour: 'Sends internal event totals.' },
+    },
+    'privacy-manifest': {
+      checked: ['app', 'sdk', 'reasons'],
+      details: {
+        'app-evidence': 'App/PrivacyInfo.xcprivacy',
+        'sdk-evidence': 'QA-104 · bundled SDK manifests',
+        'reasons-evidence': 'QA-104 · approved API reasons reviewed',
+      },
+    },
+    'listing-assets': {
+      checked: ['copy', 'iphone', 'ipad', 'icon', 'preview', 'localised'],
+      details: { package: 'STORE-120 · approved listing copy and all device assets' },
+    },
+    'eu-dsa': {
+      checked: ['disclosure', 'contact', 'accessibility'],
+      details: { status: 'trader', evidence: 'STORE-EU-12 · trader information and accessibility review' },
+    },
+    'china-compliance': {
+      checked: ['filing', 'ai', 'security'],
+      details: { filing: 'DEMO-FILING-120', declarations: 'STORE-CN-12 · filing and declaration references' },
+    },
+    'iap-subscriptions': {
+      checked: ['durable'], details: { multiseat: 'disabled' },
+      records: { 'Non-consumable purchase': [{
+        'Reference name': 'Mobility pack', 'Product ID': 'test.example.mobility.pack', Price: '4.99',
+        'Display name': 'Mobility Pack', Description: 'Unlock the extended mobility sessions.',
+        'Review screenshot reference': 'STORE-120/Mobility-pack.png',
+      }] },
+    },
+    'pre-order': { checked: ['enabled'], details: { start: '2026-11-28', end: '2026-12-01' } },
+    'review-notes': { checked: ['seeded', 'attachment'], details: { notes: staff.reviewNotes } },
+    'release-blockers': {
+      checked: ['review'], records: { 'Reviewer access': [
+        { Blocker: 'Demo account access verified on the release build.', Owner: staff.owner },
+        { Blocker: 'Sample booking seeded for App Review.', Owner: staff.owner },
+      ] },
+    },
+  };
+  const notApplicable = new Set(['whats-new', 'routing-coverage']);
   const question = {
     text: 'Who checks the App Store page and support link at launch?',
     owner: staff.owner,
     stage: 'review',
   };
-  return { stages, metadata, notApplicable, question, selections };
+  return { stages, metadata, notApplicable, question, selections, structured };
 }

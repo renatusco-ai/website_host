@@ -1,6 +1,6 @@
 # App Store intake browser tests
 
-Run the commands below from `website_host` with Node.js 22.13 or later, npm, and Python 3. Step 2 requires the Renatus workspace’s `docs/` directory beside `website_host/`.
+Run the commands below from `website_host` with Node.js 22.13 or later, npm, and Python 3. Step 2 requires the Renatus workspace’s `docs/app-store-intake/` directory.
 
 ```sh
 npm ci
@@ -14,7 +14,7 @@ npx playwright test intake-step-1.spec.js
 npx playwright test intake-step-2.spec.js
 ```
 
-`npx playwright test` runs both specs. Playwright starts Vite on `127.0.0.1:4173` and serves the [staff prototype](../../../docs/renatus-step-2-intake.html) on `127.0.0.1:4174` when the workspace docs are available. Both specs generate the same sample client and reference from a fixed Faker seed. Step 2 enters the handoff, completes all five stages and 63 checklist entries, checks that the draft reloads, and verifies the handoff sign-off. It also covers checkbox selection, conditional notes, and drafts saved with the older field format. The browser mocks the intake and Storage requests, so the suite needs no Supabase credentials and sends no email.
+`npx playwright test` runs both specs. Playwright starts Vite on `127.0.0.1:4173` and serves the [staff prototype](../../../docs/app-store-intake/renatus-step-2-intake.html) on `127.0.0.1:4174` when the workspace docs are available. Both specs generate the same sample client and reference from a fixed Faker seed. Step 2 enters the handoff, completes all five stages and 63 checklist entries, checks that the draft reloads, and verifies the handoff sign-off. It also covers checkbox selection, conditional notes, and drafts saved with the older field format. The browser mocks the intake and Storage requests, so the suite needs no Supabase credentials and sends no email.
 
 Run `node --test tests/app-store-intake.test.mjs` for the server-side intake tests.
 
