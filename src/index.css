@@ -39,7 +39,19 @@ body {
 
 ::selection {
   background-color: var(--color-spring);
-  color: var(--color-forest);
+  color: #08483d;
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid CanvasText !important;
+    outline-offset: 2px !important;
+  }
+}
+
+.skip-link:focus-visible {
+  outline: 2px solid var(--color-forest);
+  outline-offset: 2px;
 }
 
 ::-webkit-scrollbar {
@@ -169,9 +181,9 @@ h3 em,
 }
 
 .btn-primary {
-  color: var(--color-forest);
+  color: #08483d;
   background: var(--color-spring);
-  border: 1px solid var(--color-spring);
+  border: 1px solid var(--color-forest);
 }
 
 .btn-primary:hover {
@@ -182,7 +194,7 @@ h3 em,
 .btn-ghost {
   color: var(--color-forest);
   background: transparent;
-  border: 1px solid rgba(18, 102, 86, 0.3);
+  border: 1px solid var(--color-forest);
 }
 
 .btn-ghost:hover {
