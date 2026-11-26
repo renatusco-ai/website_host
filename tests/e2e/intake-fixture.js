@@ -36,13 +36,8 @@ export const test = base.extend({
     const reference = faker.string.uuid();
     const staff = {
       owner: faker.person.fullName(),
-      scope: `Public iPhone release in ${faker.helpers.arrayElement(['Australia', 'Australia and New Zealand'])}.`,
-      usage: `Collect member name and email to book ${activity} classes. The booking provider receives both.`,
       releaseBuild: `0.9 (${faker.number.int({ min: 10, max: 40 })})`,
-      policyDraft: `${websiteUrl}/privacy · draft for client approval`,
-      termsDraft: `${websiteUrl}/terms · draft for client approval`,
       supportUrl: `${websiteUrl}/support`,
-      listingAssets: `${appName} listing draft · iPhone screenshots pending`,
       reviewNotes: `Sign in, open ${faker.helpers.arrayElement(['Classes', 'Schedule'])}, and start a sample ${activity} session.`,
     };
     const logo = {
@@ -61,7 +56,7 @@ export const test = base.extend({
     let name;
 
     try {
-      await use(async (videoName, handoff) => {
+      await use(async (videoName, { staff = false } = {}) => {
         name = videoName;
         context = await browser.newContext({
           baseURL,
@@ -74,14 +69,9 @@ export const test = base.extend({
         const staffOrigin = new URL(staffURL).origin;
         await context.route(url => ![baseURL, staffOrigin].includes(url.origin), route => route.abort());
         await context.route('**/api/**', route => route.abort());
-        if (handoff) {
-          await context.route(`${staffOrigin}/public/brand/renatus-logo.svg`,
+        if (staff) {
+          await context.route(`${staffOrigin}/website_host/public/brand/renatus-logo.svg`,
             route => route.fulfill({ path: staffLogo, contentType: 'image/svg+xml' }));
-          await context.addInitScript(({ staffOrigin, handoff }) => {
-            if (location.origin !== staffOrigin || sessionStorage.getItem('intake-e2e-handoff')) return;
-            window.renatusDemoIntake = handoff;
-            sessionStorage.setItem('intake-e2e-handoff', '1');
-          }, { staffOrigin, handoff });
         }
         page = await context.newPage();
         return {
