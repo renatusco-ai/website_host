@@ -12,6 +12,7 @@ function RequiredMark() {
 export default function BookDemoForm({
   defaultIntent = 'general',
   idPrefix = '',
+  pagePath = '',
   onSubmitted,
 }) {
   const [formData, setFormData] = useState({
@@ -46,6 +47,9 @@ export default function BookDemoForm({
         body: JSON.stringify({
           ...formData,
           website: formData.website ?? '',
+          page_path: pagePath || window.location.pathname,
+          referrer: document.referrer,
+          user_agent: navigator.userAgent,
         }),
       });
 
@@ -71,14 +75,20 @@ export default function BookDemoForm({
       <div className="enquiry-form enquiry-form--sent">
         <p className="heading-display text-2xl text-ink mb-3">Enquiry sent.</p>
         <p className="text-graphite text-sm leading-relaxed">
-          It is in our inbox. We will reply within 24 hours.
+          We have it. We will reply within 24 hours.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="enquiry-form" noValidate={false}>
+    <form
+      method="post"
+      action="/api/enquiry"
+      encType="application/x-www-form-urlencoded"
+      onSubmit={handleSubmit}
+      className="enquiry-form"
+    >
       <p className="enquiry-form__banner">Enquiry form</p>
 
       <div className="enquiry-field">
@@ -198,6 +208,8 @@ export default function BookDemoForm({
           <option value="$$$$">$$$$: Significant impact</option>
         </select>
       </div>
+
+      <input type="hidden" name="page_path" value={pagePath} />
 
       <input
         type="text"

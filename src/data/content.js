@@ -1,5 +1,55 @@
 export const CONTACT_EMAIL = 'info@renatusco.com';
 
+export const ENTITY_PLACE = 'Renatus Pty Ltd, Sydney, Australia';
+export const LEGAL_LINE = 'Renatus Pty Ltd, Sydney, Australia. ABN 66 665 657 349.';
+export const DISAMBIGUATION =
+  'Renatus Pty Ltd (renatusco.com) is not affiliated with the company at renatus.ai.';
+
+// TODO(shaun): paste the Google Calendar appointment-schedule URL. Leave this empty until the link exists.
+export const GOOGLE_BOOKING_URL = '';
+
+/** Footer stat slot. Two to four items, each linked to a case study. */
+export const FOOTER_STATS = [
+  {
+    label: '$266,651 documented annual saving',
+    href: '/portfolio/lockeroom',
+  },
+  {
+    label: '6 software subscriptions retired',
+    href: '/portfolio/lockeroom',
+  },
+  // TODO(shaun): add a third verified stat, linked to its case study, once the figure is checked.
+  // { label: '', href: '' },
+  // TODO(shaun): a fourth stat can go here. Keep this list to between 2 and 4 items.
+];
+
+/**
+ * Founder bio. The two link parts are the phrases marked [link: /portfolio/lockeroom]
+ * in the approved copy. The surrounding sentences stay verbatim.
+ */
+export const FOUNDER_BIO = [
+  'Shaun Townsend is the Founder and MD of Renatus Pty Ltd, a Sydney-based AI and systems consultancy he started in late 2026. He started out running his own business, then moved into coaching and a founding leadership role at Lockeroom. There he managed a team that grew ',
+  { href: '/portfolio/lockeroom', text: 'from 4 to more than 40 staff' },
+  '. Running operations at that scale led him into software, and into what has become his core focus: data architecture. He learned SQL and Postgres before the AI wave, and he is passionate about setting up the data systems underneath a business: how the data is structured, how it holds up under load, and how it scales. He sees that foundation as what decides whether AI works in a business at all, because agents are only as reliable as the data they run on. ',
+  { href: '/portfolio/lockeroom', text: "He built the system behind Lockeroom's operations this way" },
+  '. At Renatus he designs the data systems first and builds the AI agents on top of them himself, for businesses that want one system they own.',
+];
+
+export const FOUNDER_SOURCES = [
+  {
+    href: 'https://www.linkedin.com/in/shaun-townsend-3a1067142',
+    label: 'LinkedIn profile',
+  },
+  {
+    href: 'https://www.linkedin.com/posts/shaun-townsend-3a1067142_today-marks-the-last-day-as-a-full-time-employee-activity-7516693120227434496-Ye5D',
+    label: 'LinkedIn: last day as a full-time employee',
+  },
+  {
+    href: 'https://www.renatusco.com/portfolio/lockeroom',
+    label: 'Lockeroom case study',
+  },
+];
+
 /** Legacy mailto subjects. Enquire Now now opens the on-page form modal. */
 export const INQUIRE = {
   default: {
@@ -438,7 +488,6 @@ export const FOUNDER = {
   name: 'Shaun Townsend',
   role: 'Founder & MD',
   portrait: '/about/shaun-portrait.webp',
-  lead: 'Scaled an elite Health and Fitness Brand from zero to near eight figures in revenue, built the software to run it, and led the team through the change. Now he does the same for Australian businesses.',
   chapters: [
     {
       stage: 'The start',
@@ -463,7 +512,12 @@ export const FOUNDER = {
       ],
       stats: [
         { value: '4 \u2192 40+', label: 'Staff' },
-        { value: 'Near 8 figures', label: 'Revenue, from zero' },
+        {
+          value: 'Near 8 figures',
+          label: 'Revenue, from zero',
+          // TODO(shaun): confirm this revenue claim before treating it as verified.
+          todo: 'confirm the near eight figures revenue figure',
+        },
       ],
       visual: {
         kind: 'photo',

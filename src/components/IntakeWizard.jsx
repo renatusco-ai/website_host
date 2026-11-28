@@ -562,10 +562,11 @@ function WizardDialog({ wizard, onClose }) {
 
 export default function IntakeWizard({ wizardId, onClose }) {
   const wizard = wizardId ? INTAKE_WIZARDS[wizardId] : null;
+  if (!wizard || typeof document === 'undefined') return null;
 
   return createPortal(
     <AnimatePresence>
-      {wizard && <WizardDialog key={wizardId} wizard={wizard} onClose={onClose} />}
+      <WizardDialog key={wizardId} wizard={wizard} onClose={onClose} />
     </AnimatePresence>,
     document.body,
   );

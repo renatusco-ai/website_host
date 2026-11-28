@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CONTACT_EMAIL } from '../data/content';
+import { CONTACT_EMAIL, DISAMBIGUATION, FOOTER_STATS, LEGAL_LINE } from '../data/content';
 import EnquireNowButton from './EnquireNowButton';
 
 export default function Footer() {
@@ -12,6 +12,16 @@ export default function Footer() {
             Let&rsquo;s find it. <span aria-hidden="true">&rarr;</span>
           </EnquireNowButton>
         </div>
+
+        {FOOTER_STATS.length > 0 && (
+          <div className="site-footer__stats">
+            {FOOTER_STATS.map((stat) => (
+              <Link key={stat.label} to={stat.href} className="site-footer__stat">
+                {stat.label}
+              </Link>
+            ))}
+          </div>
+        )}
 
         <div className="site-footer__details">
           <div>
@@ -36,6 +46,9 @@ export default function Footer() {
               <Link to="/services">Services</Link>
               <Link to="/portfolio">Portfolio</Link>
               <Link to="/learn-more">The story</Link>
+              <Link to="/trust">Trust</Link>
+              <Link to="/security">Security</Link>
+              <Link to="/privacy">Privacy</Link>
               <Link to="/contact">Contact</Link>
             </div>
           </div>
@@ -50,12 +63,12 @@ export default function Footer() {
         </div>
 
         <div className="site-footer__base">
-          <p>
-            &copy; {new Date().getFullYear()} Renatus. All rights reserved.
-          </p>
-          <p>
-            Understand AI. Then put it to work.
-          </p>
+          <div className="site-footer__legal-block">
+            <p>&copy; {new Date().getFullYear()} Renatus. All rights reserved.</p>
+            <p className="site-footer__legal">{LEGAL_LINE}</p>
+            <p className="site-footer__disambiguation">{DISAMBIGUATION}</p>
+          </div>
+          <p className="site-footer__tagline">Understand AI. Then put it to work.</p>
         </div>
       </div>
     </footer>

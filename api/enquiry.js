@@ -1,27 +1,25 @@
-import { parseEnquiry, sendEnquiry } from './send-enquiry.js';
+import { processEnquiry, writeEnquiryResult } from './send-enquiry.js';
 
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') {
-    res.status(204).end();
+    res.statusCode = 204;
+    res.end();
     return;
   }
 
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
+    writeEnquiryResult(res, { status: 405, error: 'Method not allowed' });
     return;
   }
 
-  const parsed = parseEnquiry(req.body ?? {});
-  if (parsed.error) {
-    res.status(parsed.status).json({ error: parsed.error });
-    return;
+  try {
+    const result = await processEnquiry(
+      { body: req.body, headers: req.headers },
+      { env: process.env },
+    );
+    writeEnquiryResult(res, result);
+  } catch (err) {
+    console.error('Enquiry handler failed:', err?.name || 'Error');
+    writeEnquiryResult(res, { status: 500, error: 'Could not send enquiry.' });
   }
-
-  const result = await sendEnquiry(parsed.data);
-  if (result.error) {
-    res.status(result.status).json({ error: result.error });
-    return;
-  }
-
-  res.status(200).json({ ok: true });
 }

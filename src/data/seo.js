@@ -40,8 +40,27 @@ export const PAGES = [
   {
     path: '/about',
     title: 'About Shaun Townsend, Founder & MD | Renatus',
+    // TODO(shaun): this description still says "near eight figures". It is not a duplicate of the replaced about-page lead. Confirm or rewrite it.
     description:
       'Shaun Townsend scaled Lockeroom from 4 to 40+ staff and near eight figures in revenue, then built the software and led the change that lifted productivity while cutting costs.',
+  },
+  {
+    path: '/trust',
+    title: 'Trust, hosting and enquiry handling | Renatus',
+    description:
+      'How the Renatus marketing site is hosted, how enquiry data is handled, and what we do not claim about certification.',
+  },
+  {
+    path: '/security',
+    title: 'Security | Renatus',
+    description:
+      'Security practices for the Renatus marketing site and its enquiry form, with the full notes on the trust page.',
+  },
+  {
+    path: '/privacy',
+    title: 'Privacy | Renatus',
+    description:
+      'Plain-English privacy note for enquiry data collected by Renatus Pty Ltd, Sydney.',
   },
   {
     path: '/contact',

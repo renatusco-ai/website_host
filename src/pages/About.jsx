@@ -10,7 +10,8 @@ import {
   StorySectionHeading,
   StoryStatement,
 } from '../components/SiteStory';
-import { FOUNDER } from '../data/content';
+import FounderBio from '../components/FounderBio';
+import { ENTITY_PLACE, FOUNDER, FOUNDER_SOURCES } from '../data/content';
 
 export default function About() {
   return (
@@ -22,7 +23,7 @@ export default function About() {
             {FOUNDER.name}. <em>{FOUNDER.role}.</em>
           </>
         }
-        lead={FOUNDER.lead}
+        lead={<FounderBio />}
         visual={
           <div className="about-story__portrait">
             <img
@@ -43,6 +44,20 @@ export default function About() {
           </>
         }
       />
+
+      <section className="site-story-section site-story-section--paper">
+        <div className="site-story-section__inner about-story__meta">
+          <p className="about-story__entity">{ENTITY_PLACE}</p>
+          <h2 className="about-story__sources-title">Sources</h2>
+          <ul className="about-story__sources">
+            {FOUNDER_SOURCES.map((source) => (
+              <li key={source.href}>
+                <a href={source.href}>{source.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
       <StoryStatement
         tone="forest"

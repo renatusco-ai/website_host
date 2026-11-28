@@ -13,6 +13,10 @@ import Portfolio from './pages/Portfolio';
 import LockeroomCaseStudy from './pages/LockeroomCaseStudy';
 import WhyCustom from './pages/WhyCustom';
 import About from './pages/About';
+import Trust from './pages/Trust';
+import Security from './pages/Security';
+import Privacy from './pages/Privacy';
+import NotFound from './pages/NotFound';
 
 export default function App() {
   const location = useLocation();
@@ -33,7 +37,12 @@ export default function App() {
             <Route path="/workshops" element={<Workshops />} />
             <Route path="/work" element={<Navigate to="/portfolio" replace />} />
             <Route path="/about" element={<About />} />
+            <Route path="/trust" element={<Trust />} />
+            <Route path="/security" element={<Security />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
         <AnimatePresence mode="wait">
