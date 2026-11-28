@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import SavingBreakdown from './SavingBreakdown';
 import SoftwareStoryGraphic from './SoftwareStoryGraphic';
+import TodoMark from './TodoMark';
 
 function ChapterVisual({ visual, imageY }) {
   switch (visual.kind) {
@@ -77,6 +78,15 @@ export default function FounderChapter({ chapter, index }) {
                   <dd className="heading-display">{stat.value}</dd>
                 </div>
               ))}
+              {chapter.stats.some((stat) => stat.todo) && (
+                <div className="founder-chapter__todo">
+                  {chapter.stats
+                    .filter((stat) => stat.todo)
+                    .map((stat) => (
+                      <TodoMark key={stat.label}>{stat.todo}</TodoMark>
+                    ))}
+                </div>
+              )}
             </dl>
           )}
         </motion.div>

@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "redirects": [
+    { "source": "/privacy-policy", "destination": "/privacy", "statusCode": 308 },
     { "source": "/work", "destination": "/portfolio", "permanent": true }
   ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]

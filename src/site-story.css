@@ -1883,9 +1883,137 @@
   font-size: 0.7rem;
 }
 
-.site-footer__base p:last-child {
+.site-footer__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.75rem;
+  padding-top: 2.5rem;
+}
+
+.site-footer__stat {
+  color: var(--color-canvas);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 224, 147, 0.75);
+  padding-bottom: 0.15rem;
+}
+
+.site-footer__stat:hover {
+  border-bottom-color: var(--color-canvas);
+}
+
+.site-footer__base {
+  align-items: flex-start;
+}
+
+.site-footer__legal-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 46rem;
+}
+
+.site-footer__legal,
+.site-footer__disambiguation {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.78rem;
+  letter-spacing: 0;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+.site-footer__tagline {
   letter-spacing: 0.16em;
   text-transform: uppercase;
+}
+
+.legal-copy {
+  max-width: 44rem;
+}
+
+.legal-copy h2 {
+  margin: 2.75rem 0 0.75rem;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.legal-copy h2:first-child {
+  margin-top: 0;
+}
+
+.legal-copy p,
+.legal-copy li {
+  color: var(--color-ink);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.legal-copy ul {
+  margin: 0 0 1rem;
+  padding-left: 1.2rem;
+}
+
+.legal-copy a {
+  color: var(--color-forest);
+}
+
+.about-story .site-story-hero__lead {
+  max-width: 42rem;
+  font-size: 1rem;
+}
+
+.about-bio-link {
+  color: var(--color-forest);
+  text-underline-offset: 0.16em;
+}
+
+.about-story__meta {
+  max-width: 44rem;
+}
+
+.about-story__entity {
+  margin: 0;
+  color: var(--color-forest);
+  font-weight: 600;
+}
+
+.about-story__sources-title {
+  margin: 1.75rem 0 0.75rem;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.about-story__sources {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-story__sources li + li {
+  margin-top: 0.45rem;
+}
+
+.about-story__sources a {
+  color: var(--color-forest);
+}
+
+.founder-chapter__todo {
+  grid-column: 1 / -1;
+}
+
+.contact-story__book {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 @media (max-width: 980px) {

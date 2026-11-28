@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SectionReveal from '../components/SectionReveal';
 import BookDemoForm from '../components/BookDemoForm';
+import BookingLink from '../components/BookingLink';
 import EnquireNowButton from '../components/EnquireNowButton';
 import {
   STORY_PAGE_TRANSITION,
@@ -23,6 +25,13 @@ const WORKSHOP_POINTS = [
 ];
 
 export default function Contact() {
+  const [searchParams] = useSearchParams();
+  const [sentFromRedirect, setSentFromRedirect] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('sent') === '1') setSentFromRedirect(true);
+  }, [searchParams]);
+
   return (
     <motion.div {...STORY_PAGE_TRANSITION} className="contact-story">
       <StoryHero
@@ -37,6 +46,7 @@ export default function Contact() {
         actions={
           <>
             <EnquireNowButton inquire="diagnostic" />
+            <a href="#book" className="link-arrow">Book a time &rarr;</a>
             <a href="#write" className="link-arrow">Write a note instead &rarr;</a>
           </>
         }
@@ -105,21 +115,44 @@ export default function Contact() {
         </div>
       </section>
 
+      <section id="book" className="site-story-section">
+        <div className="site-story-section__inner contact-story__book">
+          <StorySectionHeading
+            number="02"
+            eyebrow="Book a time"
+            title="Pick a time on the calendar."
+            body="A scheduling link will sit here. Until then, email us and we will find a time."
+          />
+          <BookingLink />
+        </div>
+      </section>
+
       <section id="write" className="site-story-section site-story-section--paper">
         <div className="site-story-section__inner contact-story__write">
           <StorySectionHeading
-            number="02"
+            number="03"
             eyebrow="Prefer to write first?"
             title="Put the problem in your own words."
             body="Mobile, email and company are required so the right person can respond. Expect a useful answer within 24 hours."
           />
           <SectionReveal>
             <div className="contact-story__form">
-              <p className="text-graphite text-sm leading-relaxed mb-8 max-w-xl">
-                Fill in the form below. Mobile, email, and company are required so we
-                can get back to the right person.
-              </p>
-              <BookDemoForm />
+              {sentFromRedirect ? (
+                <div className="enquiry-form enquiry-form--sent">
+                  <p className="heading-display text-2xl text-ink mb-3">Enquiry sent.</p>
+                  <p className="text-graphite text-sm leading-relaxed">
+                    We have it. We will reply within 24 hours.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p className="text-graphite text-sm leading-relaxed mb-8 max-w-xl">
+                    Fill in the form below. Mobile, email, and company are required so we
+                    can get back to the right person.
+                  </p>
+                  <BookDemoForm pagePath="/contact" />
+                </>
+              )}
               <div className="contact-story__direct">
                 <span>Or email directly</span>
                 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>

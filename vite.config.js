@@ -1,7 +1,9 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { parseEnquiry, sendEnquiry } from './api/send-enquiry.js';
+import { processEnquiry, writeEnquiryResult } from './api/send-enquiry.js';
 
 function enquiryApi(env) {
   return {
@@ -22,28 +24,45 @@ function enquiryApi(env) {
         const chunks = [];
         req.on('data', (chunk) => chunks.push(chunk));
         req.on('end', async () => {
-          res.setHeader('Content-Type', 'application/json');
-
-          let body = {};
           try {
-            body = JSON.parse(Buffer.concat(chunks).toString() || '{}');
-          } catch {
-            res.statusCode = 400;
-            res.end(JSON.stringify({ error: 'Invalid JSON' }));
-            return;
+            const result = await processEnquiry(
+              {
+                body: Buffer.concat(chunks).toString('utf8'),
+                headers: req.headers,
+                ip: req.socket?.remoteAddress,
+              },
+              { env },
+            );
+            writeEnquiryResult(res, result);
+          } catch (err) {
+            console.error('Enquiry dev handler failed:', err?.name || 'Error');
+            writeEnquiryResult(res, { status: 500, error: 'Could not send enquiry.' });
           }
-
-          const parsed = parseEnquiry(body);
-          if (parsed.error) {
-            res.statusCode = parsed.status;
-            res.end(JSON.stringify({ error: parsed.error }));
-            return;
-          }
-
-          const result = await sendEnquiry(parsed.data, env);
-          res.statusCode = result.error ? result.status : 200;
-          res.end(JSON.stringify(result.error ? { error: result.error } : { ok: true }));
         });
+      });
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        if (!req.url || (req.method !== 'GET' && req.method !== 'HEAD')) {
+          next();
+          return;
+        }
+        const queryIndex = req.url.indexOf('?');
+        const path = queryIndex === -1 ? req.url : req.url.slice(0, queryIndex);
+        const query = queryIndex === -1 ? '' : req.url.slice(queryIndex);
+        if (path === '/' || path.startsWith('/assets/') || path.includes('.')) {
+          next();
+          return;
+        }
+        const rel = path.replace(/^\//, '').replace(/\/$/, '');
+        const htmlFile = join(process.cwd(), 'dist', `${rel}.html`);
+        const direct = join(process.cwd(), 'dist', rel);
+        if (existsSync(htmlFile)) {
+          req.url = `/${rel}.html${query}`;
+        } else if (!existsSync(direct)) {
+          req.url = `/404.html${query}`;
+        }
+        next();
       });
     },
   };
@@ -54,5 +73,8 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), tailwindcss(), enquiryApi(env)],
+    ssr: {
+      noExternal: ['react-router', 'react-router-dom', 'framer-motion', 'lenis'],
+    },
   };
 });

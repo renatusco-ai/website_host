@@ -582,6 +582,30 @@ h3 em,
   font-size: 0.875rem;
 }
 
+.todo-marker {
+  display: inline;
+  margin-left: 0.4rem;
+  color: var(--color-graphite);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.45;
+  text-transform: none;
+}
+
+.booking-pending {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--color-ink);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.booking-pending a {
+  color: var(--color-forest);
+}
+
 .enquiry-form button:disabled {
   opacity: 0.65;
   cursor: wait;
